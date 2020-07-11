@@ -75,9 +75,6 @@ console.log(chalk.magenta('                                        \|_\|        
     userInput = await orchestratePrompts();
   }
 
-  console.log(JSON.stringify(userInput, null, 2));
-  console.log('current working dir', process.cwd());
-  console.log('dirname', __dirname);
   if (userInput) {
     const project = new Project({
       manipulationSettings: {
@@ -127,7 +124,7 @@ console.log(chalk.magenta('                                        \|_\|        
           {overwrite: true}
         );
         await copyAppTemplateFiles(null, userInput.projectName);
-        console.log(chalk.magenta(`✔ Project generated in ${path.join(process.cwd(), userInput.projectName)}`));
+        console.log(chalk.magenta(`✔ Project generated in ${path.join(process.cwd(), userInput.projectName)}!`));
       } catch (e) {
         console.log(chalk.red(`❌ Error occurred while generating project: ${e}`));
       }
@@ -136,7 +133,7 @@ console.log(chalk.magenta('                                        \|_\|        
     try {
       await project.save();
       for (const entityWritten of entitiesWritten) {
-        console.log(chalk.magenta(`✔ Resource generated for ${entityWritten.name}`));
+        console.log(chalk.magenta(`✔ Resource generated for ${entityWritten.name}! (Make sure to add a resource-permission for it)`));
       }
     } catch (e) {
       console.log(chalk.red(`❌ Error occurred while generating resource: ${e}`));
@@ -145,11 +142,10 @@ console.log(chalk.magenta('                                        \|_\|        
     if (userInput.swaggerDocs || userInput.generateApp) {
       try {
         await generateSwagger(userInput);
-        console.log(chalk.magenta(`✔ Swagger docs updated`));
+        console.log(chalk.magenta(`✔ Swagger docs updated!`));
       } catch (e) {
         console.log(chalk.red(`❌ Error occurred while updating swagger docs: ${e}`));
       }
     }
-    const breakpoint = 0;
   }
 })();

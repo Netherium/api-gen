@@ -44,6 +44,7 @@
     ```
 
 3. :computer: Fill in choices
+<img src="https://raw.githubusercontent.com/Netherium/api-gen/master/img/cli.png">
 
 4. :tada: Your api is ready!
     ```bash
@@ -249,7 +250,7 @@ $ npm run test:coverage
 To debug TS without compiling it, you can setup your IDE of choice as in the example below  
 Note: Running older versions of node  may require attaching `--inspect` before `--require`
 
-<img src="https://raw.githubusercontent.com/Netherium/neth-express-api-ts/master/img/debug_setup.png">
+<img src="https://raw.githubusercontent.com/Netherium/api-gen/master/img/debug_setup.png">
 
 
 ## Authors
@@ -257,4 +258,4 @@ Note: Running older versions of node  may require attaching `--inspect` before `
 
 
 ## Copyright and license
-Code released under [the MIT license](https://github.com/Netherium/neth-express-api-ts/blob/master/LICENSE)
+Code released under [the MIT license](https://github.com/Netherium/api-gen/blob/master/LICENSE)
