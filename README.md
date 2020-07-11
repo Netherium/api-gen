@@ -71,7 +71,7 @@ TODO
 
 ## Develop
 
-1  :pray: If you generated project, navigate and install dependencies
+1.  :pray: If you generated project, navigate and install dependencies
      ```bash
     $ cd myproject
     $ npm install
@@ -101,7 +101,7 @@ TODO
     ```bash
     $ npm run build
     ```
-   :fireworks:Your build is ready to deploy !:fireworks:
+6. :fireworks:Your build is ready to deploy !:fireworks:
 
 ## Basic Routes
 
