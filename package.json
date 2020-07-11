@@ -11,10 +11,9 @@
     "build": "tsc && echo true > .buildstatus",
     "copy:assets": "copyfiles -u 3 -a \"src/lib/templates/**/*\" \"./lib/templates\"",
     "badgeit": "jest-badges-readme",
-    "prepare": "npm run copy:app:templates:source && npm run build && npm run copy:assets",
+    "prepare": "npm run copy:app:templates:source && npm run build && npm run copy:assets && npm run badgeit",
     "prepublishOnly": "npm test",
-    "preversion": "npm run lint",
-    "version": "git add -A src",
+    "version": "git add -A",
     "postversion": "git push && git push --tags"
   },
   "keywords": [
