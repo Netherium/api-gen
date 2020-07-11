@@ -30,16 +30,16 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+TODOGIT.git"
+    "url": "git+https://github.com/Netherium/api-gen.git"
   },
   "engines": {
     "node": ">=12.0.0",
     "npm": ">=6.0.0"
   },
   "bugs": {
-    "url": "TODOGIT/issues"
+    "url": "https://github.com/Netherium/api-gen/issues"
   },
-  "homepage": "TODOGIT#readme",
+  "homepage": "https://github.com/Netherium/api-gen",
   "nodemonConfig": {
     "ignore": [
       "output/*",
