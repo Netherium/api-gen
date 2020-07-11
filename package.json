@@ -1,0 +1,94 @@
+{
+  "name": "@netherium/api-gen",
+  "version": "0.0.1",
+  "main": "bin/main.js",
+  "description": "Generator for Express Rest Api written in Typescript that provides convenient authorization, access control lists and routes following best practices.",
+  "scripts": {
+    "dev": "ts-node --transpile-only src/bin/main.ts",
+    "copy:app:templates:source": "ts-node --transpile-only src/lib/helpers/copySourceFiles.ts",
+    "test": "mocha -r ts-node/register/transpile-only __tests__/*.test.ts --timeout 90000 --exit",
+    "test:coverage": "nyc npm run test",
+    "build": "tsc && echo true > .buildstatus",
+    "copy:assets": "copyfiles -u 3 -a \"src/lib/templates/**/*\" \"./lib/templates\"",
+    "npm:prepublish": "npm run copy:app:templates:source && npm run build && npm run copy:assets",
+    "badgeit": "jest-badges-readme"
+  },
+  "keywords": [
+    "Generator",
+    "Typescript",
+    "Express",
+    "NodeJS",
+    "REST",
+    "Api",
+    "Restful Api",
+    "Mongoose",
+    "Chalk",
+    "Inquirer",
+    "Ts-morph"
+  ],
+  "author": "Netherium",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+TODOGIT.git"
+  },
+  "engines": {
+    "node": ">=12.0.0",
+    "npm": ">=6.0.0"
+  },
+  "bugs": {
+    "url": "TODOGIT/issues"
+  },
+  "homepage": "TODOGIT#readme",
+  "nodemonConfig": {
+    "ignore": [
+      "output/*",
+      "node_modules/*"
+    ]
+  },
+  "nyc": {
+    "include": [
+      "src/**/*.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "reporter": [
+      "json-summary",
+      "lcov",
+      "html",
+      "text"
+    ]
+  },
+  "bin": {
+    "neth-api-gen": "./bin/main.js"
+  },
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "inquirer": "^7.3.1",
+    "inquirer-fuzzy-path": "^2.3.0",
+    "pluralize": "^8.0.0",
+    "ts-morph": "^7.1.2",
+    "yaml": "^1.10.0",
+    "yargs": "^15.4.1"
+  },
+  "devDependencies": {
+    "@olavoparno/jest-badges-readme": "^1.4.2",
+    "@types/chai": "^4.2.11",
+    "@types/cross-spawn": "^6.0.2",
+    "@types/faker": "^4.1.12",
+    "@types/inquirer": "^6.5.0",
+    "@types/mocha": "^7.0.2",
+    "@types/pluralize": "0.0.29",
+    "@types/yaml": "^1.9.7",
+    "@types/yargs": "^15.0.5",
+    "chai": "^4.2.0",
+    "copyfiles": "^2.3.0",
+    "cross-spawn": "^7.0.3",
+    "mocha": "^8.0.1",
+    "nyc": "^15.1.0",
+    "ts-node": "^8.10.2",
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.6"
+  }
+}

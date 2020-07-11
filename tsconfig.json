@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "declaration": true,
+    "outDir": ".",
+    "rootDir": "./src",
+    "removeComments": true,
+    "noImplicitAny": true,
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "exclude": [
+    "__tests__",
+    "node_modules",
+    "bin",
+    "lib"
+  ],
+  "include": [
+    "src"
+  ]
+}
