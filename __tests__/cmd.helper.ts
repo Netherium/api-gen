@@ -1,5 +1,4 @@
-import { spawn as crossSpawn } from 'cross-spawn';
-import { ChildProcessWithoutNullStreams } from 'child_process';
+import { ChildProcessWithoutNullStreams, spawn } from 'child_process';
 
 // tslint:disable-next-line:max-line-length
 const setInputsTimeouts = (inputs: string[], childProcess: ChildProcessWithoutNullStreams, inputInitDelay: number, inputInterval: number) => {
@@ -21,12 +20,12 @@ const clearInputsTimeouts = (inputsTimer: NodeJS.Timeout[]) => {
 // tslint:disable-next-line:max-line-length
 export const cliExecute = (cmd: any, inputs: any = [], showOutput = false, processTimer = 30000, inputInitDelay = 1000, inputInterval = 1000) => {
   return new Promise((resolve, reject) => {
-    const childProcess = crossSpawn(cmd);
+    const childProcess = spawn(cmd, {stdio: 'pipe', shell: true});
     childProcess.stdin.setDefaultEncoding('utf-8');
     childProcess.stdout.setEncoding('utf-8');
     let result = '';
     const inputsTimer = setInputsTimeouts(inputs, childProcess, inputInitDelay, inputInterval);
-    const childProcessTimer = setTimeout(() => reject('Max timeout reached'), processTimer)
+    const childProcessTimer = setTimeout(() => reject('Max timeout reached'), processTimer);
 
     childProcess.stdout.on('data', (data: any) => {
       result += data.toString();

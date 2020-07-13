@@ -1,13 +1,14 @@
-import {should} from 'chai';
+import { should } from 'chai';
 import * as path from 'path';
 import * as YAML from 'yaml';
 import { promises as fs } from 'fs';
 import { generateSwagger } from '../src/lib/generators/generate.swagger';
 import { UI } from '../src/lib/interfaces/ui.model';
 import { UIField } from '../src/lib/interfaces/ui.field.model';
+// @ts-ignore
 import { MockSwaggerAllFields } from './mocks/mock.swagger.all.fields';
 import { UIEntity } from '../src/lib/interfaces/ui.entity.model';
-import pluralize = require('pluralize');
+import pluralize from 'pluralize';
 
 should();
 
@@ -51,7 +52,7 @@ describe('Generate Swagger', () => {
       paths.should.be.a('object').include.keys(pathKeys);
     });
     it('should have "schemas" equal to entities', async () => {
-      for(const uiEntity of ui.entities){
+      for (const uiEntity of ui.entities) {
         const fieldKeys = uiEntity.fields.reduce((acc: any, item: UIField, index) => {
           return [...acc, item.name];
         }, []);
@@ -70,7 +71,7 @@ describe('Generate Swagger', () => {
       tags.should.be.a('array').length(ui.entities.length);
     });
   });
-  after( async() => {
+  after(async () => {
     await fs.unlink(sampleYamlPath);
   });
 });

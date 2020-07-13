@@ -4,6 +4,7 @@ import { UI } from '../interfaces/ui.model';
 import { UIEntity } from '../interfaces/ui.entity.model';
 import * as fs from 'fs';
 import { camelCase, firstLowerCase } from './utility.functions';
+import { UINestedField } from '../interfaces/ui.nested.field.model';
 
 inquirer.registerPrompt('fuzzypath', require('inquirer-fuzzy-path'));
 
@@ -26,12 +27,30 @@ export const orchestratePrompts = async (): Promise<UI> => {
       const fields: UIField[] = [];
       do {
         const name = firstLowerCase((await promptPropertyName()).name);
-        const type = (await promptPropertyType()).type;
+        let type = (await promptPropertyType()).type;
         let ref: any;
         if (type === 'ObjectId') {
           ref = (await promptPropertyRef()).ref;
         }
-        const properties = (await promptPropertyRestrictions()).properties;
+        if (type === 'Array') {
+          const nestedType = (await promptNestedPropertyType()).type;
+          let nestedRef: string;
+          if (nestedType === 'ObjectId') {
+            nestedRef = (await promptPropertyRef()).ref;
+          }
+          const nestedProperties = (await promptPropertyRestrictions()).properties;
+          const nestedField: UINestedField = {
+            type: nestedType,
+            ...(nestedRef) && {ref: nestedRef},
+            ...(nestedProperties.includes('Required')) && {required: true},
+            ...(nestedProperties.includes('Unique')) && {unique: true},
+          }
+          type = [nestedField];
+        }
+        let properties = [];
+        if (!(type instanceof Array)) {
+          properties = (await promptPropertyRestrictions()).properties;
+        }
         const newField: UIField = {
           ...(name) && {name},
           ...(type) && {type},
@@ -41,7 +60,7 @@ export const orchestratePrompts = async (): Promise<UI> => {
         };
         fields.push(newField);
       } while ((await promptEntityPropertyAgain()).askAgain === true);
-      const canBePopulated = fields.find(o => o.type === 'ObjectId')
+      const canBePopulated = fields.find(o => o.type === 'ObjectId' || o.type instanceof Array)
       const entity: UIEntity = {
         name: camelCase(entityName),
         capitalizedName: camelCase(entityName, true),
@@ -149,6 +168,17 @@ const promptPropertyType = async () => {
       name: 'type',
       message: 'Select Type:',
       choices: ['String', 'Number', 'Date', 'Boolean', 'Array', 'ObjectId'],
+    }
+  );
+}
+
+const promptNestedPropertyType = async () => {
+  return inquirer.prompt(
+    {
+      type: 'list',
+      name: 'type',
+      message: 'Select Nested Type:',
+      choices: ['String', 'Number', 'Date', 'Boolean', 'ObjectId'],
     }
   );
 }

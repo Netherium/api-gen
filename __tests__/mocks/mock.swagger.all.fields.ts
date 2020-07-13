@@ -32,7 +32,44 @@ export const MockSwaggerAllFields: UIEntity[] =
         },
         {
           name: 'tags',
-          type: 'Array'
+          type: [
+            {
+              type: 'String'
+            }
+          ]
+        },
+        {
+          name: 'arrayOfNumbers',
+          type: [
+            {
+              type: 'Number'
+            }
+          ]
+        },
+        {
+          name: 'arrayOfDates',
+          type: [
+            {
+              type: 'Date'
+            }
+          ]
+        },
+        {
+          name: 'arrayOfBoolean',
+          type: [
+            {
+              type: 'Boolean'
+            }
+          ]
+        },
+        {
+          name: 'arrayOfObjects',
+          type: [
+            {
+              type: 'ObjectId',
+              ref: 'user',
+            }
+          ]
         }
       ],
       timestamps: true,

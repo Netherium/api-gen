@@ -149,9 +149,9 @@ export const generateController = (uiEntity: UIEntity): OptionalKind<SourceFileS
                   .writeLine(`const ${uiEntity.name}Entry = new ${uiEntity.capitalizedName}Model({\n${getFieldsForCreated(uiEntity)}\n});`)
                   .writeLine(`try {`)
                   .writeLine(`  const ${uiEntity.name}Created = await ${uiEntity.name}Entry.save();`)
-                  .conditionalWriteLine(uiEntity.populate===false, () => `  return HTTP_CREATED(res, ${uiEntity.name}Created);`)
-                  .conditionalWriteLine(uiEntity.populate===true, () => `  const ${uiEntity.name}CreatedPopulated = await ${uiEntity.name}Created${getPopulatedFieldsFragment(uiEntity)}.execPopulate();`)
-                  .conditionalWriteLine(uiEntity.populate===true, () => `  return HTTP_CREATED(res, ${uiEntity.name}CreatedPopulated);`)
+                  .conditionalWriteLine(uiEntity.populate === false, () => `  return HTTP_CREATED(res, ${uiEntity.name}Created);`)
+                  .conditionalWriteLine(uiEntity.populate === true, () => `  const ${uiEntity.name}CreatedPopulated = await ${uiEntity.name}Created${getPopulatedFieldsFragment(uiEntity, true)};`)
+                  .conditionalWriteLine(uiEntity.populate === true, () => `  return HTTP_CREATED(res, ${uiEntity.name}CreatedPopulated);`)
                   .writeLine(`} catch (err) {\n  return HTTP_INTERNAL_SERVER_ERROR(res, err);\n}`)
               }
             ],

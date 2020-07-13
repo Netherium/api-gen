@@ -84,7 +84,6 @@
   "devDependencies": {
     "@olavoparno/jest-badges-readme": "^1.4.2",
     "@types/chai": "^4.2.11",
-    "@types/cross-spawn": "^6.0.2",
     "@types/faker": "^4.1.12",
     "@types/inquirer": "^6.5.0",
     "@types/mocha": "^7.0.2",
@@ -93,7 +92,6 @@
     "@types/yargs": "^15.0.5",
     "chai": "^4.2.0",
     "copyfiles": "^2.3.0",
-    "cross-spawn": "^7.0.3",
     "mocha": "^8.0.1",
     "nyc": "^15.1.0",
     "ts-node": "^8.10.2",

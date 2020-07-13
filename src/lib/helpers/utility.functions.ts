@@ -2,16 +2,22 @@ import { promises as fs } from 'fs';
 import * as path from 'path';
 import { basename, extname } from 'path';
 import { UI } from '../interfaces/ui.model';
+import { UIEntity } from '../interfaces/ui.entity.model';
 
 
-export const getPopulatedFieldsFragment = (input: any) => {
+export const getPopulatedFieldsFragment = (input: UIEntity, existingDocument = false) => {
   let fragment = '';
   if (input.populate) {
     const fieldsToPopulate = input.fields.filter((modelField: any) => {
-      return modelField.type === 'ObjectId'
+      return modelField.type === 'ObjectId' || modelField.type instanceof Array;
     })
     for (const field of fieldsToPopulate) {
       fragment += `.populate('${field.name}')`;
+    }
+    if (existingDocument) {
+      fragment += `.execPopulate()`;
+    } else {
+      fragment += `.exec()`;
     }
     return fragment;
   }
@@ -43,11 +49,21 @@ export const getFieldsForUpdate = (userInput: any) => {
 export const getModelPropertiesForGenerator = (userInput: any) => {
   let modelFieldsString = '{';
   userInput.fields.forEach((field: any, index: number) => {
-    if (field.type === 'ObjectId' || field.required || field.unique) {
-      modelFieldsString += `\r\n${field.name}: {\r\n  type: ${field.type === 'ObjectId' ? 'Schema.Types.ObjectId' : field.type}`;
-      if (field.ref) modelFieldsString += `,\r\n  ref: '${field.ref}'`;
-      if (field.required) modelFieldsString += `,\r\n  required: ${field.required}`;
-      if (field.unique) modelFieldsString += `,\r\n  unique: ${field.unique}`;
+    if (field.type instanceof Array) {
+      modelFieldsString += `\r\n${field.name}: [\r\n`;
+      for (const nestedField of field.type) {
+        modelFieldsString += `\t{\r\n\t\ttype: ${nestedField.type === 'ObjectId' ? 'Schema.Types.ObjectId' : nestedField.type}`;
+        if (nestedField.ref) modelFieldsString += `,\r\n\t\tref: '${nestedField.ref}'`;
+        if (nestedField.required) modelFieldsString += `,\r\n\t\trequired: ${nestedField.required}`;
+        if (nestedField.unique) modelFieldsString += `,\r\n\t\tunique: ${nestedField.unique}`;
+        modelFieldsString += `\r\n\t}`;
+      }
+      modelFieldsString += `\r\n]`;
+    } else if (field.type === 'ObjectId' || field.required || field.unique) {
+      modelFieldsString += `\r\n${field.name}: {\r\n\ttype: ${field.type === 'ObjectId' ? 'Schema.Types.ObjectId' : field.type}`;
+      if (field.ref) modelFieldsString += `,\r\n\tref: '${field.ref}'`;
+      if (field.required) modelFieldsString += `,\r\n\trequired: ${field.required}`;
+      if (field.unique) modelFieldsString += `,\r\n\tunique: ${field.unique}`;
       modelFieldsString += `\r\n}`;
     } else {
       modelFieldsString += `\r\n${field.name}: ${field.type}`;
@@ -88,7 +104,20 @@ export const generateSampleJson = async () => {
             type: 'ObjectId',
             ref: 'user',
             required: true
-          }
+          },
+          {
+            name: 'publishedAt',
+            type: 'Date',
+            required: true
+          },
+          {
+            name: 'tags',
+            type: [
+              {
+                type: 'String'
+              }
+            ]
+          },
         ],
         timestamps: true,
         populate: true

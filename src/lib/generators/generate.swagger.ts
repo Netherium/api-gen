@@ -8,6 +8,7 @@ import { SwaggerPaths } from '../interfaces/swagger.paths.model';
 import { SwaggerComponentSchema, SwaggerPropertiesSchema } from '../interfaces/swagger.component.schema.model';
 import { UIEntity } from '../interfaces/ui.entity.model';
 import { camelCase } from '../helpers/utility.functions';
+import { UINestedField } from '../interfaces/ui.nested.field.model';
 
 export const generateSwagger = async (ui: UI) => {
   const yamlPath = path.join(process.cwd(), ui.swaggerPath);
@@ -249,35 +250,39 @@ const uiFieldsToSwaggerProperties = (uiEntity: UIEntity): SwaggerPropertiesSchem
   }
   for (const field of uiEntity.fields) {
     swaggerProperties[field.name] = {};
-    switch (field.type) {
-      case 'String':
+    switch (true) {
+      case field.type === 'String':
         swaggerProperties[field.name] = {
           type: 'string',
         }
         break;
-      case 'Number':
+      case field.type === 'Number':
         swaggerProperties[field.name] = {
           type: 'number',
         }
         break;
-      case 'Date':
+      case field.type === 'Date':
         swaggerProperties[field.name] = {
           type: 'string',
           format: 'date-time'
         }
         break;
-      case 'Boolean':
+      case field.type === 'Boolean':
         swaggerProperties[field.name] = {
-          type: 'boolean',
-          format: 'date-time'
+          type: 'boolean'
         }
         break;
-      case 'Array':
+      case field.type instanceof Array:
+        let items: any = {};
+        for (const nestedField of field.type as UINestedField[]) {
+          items = getNestedUiFieldsToSwaggerProperties(nestedField);
+        }
         swaggerProperties[field.name] = {
-          type: 'array'
+          type: 'array',
+          ...items
         }
         break;
-      case 'ObjectId':
+      case field.type === 'ObjectId':
         swaggerProperties[field.name] = {
           $ref: `#/components/schemas/${camelCase(field.ref, true)}`
         }
@@ -306,4 +311,27 @@ const getRequiredSwaggerProperties = (uiEntity: UIEntity): string[] => {
     }
   }
   return requiredProperties;
+}
+
+const getNestedUiFieldsToSwaggerProperties = (uiNested: UINestedField): any => {
+  const swaggerNestedProperties: SwaggerPropertiesSchema = {};
+  swaggerNestedProperties.items = {};
+  switch (uiNested.type) {
+    case 'String':
+      swaggerNestedProperties.items.type = 'string';
+      break;
+    case 'Number':
+      swaggerNestedProperties.items.type = 'number';
+      break;
+    case 'Date':
+      swaggerNestedProperties.items.type = 'string';
+      swaggerNestedProperties.items.format = 'date-time';
+      break;
+    case 'Boolean':
+      swaggerNestedProperties.items.type = 'boolean';
+      break;
+    case 'ObjectId':
+      swaggerNestedProperties.items.$ref = `#/components/schemas/${camelCase(uiNested.ref, true)}`;
+  }
+  return swaggerNestedProperties;
 }

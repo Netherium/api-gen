@@ -5,20 +5,18 @@ import pluralize from 'pluralize';
 export const generateServer = (ui: UI): OptionalKind<SourceFileStructure> => {
   const registerRoutes: string[] = [];
   const importDeclarations: ImportDeclarationStructure[] = [];
-  // 'this.express.use(\'/api/articles\', new ArticleRoute().router);'
   ui.entities.forEach(entity => {
-        registerRoutes.push(`this.express.use('/api/${pluralize(entity.name)}', new ${entity.capitalizedName}Route().router);`);
-        importDeclarations.push(
-            {
-              kind: StructureKind.ImportDeclaration,
-              isTypeOnly: false,
-              moduleSpecifier: `./routes/${entity.name}.route`,
-              namedImports: [{kind: StructureKind.ImportSpecifier, name: `${entity.capitalizedName}Route`}]
-            }
-        )
-      }
+      registerRoutes.push(`this.express.use('/api/${pluralize(entity.name)}', new ${entity.capitalizedName}Route().router);`);
+      importDeclarations.push(
+        {
+          kind: StructureKind.ImportDeclaration,
+          isTypeOnly: false,
+          moduleSpecifier: `./routes/${entity.name}.route`,
+          namedImports: [{kind: StructureKind.ImportSpecifier, name: `${entity.capitalizedName}Route`}]
+        }
+      )
+    }
   )
-
 
   return {
     statements: [

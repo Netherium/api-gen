@@ -17,7 +17,6 @@ import * as path from 'path';
 import { generateSwagger } from '../lib/generators/generate.swagger';
 import { generateServer } from '../lib/generators/generate.server';
 
-
 console.log(chalk.magenta(' _   _        _    _                            _                             '));
 console.log(chalk.magenta('\| \\ \| \|      \| \|  \| \|                          (_)                            '));
 console.log(chalk.magenta('\|  \\\| \|  ___ \| \|_ \| \|__   ______   __ _  _ __   _  ______   __ _   ___  _ __  '));

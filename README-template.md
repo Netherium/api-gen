@@ -65,9 +65,41 @@
 - Various helper files and tools, i.e. CORS integration, swagger.yaml, .env environment setup
 - Several scripts for easy development and testing
 
+
 ## Cli Options
 
-TODO
+1. :dash: Gimmie my API!!!
+    
+- `neth-api-gen`
+- Select `app`
+- Add entities according to your needs
+- Get a production ready(:crossed_fingers) api, including [basic routes](#basic-routes) + the entities you've added ([ACL required](#resource-permissions))
+- Impress your team!
+
+2. :bulb: I forgot to add...
+
+- `neth-api-gen`
+- Select `entities`
+- Add more entities to your existing neth-api-gen project, or a solid boilerplate for an ExpressJs project (modifications may apply)
+- Go and play!
+
+3. :joystick: I want more control and faster!!!
+
+- `neth-api-gen -i mysample.json`
+- Import all the options from a json file, instead of a UI
+- Do it once, do it many!    
+
+    :warning: When `generateApp: true`, `swaggerDocs` is irrelevant but you need to provide `swaggerPath: "myproject/swagger.yaml"`
+
+4. :confused: But where is that JSON???
+
+- `neth-api-gen -s`
+-  Oh yeah, forgot to mention it
+
+5. :question: Can you help???
+
+- `neth-api-gen -h`
+- I can
 
 
 ## Develop
