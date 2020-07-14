@@ -7,7 +7,7 @@ import { SwaggerEntity } from '../interfaces/swagger.entity.model';
 import { SwaggerPaths } from '../interfaces/swagger.paths.model';
 import { SwaggerComponentSchema, SwaggerPropertiesSchema } from '../interfaces/swagger.component.schema.model';
 import { UIEntity } from '../interfaces/ui.entity.model';
-import { camelCase } from '../helpers/utility.functions';
+import { camelCase, firstUpperCase } from '../helpers/utility.functions';
 import { UINestedField } from '../interfaces/ui.nested.field.model';
 
 export const generateSwagger = async (ui: UI) => {
@@ -284,7 +284,7 @@ const uiFieldsToSwaggerProperties = (uiEntity: UIEntity): SwaggerPropertiesSchem
         break;
       case field.type === 'ObjectId':
         swaggerProperties[field.name] = {
-          $ref: `#/components/schemas/${camelCase(field.ref, true)}`
+          $ref: `#/components/schemas/${firstUpperCase(field.ref)}`
         }
     }
   }
@@ -331,7 +331,7 @@ const getNestedUiFieldsToSwaggerProperties = (uiNested: UINestedField): any => {
       swaggerNestedProperties.items.type = 'boolean';
       break;
     case 'ObjectId':
-      swaggerNestedProperties.items.$ref = `#/components/schemas/${camelCase(uiNested.ref, true)}`;
+      swaggerNestedProperties.items.$ref = `#/components/schemas/${firstUpperCase(uiNested.ref)}`;
   }
   return swaggerNestedProperties;
 }
