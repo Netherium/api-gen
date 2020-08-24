@@ -8,7 +8,7 @@ import { Book } from './book.model';
 @Component({
   selector: 'app-book',
   templateUrl: './book.component.html'
-})
+  })
 export class BookComponent {
   resource = 'books';
   displayName = 'Books';
@@ -19,8 +19,8 @@ export class BookComponent {
     {header: 'Isbn', columnDef: 'isbn', type: 'Number'},
     {header: 'IsPublished', columnDef: 'isPublished', type: 'Boolean'},
     {header: 'PublishedAt', columnDef: 'publishedAt', type: 'Date'},
-    {header: 'Author', columnDef: 'author', type: 'ObjectId', displayProperty: 'name'},
-    {header: 'Collaborators', columnDef: 'collaborators', type: 'ObjectId[]', displayProperty: 'name'},
+    {header: 'Author', columnDef: 'author', type: 'ObjectId', displayProperty: 'email'},
+    {header: 'Collaborators', columnDef: 'collaborators', type: 'ObjectId[]', displayProperty: 'email'},
     {header: 'Cover', columnDef: 'cover', type: 'mediaObject'},
     {header: 'Images', columnDef: 'images', type: 'mediaObject[]'},
     {header: 'Tags', columnDef: 'tags', type: 'String[]'},
@@ -29,11 +29,11 @@ export class BookComponent {
     {header: 'CreatedAt', columnDef: 'createdAt', type: 'Date'},
     {header: 'UpdatedAt', columnDef: 'updatedAt', type: 'Date'},
     {header: 'Edit', columnDef: 'edit', type: 'edit'}
-  ];
+    ];
   sort: Sort = {
-    active: '_id',
-    direction: 'asc'
-  };
+        active: '_id',
+        direction: 'asc'
+      };
   dataSource = new CollectionDataSource<Book>(this.httpService, this.resource, this.sort, 0, 10, '');
 
   constructor(private httpService: HttpGenericService) {

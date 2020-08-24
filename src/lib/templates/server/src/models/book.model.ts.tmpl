@@ -1,7 +1,6 @@
 import * as mongoose from 'mongoose';
 
 const fuzzySearching = require('mongoose-fuzzy-searching');
-
 const Schema = mongoose.Schema;
 const bookSchema = new Schema({
   title: {
@@ -13,12 +12,22 @@ const bookSchema = new Schema({
     required: true,
     unique: true
   },
+  isPublished: Boolean,
+  publishedAt: {
+    type: Date,
+    required: true
+  },
   author: {
     type: Schema.Types.ObjectId,
     ref: 'user',
     required: true
   },
-  isPublished: Boolean,
+  collaborators: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'user'
+    }
+  ],
   cover: {
     type: Schema.Types.ObjectId,
     ref: 'mediaObject'
@@ -29,17 +38,21 @@ const bookSchema = new Schema({
       ref: 'mediaObject'
     }
   ],
-  publishedAt: {
-    type: Date,
-    required: true
-  },
   tags: [
     {
       type: String
     }
+  ],
+  pagesForReview: [
+    {
+      type: Number
+    }
+  ],
+  datesForReview: [
+    {
+      type: Date
+    }
   ]
 }, {timestamps: true});
-
-bookSchema.plugin(fuzzySearching, {fields: ['title']});
-
+bookSchema.plugin(fuzzySearching, {fields: ['title', , , , , , , , , ,]});
 export default mongoose.model('book', bookSchema);

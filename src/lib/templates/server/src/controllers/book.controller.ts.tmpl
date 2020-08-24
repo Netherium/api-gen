@@ -8,7 +8,7 @@ export class BookController {
   /** BookController.list() */
   public async list(req: Request, res: Response): Promise<Response> {
     try {
-      const bookCollection = await queryBuilderCollection(req, BookModel, [{path: 'author'}, {path: 'cover'}, {path: 'images'}, ]);
+      const bookCollection = await queryBuilderCollection(req, BookModel, [{path: 'author'}, {path: 'collaborators'}, {path: 'cover'}, {path: 'images'}, ]);
       return HTTP_OK(res, bookCollection);
     } catch (err) {
       return HTTP_INTERNAL_SERVER_ERROR(res, err);
@@ -19,7 +19,7 @@ export class BookController {
   public async show(req: Request, res: Response): Promise<Response> {
     const id = req.params.id;
     try {
-      const bookEntry = await BookModel.findOne({_id: id}).populate('author').populate('cover').populate('images').exec();
+      const bookEntry = await BookModel.findOne({_id: id}).populate('author').populate('collaborators').populate('cover').populate('images').exec();
       if (!bookEntry) {
         return HTTP_NOT_FOUND(res);
       }
@@ -34,16 +34,19 @@ export class BookController {
     const bookEntry = new BookModel({
       title: req.body.title,
       isbn: req.body.isbn,
-      author: req.body.author,
       isPublished: req.body.isPublished,
+      publishedAt: req.body.publishedAt,
+      author: req.body.author,
+      collaborators: req.body.collaborators,
       cover: req.body.cover,
       images: req.body.images,
-      publishedAt: req.body.publishedAt,
-      tags: req.body.tags
+      tags: req.body.tags,
+      pagesForReview: req.body.pagesForReview,
+      datesForReview: req.body.datesForReview
     });
     try {
       const bookCreated = await bookEntry.save();
-      const bookCreatedPopulated = await bookCreated.populate('author').populate('cover').populate('images').execPopulate();
+      const bookCreatedPopulated = await bookCreated.populate('author').populate('collaborators').populate('cover').populate('images').execPopulate();
       return HTTP_CREATED(res, bookCreatedPopulated);
     } catch (err) {
       return HTTP_INTERNAL_SERVER_ERROR(res, err);
@@ -56,15 +59,18 @@ export class BookController {
     const bookUpdateData = {
       ...(req.body.title !== undefined) && {title: req.body.title},
       ...(req.body.isbn !== undefined) && {isbn: req.body.isbn},
-      ...(req.body.author !== undefined) && {author: req.body.author},
       ...(req.body.isPublished !== undefined) && {isPublished: req.body.isPublished},
+      ...(req.body.publishedAt !== undefined) && {publishedAt: req.body.publishedAt},
+      ...(req.body.author !== undefined) && {author: req.body.author},
+      ...(req.body.collaborators !== undefined) && {collaborators: req.body.collaborators},
       ...(req.body.cover !== undefined) && {cover: req.body.cover},
       ...(req.body.images !== undefined) && {images: req.body.images},
-      ...(req.body.publishedAt !== undefined) && {publishedAt: req.body.publishedAt},
-      ...(req.body.tags !== undefined) && {tags: req.body.tags}
+      ...(req.body.tags !== undefined) && {tags: req.body.tags},
+      ...(req.body.pagesForReview !== undefined) && {pagesForReview: req.body.pagesForReview},
+      ...(req.body.datesForReview !== undefined) && {datesForReview: req.body.datesForReview}
     };
     try {
-      const bookUpdated = await BookModel.findByIdAndUpdate(id, bookUpdateData, {new: true}).populate('author').populate('cover').populate('images').exec();
+      const bookUpdated = await BookModel.findByIdAndUpdate(id, bookUpdateData, {new: true}).populate('author').populate('collaborators').populate('cover').populate('images').exec();
       if (!bookUpdated) {
         return HTTP_NOT_FOUND(res);
       }

@@ -13,9 +13,9 @@ import { NgForm } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 
 @Component({
-  selector: 'app-book-detail',
-  templateUrl: './book-detail.component.html'
-})
+    selector: 'app-book-detail',
+    templateUrl: './book-detail.component.html'
+  })
 export class BookDetailComponent {
   action: CRUDAction = CRUDAction.CREATE;
   book: Book = {
@@ -31,7 +31,7 @@ export class BookDetailComponent {
     tags: [],
     pagesForReview: [],
     datesForReview: [],
-  };
+    };
   isLoading = false;
   authorChangedSub: Subject<string> = new Subject<string>();
   filteredAuthor: Observable<User[]>;
@@ -81,7 +81,7 @@ export class BookDetailComponent {
 
   authorDisplayFn(user: User): string {
     if (user) {
-      return user.name;
+      return user.email;
     }
   }
 
@@ -101,7 +101,7 @@ export class BookDetailComponent {
 
   collaboratorsDisplayFn(user: User): string {
     if (user) {
-      return user.name;
+      return user.email;
     }
   }
 
