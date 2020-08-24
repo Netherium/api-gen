@@ -1,5 +1,5 @@
-<p align="center" style="margin: 0 auto;">
-  <img src="http://localhost:4000/uploads/repo-logo-760x480_aa797b1c6b.png" alt="Neth-api-gen" width="380">
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Netherium/api-gen/master/img/repo-logo-760x480.png" alt="Neth-api-gen" width="380">
 </p>
 
 <h4 align="center">A powerful RESTful Headless CMS written in Typescript using <a href="https://github.com/expressjs/express" target="_blank">Express</a> and <a href="https://angular.io/" target="_blank">Angular</a></h4>
