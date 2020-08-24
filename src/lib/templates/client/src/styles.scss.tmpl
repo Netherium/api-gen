@@ -1,0 +1,105 @@
+/* You can add global styles to this file, and also import other style filesDragged */
+@import "theming/neth.theme";
+@import "theming/grid";
+
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.w-100 {
+  width: 100% !important;
+}
+
+.dialog-responsive {
+  width: 75vw;
+  @media (min-width: 960px) {
+    width: 30vw;
+  }
+}
+
+.dialog-full {
+  width: 90vw;
+}
+
+.mat-list-base[dense].cell-mat-list {
+  .mat-list-item {
+    height: 20px;
+
+    .mat-list-item-content {
+      padding-left: 0;
+    }
+  }
+}
+
+a.cell-file {
+  position: relative;
+
+  img, mat-icon {
+    display: flex !important;
+    width: 80px !important;
+    height: 80px !important;
+    font-size: 80px !important;
+  }
+}
+
+.mat-chip-list .mat-datepicker-toggle .mat-icon-button {
+  width: 1.5em;
+  height: 1.5em;
+  font: inherit;
+  vertical-align: baseline;
+  right: 4px;
+
+  .mat-datepicker-toggle-default-icon {
+    width: 1em;
+  }
+}
+
+.mat-chip-list {
+  .mat-icon[matSuffix] {
+    width: 1em;
+    font-size: 150%;
+    line-height: 1.125;
+    position: absolute;
+    right: 0;
+    bottom: 8px;
+  }
+
+  .mat-spinner {
+    position: absolute;
+    right: -2px;
+    bottom: 7px;
+    width: 24px !important;
+    height: 24px !important;
+
+    svg {
+      top: 2px;
+      left: 2px
+    }
+  }
+}
+
+.mat-header-cell, .mat-cell {
+  &.mat-column-select {
+    max-width: 40px !important;
+    padding-left: 12px !important;
+  }
+
+  &.mat-column-edit {
+    max-width: 52px !important;
+    padding-right: 12px !important;
+  }
+}
+
+.cdk-global-overlay-wrapper {
+  overflow-y: scroll !important;
+}

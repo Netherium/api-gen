@@ -1,0 +1,129 @@
+<mat-card class="m-2 m-md-3 mat-elevation-z4">
+  <mat-card-header>
+    <mat-card-title>{{action === 1 ? 'Update' : 'Create'}} Book
+      <span *ngIf="action===1" class="ml-1 mat-caption">{{book._id}}</span>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form #entityForm="ngForm" id="entityForm" novalidate>
+      <div class="d-flex flex-wrap">
+        <div class="col-12 col-md-7">
+          <mat-form-field class="w-100">
+            <mat-label>Title</mat-label>
+            <input [(ngModel)]="book.title" autocomplete="off" matInput name="title">
+            <mat-icon matSuffix>text_fields</mat-icon>
+          </mat-form-field>
+          <mat-form-field class="w-100">
+            <mat-label>Isbn</mat-label>
+            <input [(ngModel)]="book.isbn" autocomplete="off" matInput name="isbn" type="number">
+            <mat-icon matSuffix svgIcon="neth:numeric"></mat-icon>
+          </mat-form-field>
+          <div class="w-100 mb-3">
+            <mat-label class="mat-label-toggle">IsPublished</mat-label>
+            <mat-slide-toggle [(ngModel)]="book.isPublished" name="isPublished"></mat-slide-toggle>
+          </div>
+          <mat-form-field class="w-100">
+            <mat-label>PublishedAt</mat-label>
+            <input [(ngModel)]="book.publishedAt" [matDatepicker]="picker1" autocomplete="off"
+                   matInput name="publishedAt">
+            <mat-datepicker-toggle [for]="picker1" matSuffix></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field class="w-100">
+            <mat-label>Tags</mat-label>
+            <mat-chip-list #tagsChipList>
+              <mat-chip (removed)="removeTags(tagsIndex, entityForm)" *ngFor="let item of book.tags; index as tagsIndex" [removable]="true"
+                        [selectable]="true">
+                {{item}}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+              <input (matChipInputTokenEnd)="addTags($event)" [(ngModel)]="tagsValue" [matChipInputFor]="tagsChipList"
+                     autocomplete="off" matInput name="tags">
+            </mat-chip-list>
+          </mat-form-field>
+          <mat-form-field class="w-100">
+            <mat-label>PagesForReview</mat-label>
+            <mat-chip-list #pagesForReviewChipList>
+              <mat-chip (removed)="removePagesForReview(pagesForReviewIndex, entityForm)" *ngFor="let item of book.pagesForReview; index as pagesForReviewIndex"
+                        [removable]="true"
+                        [selectable]="true">
+                {{item}}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+              <input (matChipInputTokenEnd)="addPagesForReview($event)" [(ngModel)]="pagesForReviewValue" [matChipInputFor]="pagesForReviewChipList"
+                     autocomplete="off" matInput name="pagesForReview"
+                     type="number">
+            </mat-chip-list>
+          </mat-form-field>
+          <mat-form-field class="w-100">
+            <mat-label>DatesForReview</mat-label>
+            <mat-chip-list #datesForReviewChipList>
+              <mat-chip (removed)="removeDatesForReview(datesForReviewIndex, entityForm)" *ngFor="let item of book.datesForReview; index as datesForReviewIndex"
+                        [removable]="true"
+                        [selectable]="true">
+                {{item | date}}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+              <input (matChipInputTokenEnd)="addDatesForReview($event)" [(ngModel)]="datesForReviewValue" [matChipInputFor]="datesForReviewChipList"
+                     [matDatepicker]="picker2" autocomplete="off"
+                     matInput name="datesForReview">
+              <mat-datepicker-toggle [for]="picker2" matSuffix></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-chip-list>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-md-5">
+          <mat-form-field class="w-100">
+            <mat-label>Author</mat-label>
+            <input (ngModelChange)="authorChanged($event)" [(ngModel)]="book.author" [matAutocomplete]="authorAuto"
+                   autocomplete="off" matInput name="author">
+            <mat-icon *ngIf="!isLoadingAuthor" matSuffix svgIcon="neth:hexagon"></mat-icon>
+            <mat-spinner *ngIf="isLoadingAuthor" diameter="20" matSuffix></mat-spinner>
+            <mat-autocomplete #authorAuto="matAutocomplete" [displayWith]="authorDisplayFn">
+              <mat-option *ngFor="let item of filteredAuthor | async" [value]="item">
+                {{item.name}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <mat-form-field class="w-100">
+            <mat-label>Collaborators</mat-label>
+            <mat-chip-list #collaboratorsChipList>
+              <mat-chip (removed)="removeCollaborators(collaboratorsIndex, entityForm)" *ngFor="let item of book.collaborators; index as collaboratorsIndex"
+                        [removable]="true" [selectable]="true">
+                {{item.name}}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+              <input (ngModelChange)="collaboratorsChanged($event)" [matAutocomplete]="collaboratorsAuto" [matChipInputFor]="collaboratorsChipList"
+                     [ngModel]="book.collaborators" autocomplete="off"
+                     matInput name="collaborators">
+              <mat-icon *ngIf="!isLoadingCollaborators" matSuffix svgIcon="neth:hexagon-multiple"></mat-icon>
+              <mat-spinner *ngIf="isLoadingCollaborators" diameter="20" matSuffix></mat-spinner>
+              <mat-autocomplete #collaboratorsAuto="matAutocomplete" (optionSelected)="selectedCollaborators($event)"
+                                [displayWith]="collaboratorsDisplayFn">
+                <mat-option *ngFor="let item of filteredCollaborators | async" [value]="item">
+                  {{item.name}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-chip-list>
+          </mat-form-field>
+          <app-file-upload [(ngModel)]="book.cover" [multiple]="false" [title]="'Cover'" name="cover"></app-file-upload>
+          <app-file-upload [(ngModel)]="book.images" [multiple]="true" [title]="'Images'"
+                           name="images"></app-file-upload>
+        </div>
+      </div>
+      <div class="d-flex justify-content-end">
+        <a [routerLink]="['/books']" class="mr-3" color="accent" mat-raised-button>Cancel</a>
+        <ng-container>
+          <button (click)="save()" *ngIf="!isLoading; else loadingButton" [disabled]="entityForm.pristine"
+                  color="primary" mat-raised-button>Save
+          </button>
+          <ng-template #loadingButton>
+            <button color="accent" disabled mat-raised-button>
+              <mat-spinner class="m-2" diameter="20"></mat-spinner>
+            </button>
+          </ng-template>
+        </ng-container>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

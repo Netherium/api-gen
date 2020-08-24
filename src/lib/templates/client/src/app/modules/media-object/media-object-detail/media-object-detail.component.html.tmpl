@@ -1,0 +1,43 @@
+<mat-card class="m-2 m-md-3 mat-elevation-z4">
+  <mat-card-header>
+    <mat-card-title>{{action === 1 ? 'Update' : 'Create'}} Media Object
+      <span *ngIf="action===1" class="ml-1 mat-caption">{{mediaObject._id}}</span>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form #entityForm="ngForm" id="entityForm" novalidate>
+      <div class="d-flex flex-wrap">
+        <div class="col-12 col-md-7">
+          <mat-form-field class="w-100">
+            <mat-label>Alternative Text</mat-label>
+            <input [(ngModel)]="alternativeText" autocomplete="off" matInput name="alternativeText">
+            <mat-icon matSuffix>text_fields</mat-icon>
+          </mat-form-field>
+          <mat-form-field class="w-100">
+            <mat-label>Caption</mat-label>
+            <input [(ngModel)]="caption" autocomplete="off" matInput name="caption">
+            <mat-icon matSuffix>text_fields</mat-icon>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-md-5">
+          <app-file-upload [(ngModel)]="mediaObject" [canAddFiles]="action === 0" [multiple]="false" [standAlone]="true"
+                           name="image"
+                           title="Image"></app-file-upload>
+        </div>
+      </div>
+      <div class="d-flex justify-content-end">
+        <a [routerLink]="['/media-objects']" class="mr-3" color="accent" mat-raised-button>Cancel</a>
+        <ng-container>
+          <button (click)="save()" *ngIf="!isLoading; else loadingButton" [disabled]="entityForm.pristine"
+                  color="primary" mat-raised-button>Save
+          </button>
+          <ng-template #loadingButton>
+            <button color="accent" disabled mat-raised-button>
+              <mat-spinner class="m-2" diameter="20"></mat-spinner>
+            </button>
+          </ng-template>
+        </ng-container>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

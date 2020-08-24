@@ -1,8 +1,9 @@
-<h1 align="center">
-  Neth-api-gen
-</h1>
-<h4 align="center">A powerful RESTful API generator written in Typescript using <a href="https://github.com/expressjs/express" target="_blank">Express</a></h4>
-<h5 align="center">JWT auth, Access-Control Lists (ACL), Uploads, MongoDB in one :package: </h5>
+<p align="center" style="margin: 0 auto;">
+  <img src="http://localhost:4000/uploads/repo-logo-760x480_aa797b1c6b.png" alt="Neth-api-gen" width="380">
+</p>
+
+<h4 align="center">A powerful RESTful Headless CMS written in Typescript using <a href="https://github.com/expressjs/express" target="_blank">Express</a> and <a href="https://angular.io/" target="_blank">Angular</a></h4>
+<h5 align="center">JWT auth, Access-Control Lists (ACL), Uploads, MongoDB, Angular and Angular Material in one :package:  </h5>
 <p align="center">
     <img src="#lines#" alt="Lines Covered">
     <img src="#buildstatus#" alt="Build Status">
@@ -20,11 +21,12 @@
 - [Features](#features)
 - [Cli Options](#cli-options)
 - [Develop](#develop)
-- [Basic Routes](#basic-routes)
+- [Basic API Routes](#basic-api-routes)
 - [Resource Permissions](#resource-permissions)
 - [Coding Tips](#coding-tips)
 - [Structure](#structure)
 - [Uploads](#uploads)
+- [Under The Hood](#under-the-hood)
 - [Tests](#tests)
 - [Debug](#debug)
 - [Authors](#authors)
@@ -46,19 +48,42 @@
 3. :computer: Fill in choices
 <img src="https://raw.githubusercontent.com/Netherium/api-gen/master/img/cli.png">
 
-4. :tada: Your api is ready!
+4. :tada: Your CMS is ready!
+    Server
     ```bash
-    $ cd myproject
+    $ cd myproject/server
     $ npm install
+    $ copy `.env.sample` to `.env` and adjust credentials
+    $ npm run dev 
     ```
+   Navigate to http://localhost:4000/api/auth/init to initialize app
+   
+   Client
+   ```bash
+   $ cd myproject/client
+   $ npm install
+   $ npm run start (or ng serve)
+   ```
+   Navigate to http://localhost:4200 and login with your credentials
+
+<p align="center">
+    <img src="https://raw.githubusercontent.com/Netherium/api-gen/master/img/admin-panel-login.png" alt="Admin Panel Login">
+</p>
+
+   All resources are located in the sidenav under `Resources`
+    
+<p align="center">
+    <img src="https://raw.githubusercontent.com/Netherium/api-gen/master/img/admin-panel-sidenav.png" alt="Admin Panel Sidenav">
+</p>
 
 ## Features
   
-- Typescript Intellisense Awesomeness
+- Typescript Intellisense Awesomeness throughout backend and UI
 - Robust routing and middleware based on same principles of Express
+- Solid modularized admin panel with [Angular](https://angular.io) and [Angular Material](https://material.angular.io)
 - MongoDB integration
-- Elasticsearch integration (soon™)
-- Protected routes, ACL based with middleware, using [`jwt-token`](https://jwt.io/)
+- ~~Elasticsearch integration~~ (soon™), temporarily replaced with 'mongoose-fuzzy-searching'
+- Protected routes, ACL based with middleware, using [`jwt-token`](https://jwt.io)
 - File Upload routes and thumbnail generator
 - Test and Coverage
 - REST API Documentation via [swagger-ui-express](https://www.npmjs.com/package/swagger-ui-express)
@@ -73,14 +98,14 @@
  - `neth-api-gen`
  - Select `app`
  - Add entities according to your needs
- - Get a production ready(:crossed_fingers:) api, including [basic routes](#basic-routes) + the entities you've added ([ACL required](#resource-permissions))
+ - Get a production ready(:crossed_fingers:) api + admin panel including [basic routes](#basic-routes) + the entities you've added ([ACL required](#resource-permissions))
  - Impress your team!
 
 2. :bulb: I forgot to add...
 
  - `neth-api-gen`
  - Select `entities`
- - Add more entities to your existing neth-api-gen project, or a solid boilerplate for an ExpressJs project (modifications may apply)
+ - Add more entities to your existing neth-api-gen project, or a solid boilerplate for an ExpressJs/Angular project (modifications may apply)
  - Go and play!
 
 3. :joystick: I want more control and faster!!!
@@ -99,18 +124,31 @@
  - `neth-api-gen -h`
  - I can
 
-:warning: When `generateApp: true`, `swaggerDocs` is irrelevant but you need to provide `swaggerPath: "myproject/swagger.yaml"`
+:warning: When `generateApp: true`, `swaggerDocs` is irrelevant, but you need to provide `swaggerPath: "myproject/swagger.yaml"`
     
 
 ## Develop
 
 1.  :pray: If you generated project, navigate and install dependencies
+    
+    Server
+        
      ```bash
-    $ cd myproject
+    $ cd myproject/server
     $ npm install
     ```
 
-2. :evergreen_tree: Setup your environment files: `.env`, `.env.test`, `.env.production`, according to `.env.sample`
+    Client
+    
+     ```bash
+    $ cd myproject/client
+    $ npm install
+    ```
+
+2. :evergreen_tree: Setup your environment files:
+
+    Server `.env`, `.env.test`, `.env.production`, according to `.env.sample` (under myproject/server)
+    
     ```bash
     ADDRESS=localhost
     PORT=4000
@@ -119,11 +157,29 @@
     SECRET=YOURSECRETHERE
     ...
     ```
+   
+   Client `environment.ts`, `environment.prod.ts` (under myproject/client/environments)
+       
+   ```bash
+   apiUrl: 'http://localhost:4000/api',         // Endpoint of the server
+   authorizedRole: 'Admin'                      // Role that has authorized access to admin panel
+   ...
+   ```
 
 3. :dash: Develop
+
+    Server
+    
      ```bash
     $ npm run dev
     ```
+   
+    Client
+    
+     ```bash
+    $ npm run start (ng serve)
+    ```   
+   
 
 4. :bulb: Initialize: Navigate to http://localhost:4000/api/auth/init
     - 2 Roles will be created, 1 Admin, 1 Public
@@ -131,12 +187,19 @@
     - Resource permissions will be created for basic routes, with default access to admin Role
 
 5. :rocket: Build!
+    
+    Server
     ```bash
     $ npm run build
     ```
+    Client
+    ```bash
+    $ npm run build
+    ```
+   
 6. :fireworks:Your build is ready to deploy !:fireworks:
 
-## Basic Routes
+## Basic API Routes
 
 The basic routes provided are listed below.
 Each one of them is being reflected by its own `route`, `controller`, `model`
@@ -227,8 +290,9 @@ Get Resource Permissions
 
 Follow the structure below. It will keep things and your mind tidy :blossom:
 
+    Server
     .
-    ├── dist                # Compiled files ready to deploy `npm run test`
+    ├── dist                # Compiled files ready to deploy `npm run build`
     ├── uploads             # When using local provider this is where uploads go
     │
     ├── src                 # Your code goes here
@@ -244,7 +308,25 @@ Follow the structure below. It will keep things and your mind tidy :blossom:
     │
     ├── swagger.yaml        # Swagger documentation (`api/docs`) defined in yaml format
     ├── LICENSE             # License file
-    └── README.md           # This File
+    └── README.md
+
+    Client
+    .
+    ├── dist                            # Compiled files ready to deploy `npm run build`
+    │
+    ├── src                             # Your code goes here
+    │   ├── app             
+    │   │   ├── components              # Shared components throughout the Angular app
+    │   │   ├── models                  # Shared models throughout the Angular app    
+    │   │   ├── services                # Shared core services throughout the Angular app
+    │   │   ├── dialogs                 # Shared dialogs
+    │   │   ├── modules                 # Lazy loaded modules, each generated resource corresponds to 1 module
+    │   │   └── app-routing.module.ts   # Routing module that binds all lazy loaded modules, each generated resource has a child under `childrenRoutes`  
+    │   ├── assets                      # Static resources
+    │   ├── environments                # Angular environment configuration
+    │   ├── theming                     # Angular Material Theming Styles
+    │                      
+    ... Rest Default Angular Structure
 
 
 ## Uploads
@@ -256,26 +338,47 @@ Follow the structure below. It will keep things and your mind tidy :blossom:
 - If file of image type, a thumbnail (80x80) will be generated
 
 
+## Under The Hood
+
+- When you generate an `App`, an Express server project based on [Neth-express-api-ts](https://github.com/Netherium/neth-express-api-ts) and an Angular project
+- When you generate an `Entity`, multiple files are generated under `server` and `client` folders
+    Server
+    - Controller, Model, Route files are generated under their corresponding folders `./server/src/controllers/entity.controller.ts, ./server/src/models/entity.model.ts, ./server/src/routes/entity.route.ts`
+    - An entry in `server.ts` is created, under method `routes`
+    
+    Client
+    - A module is being created under its corresponding folder  `./client/src/app/modules/entityfolder/...`
+    - An entry in `app-routing.module.ts` is created, under variable `childrenRoutes`
+
+
 ## Tests
 
-Testing is based on [Mocha](https://www.npmjs.com/package/mocha), [chai](https://www.npmjs.com/package/chai) and [chai-http](https://www.npmjs.com/package/chai-http)
+- Server testing based on [Mocha](https://www.npmjs.com/package/mocha), [chai](https://www.npmjs.com/package/chai) and [chai-http](https://www.npmjs.com/package/chai-http)
+- Client testing based on the default Angular test tools [Jasmine](https://angular.io/guide/testing)
+<sub>(Tests not provided/generated for Angular, but you can follow standard Angular practices)</sub>
 
 Run tests
+
+Server
 ```bash
+$ cd myproject/server
 $ npm test
 ```
 
+Client
+```bash
+$ cd myproject/client
+$ npm test (or ng test)
+```
 
 ## Coverage
 
-Coverage is based on [nyc](https://www.npmjs.com/package/nyc)
+Server Coverage is based on [nyc](https://www.npmjs.com/package/nyc)
 
 Run coverage (generated under folder `coverage`)
-
 ```bash
 $ npm run test:coverage
 ```
-
 
 ## Debug
   

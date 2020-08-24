@@ -1,0 +1,82 @@
+@import '../../../../node_modules/@angular/material/theming';
+
+@mixin file-upload-color($config-or-theme) {
+  $config: mat-get-color-config($config-or-theme);
+  $foreground: map-get($config, foreground);
+  $background: map-get($config, background);
+  $is-dark-theme: map-get($config, is-dark);
+
+  .file-upload-title {
+    margin-bottom: 6px !important;
+    color: mat-color($foreground, secondary-text);
+  }
+  .file-upload-container {
+    border-radius: 4px;
+    position: relative;
+    border: 1px solid mat-color($foreground, divider, if($is-dark-theme, 0.7, 0.42));
+    background-color: mat-color($background, card);
+    margin-bottom: 16px;
+
+    .file-list-container {
+      min-height: 98px;
+      max-height: 298px;
+      overflow-y: auto;
+      margin-bottom: 52px;
+      padding: 16px 20px 0 16px;
+    }
+
+    .container-bg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      color: mat-color($foreground, secondary-text);
+      user-select: none;
+      text-align: center;
+
+      p {
+        margin-bottom: 0;
+      }
+
+      mat-icon {
+        width: 72px;
+        height: 72px;
+        font-size: 72px;
+      }
+    }
+
+    .mat-chip {
+      font-size: 12px;
+
+      img {
+        height: 24px;
+        width: 24px;
+      }
+    }
+
+    .mat-raised-button {
+      position: absolute;
+      right: 8px;
+      bottom: 8px;
+    }
+
+    .mat-mini-fab, .mat-icon-button {
+      position: absolute;
+      left: 8px;
+      bottom: 8px;
+    }
+
+    mat-spinner {
+      margin: 8px;
+    }
+  }
+}
+
+@mixin file-upload-theme($theme) {
+  $color: mat-get-color-config($theme);
+  $typography: mat-get-typography-config($theme);
+  @if $color != null {
+    @include file-upload-color($color);
+  }
+}

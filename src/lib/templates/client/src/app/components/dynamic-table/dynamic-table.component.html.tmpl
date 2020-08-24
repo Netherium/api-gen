@@ -1,0 +1,231 @@
+<mat-card *ngIf="!displayAsDialog; else displayDialogTemplate" class="m-2 m-md-3 mat-elevation-z4">
+  <mat-card-header>
+    <mat-card-title>{{displayName}}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <ng-container *ngTemplateOutlet="dynamicTable">
+    </ng-container>
+  </mat-card-content>
+</mat-card>
+
+<ng-template #displayDialogTemplate>
+  <ng-container *ngTemplateOutlet="dynamicTable">
+  </ng-container>
+</ng-template>
+
+
+<ng-template #dynamicTable>
+  <div class="d-flex flex-wrap justify-content-between">
+    <div>
+      <mat-form-field *ngIf="dataSource.page$ | async as page">
+        <mat-label>Filter</mat-label>
+        <input (ngModelChange)="dataSource.queryTrigger($event)" [ngModel]="page.query" autocomplete="off" matInput>
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </div>
+    <div class="d-flex justify-content-end align-items-center">
+      <mat-form-field class="mr-3" style="width: 70px">
+        <mat-label>Display</mat-label>
+        <mat-select (ngModelChange)="selectedColumnsChanged($event)" [ngModel]="selectedColumns" multiple>
+          <mat-select-trigger>
+            {{selectedColumns.length}}/{{columns.length}}
+          </mat-select-trigger>
+          <mat-option *ngFor="let item of columns" [value]="item.columnDef">{{item.header}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button *ngIf="!displayAsDialog" [disabled]="dataSource.selection.selected.length === 0"
+              [matMenuTriggerFor]="tableActionsMenu"
+              class="mr-3" color="accent"
+              mat-raised-button>{{dataSource.selection.selected.length}}
+        Selected
+      </button>
+      <a *ngIf="!displayAsDialog" [routerLink]="['/' + resource + '/create']" aria-label="Create" color="primary"
+         mat-mini-fab>
+        <mat-icon class="d-flex">add</mat-icon>
+      </a>
+    </div>
+  </div>
+  <mat-menu #tableActionsMenu="matMenu">
+    <button (click)="deleteSelected()" mat-menu-item>
+      <mat-icon>delete</mat-icon>
+      <span>Delete selected</span>
+    </button>
+  </mat-menu>
+
+  <mat-table (matSortChange)="dataSource.sortingTrigger($event)"
+             [dataSource]="dataSource" [matSortActive]="sort.active"
+             [matSortDirection]="sort.direction" matSort>
+
+    <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef" matRipple>
+      <ng-container [ngSwitch]="column.type">
+        <ng-container *ngSwitchCase="'select'">
+          <mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? dataSource.masterToggle() : null"
+                          [checked]="dataSource.selection.hasValue() && dataSource.isAllSelected()"
+                          [indeterminate]="dataSource.selection.hasValue() && !dataSource.isAllSelected()"
+            ></mat-checkbox>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <mat-checkbox (change)="$event ? dataSource.selection.toggle(row) : null"
+                          (click)="$event.stopPropagation()"
+                          [checked]="dataSource.selection.isSelected(row)"
+            ></mat-checkbox>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'String'">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.header }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{ row[column.columnDef] }}</mat-cell>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'Number'">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.header }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{ row[column.columnDef] }}</mat-cell>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'Date'">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.header }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{ row[column.columnDef] | date}}</mat-cell>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'Boolean'">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.header }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <mat-icon>{{row[column.columnDef] ? 'check' : 'clear'}}</mat-icon>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'ObjectId'">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.header }}</mat-header-cell>
+          <mat-cell
+            *matCellDef="let row">{{row[column.columnDef] ? row[column.columnDef][column.displayProperty] : null}}</mat-cell>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'mediaObject'">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.header }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <a *ngIf="row[column.columnDef] as item" [href]="item.url" target="_blank">
+              <img *ngIf="item.thumbnail else fileIcon" [alt]="item.name" [matTooltip]="item.url"
+                   [src]="item.thumbnail.url"
+                   class="mr-1"
+                   height="24px" width="24px">
+              <ng-template #fileIcon>
+                <mat-icon [matTooltip]="item.url">file_download</mat-icon>
+              </ng-template>
+            </a>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'mediaObjectUrl'">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.header }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <a [href]="row.url" class="cell-file" target="_blank">
+              <img *ngIf="row.thumbnail else fileIcon" [alt]="row.name" [matTooltip]="row.url"
+                   [src]="row.thumbnail.url">
+              <ng-template #fileIcon>
+                <mat-icon [matTooltip]="row.url">file_download</mat-icon>
+              </ng-template>
+            </a>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'String[]'">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.header }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <mat-list *ngIf="row[column.columnDef] && row[column.columnDef].length > 0" class="cell-mat-list" dense>
+              <mat-list-item *ngFor="let item of row[column.columnDef]">{{item}}</mat-list-item>
+            </mat-list>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'Number[]'">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.header }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <mat-list *ngIf="row[column.columnDef] && row[column.columnDef].length > 0" class="cell-mat-list" dense>
+              <mat-list-item *ngFor="let item of row[column.columnDef]">{{item}}</mat-list-item>
+            </mat-list>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'Date[]'">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.header }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <mat-list *ngIf="row[column.columnDef] && row[column.columnDef].length > 0" class="cell-mat-list" dense>
+              <mat-list-item *ngFor="let item of row[column.columnDef]">{{item | date}}</mat-list-item>
+            </mat-list>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'Boolean[]'">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.header }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <mat-list *ngIf="row[column.columnDef] && row[column.columnDef].length > 0" class="cell-mat-list" dense>
+              <mat-list-item *ngFor="let item of row[column.columnDef]">
+                <mat-icon>{{item ? 'check' : 'clear'}}</mat-icon>
+              </mat-list-item>
+            </mat-list>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'ObjectId[]'">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.header }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <mat-list *ngIf="row[column.columnDef] && row[column.columnDef].length > 0" class="cell-mat-list" dense>
+              <mat-list-item
+                *ngFor="let item of row[column.columnDef]">{{item[column.displayProperty]}}</mat-list-item>
+            </mat-list>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'mediaObject[]'">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.header }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <ng-container *ngFor="let item of row[column.columnDef]">
+              <a [href]="item.url" target="_blank">
+                <img *ngIf="item.thumbnail else fileIcon" [alt]="item.name" [matTooltip]="item.url"
+                     [src]="item.thumbnail.url"
+                     class="mr-1"
+                     height="24px" width="24px">
+                <ng-template #fileIcon>
+                  <mat-icon [matTooltip]="item.url">file_download</mat-icon>
+                </ng-template>
+              </a>
+            </ng-container>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'resourcePermission'">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.header }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <mat-list *ngIf="row[column.columnDef] && row[column.columnDef].length > 0" class="cell-mat-list" dense>
+              <mat-list-item *ngFor="let method of row[column.columnDef]">{{method.name}} |
+                <ng-container *ngFor="let role of method.roles; last as isLast">{{role.name}}
+                  <ng-container *ngIf="!isLast">,&nbsp;</ng-container>
+                </ng-container>
+              </mat-list-item>
+            </mat-list>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'edit'">
+          <mat-header-cell *matHeaderCellDef>{{ column.header }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <a [routerLink]="['/' + resource + '/edit', row._id]" color="gray" mat-icon-button>
+              <mat-icon>edit</mat-icon>
+            </a>
+          </mat-cell>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="selectedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: selectedColumns;" matRipple (click)="editDialog(row)"></mat-row>
+
+  </mat-table>
+
+  <mat-paginator (page)="dataSource.paginationTrigger($event.pageIndex, $event.pageSize)"
+                 *ngIf="dataSource.page$ | async as page" [length]="page.totalItems"
+                 [pageIndex]="page.pageNumber" [pageSizeOptions]="[5, 10, 20, 50]"
+                 [pageSize]="page.pageSize" showFirstLastButtons>
+  </mat-paginator>
+</ng-template>

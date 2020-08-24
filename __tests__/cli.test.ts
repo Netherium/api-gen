@@ -90,6 +90,7 @@ describe('CLI', () => {
         KEYSTROKE.BACKSPACE,              // Delete wrong property name
         `body${KEYSTROKE.ENTER}`,         // body property
         KEYSTROKE.ENTER,                  // String
+        KEYSTROKE.ENTER,                  // Indexed
         KEYSTROKE.ENTER,                  // No restrictions on property
         `Y${KEYSTROKE.ENTER}`,            // Add another property
         `createdBy${KEYSTROKE.ENTER}`,    // createdBy property
@@ -100,6 +101,7 @@ describe('CLI', () => {
         KEYSTROKE.DOWN,
         KEYSTROKE.ENTER,
         `user${KEYSTROKE.ENTER}`,         // Entity ref
+        `name${KEYSTROKE.ENTER}`,         // Property displayProperty
         KEYSTROKE.ENTER,                  // No restrictions on property
         `N${KEYSTROKE.ENTER}`,            // Add another property
         `N${KEYSTROKE.ENTER}`,            // Timestamps
@@ -108,6 +110,7 @@ describe('CLI', () => {
         `book${KEYSTROKE.ENTER}`,         // book entity
         `title${KEYSTROKE.ENTER}`,        // title property
         KEYSTROKE.ENTER,                  // string type
+        KEYSTROKE.ENTER,                  // Indexed
         KEYSTROKE.SPACE,                  // Required
         KEYSTROKE.DOWN,
         KEYSTROKE.SPACE,                  // Unique
@@ -126,6 +129,7 @@ describe('CLI', () => {
         KEYSTROKE.DOWN,
         KEYSTROKE.ENTER,
         `user${KEYSTROKE.ENTER}`,         // Entity ref
+        `name${KEYSTROKE.ENTER}`,         // Property displayProperty
         KEYSTROKE.ENTER,                  // No restrictions on property
         `N${KEYSTROKE.ENTER}`,            // Add another property
         `Y${KEYSTROKE.ENTER}`,            // Timestamps
@@ -136,16 +140,18 @@ describe('CLI', () => {
       cli.should.have.property('data').contains('Project generated in ');
       cli.should.have.property('data').contains('Resource generated for post');
       cli.should.have.property('data').contains('Resource generated for book');
-      const controller = await fs.promises.readdir(path.join(process.cwd(), apiTwoEntities, 'src', 'controllers'));
+      const controller = await fs.promises.readdir(path.join(process.cwd(), apiTwoEntities, 'server', 'src', 'controllers'));
       controller.should.include.members(['post.controller.ts', 'book.controller.ts']);
     });
     it('should create entities without app but with docs', async () => {
       const cli = await cliExecute('npx ts-node --transpile-only src/bin/main.ts', [
         KEYSTROKE.DOWN,
         KEYSTROKE.ENTER,
+        `${apiNoAppWDocs}${KEYSTROKE.ENTER}`,
         `product${KEYSTROKE.ENTER}`,
         `title${KEYSTROKE.ENTER}`,
-        KEYSTROKE.ENTER,
+        KEYSTROKE.ENTER,                  // String property
+        KEYSTROKE.ENTER,                  // Indexed property
         KEYSTROKE.ENTER,
         `Y${KEYSTROKE.ENTER}`,
         `tags${KEYSTROKE.ENTER}`,
@@ -180,11 +186,10 @@ describe('CLI', () => {
         `N${KEYSTROKE.ENTER}`,
         `Y${KEYSTROKE.ENTER}`,
         `N${KEYSTROKE.ENTER}`,
-        `${apiNoAppWDocs}/src${KEYSTROKE.ENTER}`,
         `Y${KEYSTROKE.ENTER}`,
         `${apiNoAppWDocs}/swagger.yaml${KEYSTROKE.ENTER}`
       ], true, 50000, 1500, 1000);
-      const controller = await fs.promises.readdir(path.join(process.cwd(), apiNoAppWDocs, 'src', 'controllers'));
+      const controller = await fs.promises.readdir(path.join(process.cwd(), apiNoAppWDocs, 'server', 'src', 'controllers'));
       controller.should.include.members(['product.controller.ts']);
       cli.should.have.property('data').contains('Resource generated for product');
       cli.should.have.property('data').contains('Swagger docs updated');
@@ -193,17 +198,19 @@ describe('CLI', () => {
       const cli = await cliExecute('npx ts-node --transpile-only src/bin/main.ts', [
         KEYSTROKE.DOWN,
         KEYSTROKE.ENTER,
+        `${apiNoAppNoDocs}${KEYSTROKE.ENTER}`,
         `post${KEYSTROKE.ENTER}`,
         `title${KEYSTROKE.ENTER}`,
         KEYSTROKE.ENTER,
         KEYSTROKE.ENTER,
+        KEYSTROKE.ENTER,
         `N${KEYSTROKE.ENTER}`,
         `N${KEYSTROKE.ENTER}`,
         `N${KEYSTROKE.ENTER}`,
-        `${apiNoAppNoDocs}/src${KEYSTROKE.ENTER}`,
+        // `${apiNoAppNoDocs}/src${KEYSTROKE.ENTER}`,
         `N${KEYSTROKE.ENTER}`
       ], true, 20000, 1500, 1000);
-      const controller = await fs.promises.readdir(path.join(process.cwd(), 'apiNoAppNoDocs', 'src', 'controllers'));
+      const controller = await fs.promises.readdir(path.join(process.cwd(), 'apiNoAppNoDocs', 'server', 'src', 'controllers'));
       controller.should.include.members(['post.controller.ts']);
       cli.should.have.property('data').contains('Resource generated for post');
     });

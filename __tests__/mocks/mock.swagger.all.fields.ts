@@ -1,10 +1,9 @@
-import { UIEntity } from '../../src/lib/interfaces/ui.entity.model';
+import { UIEntity } from '../../src/lib/interfaces/ui-entity.model';
 
 export const MockSwaggerAllFields: UIEntity[] =
   [
     {
       name: 'book',
-      capitalizedName: 'Book',
       fields: [
         {
           name: 'title',
@@ -77,7 +76,6 @@ export const MockSwaggerAllFields: UIEntity[] =
     },
     {
       name: 'post',
-      capitalizedName: 'Post',
       fields: [
         {
           name: 'content',

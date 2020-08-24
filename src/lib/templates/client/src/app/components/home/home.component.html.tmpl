@@ -1,0 +1,90 @@
+<div class="row m-0">
+  <div *ngIf="users$ | async as users" class="col-12 col-sm-6 col-lg-4 col-xl-3 mt-3">
+    <mat-card class="w-100">
+      <div class="d-flex flex-row justify-content-between align-items-center">
+        <h2 class="m-0">Users</h2>
+        <a [matMenuTriggerFor]="cardActionsMenu" mat-icon-button>
+          <mat-icon>more_vert</mat-icon>
+        </a>
+      </div>
+      <mat-menu #cardActionsMenu="matMenu">
+        <a *ngIf="users.data.length > 0" [routerLink]="['/users/edit', users.data[0]._id]" mat-menu-item>Edit last</a>
+        <a [routerLink]="['/users/create']" mat-menu-item>Create new</a>
+      </mat-menu>
+      <div class="d-flex flex-column align-items-center">
+        <h2 class="m-0">Total</h2>
+        <h1 class="m-0">{{users.totalItems}}</h1>
+      </div>
+      <mat-list *ngIf="users.data.length > 0" dense>
+        <mat-list-item>Last edit {{users.data[0].updatedAt | date: 'full'}}</mat-list-item>
+      </mat-list>
+    </mat-card>
+  </div>
+  <div *ngIf="roles$ | async as roles" class="col-12 col-sm-6 col-lg-4 col-xl-3 mt-3">
+    <mat-card class="w-100">
+      <div class="d-flex flex-row justify-content-between align-items-center">
+        <h2 class="m-0">Roles</h2>
+        <a [matMenuTriggerFor]="cardActionsMenu" mat-icon-button>
+          <mat-icon>more_vert</mat-icon>
+        </a>
+      </div>
+      <mat-menu #cardActionsMenu="matMenu">
+        <a *ngIf="roles.data.length > 0" [routerLink]="['/roles/edit', roles.data[0]._id]" mat-menu-item>Edit last</a>
+        <a [routerLink]="['/roles/create']" mat-menu-item>Create new</a>
+      </mat-menu>
+      <div class="d-flex flex-column align-items-center">
+        <h2 class="m-0">Total</h2>
+        <h1 class="m-0">{{roles.totalItems}}</h1>
+      </div>
+      <mat-list *ngIf="roles.data.length > 0" dense>
+        <mat-list-item>Last edit {{roles.data[0].updatedAt | date: 'full'}}</mat-list-item>
+      </mat-list>
+    </mat-card>
+  </div>
+  <div *ngIf="resourcePermissions$ | async as resourcePermissions" class="col-12 col-sm-6 col-lg-4 col-xl-3 mt-3">
+    <mat-card class="w-100">
+      <div class="d-flex flex-row justify-content-between align-items-center">
+        <h2 class="m-0">ResourcePermissions</h2>
+        <a [matMenuTriggerFor]="cardActionsMenu" mat-icon-button>
+          <mat-icon>more_vert</mat-icon>
+        </a>
+      </div>
+      <mat-menu #cardActionsMenu="matMenu">
+        <a *ngIf="resourcePermissions.data.length > 0" [routerLink]="['/resource-permissions/edit', resourcePermissions.data[0]._id]"
+           mat-menu-item>Edit last</a>
+        <a [routerLink]="['/resource-permissions/create']" mat-menu-item>Create new</a>
+      </mat-menu>
+      <div class="d-flex flex-column align-items-center">
+        <h2 class="m-0">Total</h2>
+        <h1 class="m-0">{{resourcePermissions.totalItems}}</h1>
+      </div>
+      <mat-list *ngIf="resourcePermissions.data.length > 0" dense>
+        <mat-list-item>Last edit {{resourcePermissions.data[0].updatedAt | date: 'full'}}</mat-list-item>
+      </mat-list>
+    </mat-card>
+  </div>
+  <div *ngIf="mediaObjects$ | async as mediaObjects" class="col-12 col-sm-6 col-lg-4 col-xl-3 mt-3">
+    <mat-card class="w-100">
+      <div class="d-flex flex-row justify-content-between align-items-center">
+        <h2 class="m-0">MediaObjects</h2>
+        <a [matMenuTriggerFor]="cardActionsMenu" mat-icon-button>
+          <mat-icon>more_vert</mat-icon>
+        </a>
+      </div>
+      <mat-menu #cardActionsMenu="matMenu">
+        <a *ngIf="mediaObjects.data.length > 0" [routerLink]="['/media-objects/edit', mediaObjects.data[0]._id]"
+           mat-menu-item>Edit last</a>
+        <a [routerLink]="['/media-objects/create']" mat-menu-item>Create new</a>
+      </mat-menu>
+      <div class="d-flex flex-column align-items-center">
+        <h2 class="m-0">Total</h2>
+        <h1 class="m-0">{{mediaObjects.totalItems}}</h1>
+      </div>
+      <mat-list *ngIf="mediaObjects.data.length > 0" dense>
+        <mat-list-item>Last edit {{mediaObjects.data[0].updatedAt | date: 'full'}}</mat-list-item>
+      </mat-list>
+    </mat-card>
+  </div>
+</div>
+
+

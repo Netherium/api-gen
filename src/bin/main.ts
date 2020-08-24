@@ -4,18 +4,16 @@
  * Entry point for neth-api-gen
  */
 
-import { IndentationText, NewLineKind, Project, QuoteKind } from 'ts-morph';
 import chalk from 'chalk';
-import { generateController } from '../lib/generators/generate.controller';
-import { generateModel } from '../lib/generators/generate.model';
-import { generateRoute } from '../lib/generators/generate.route';
-import { copyAppTemplateFiles, generateSampleJson, readFromJson } from '../lib/helpers/utility.functions';
+import { copyAppTemplateFiles, generateSampleJson, readFromJson } from '../lib/helpers/server-utility-functions';
 import { orchestratePrompts } from '../lib/helpers/prompts';
 import * as yargs from 'yargs';
 import { UI } from '../lib/interfaces/ui.model';
+import { IndentationText, NewLineKind, Project, ProjectOptions, QuoteKind } from 'ts-morph';
 import * as path from 'path';
-import { generateSwagger } from '../lib/generators/generate.swagger';
-import { generateServer } from '../lib/generators/generate.server';
+import { generateSwagger } from '../lib/generators/server/generate-swagger';
+import { generateServerSuite, updateServerFile } from '../lib/generators/server/generate-server-suite';
+import { generateClientHtmlComponents, generateClientSuite, updateAppRoutingModule } from '../lib/generators/client/generate-client-suite';
 
 console.log(chalk.magenta(' _   _        _    _                            _                             '));
 console.log(chalk.magenta('\| \\ \| \|      \| \|  \| \|                          (_)                            '));
@@ -73,9 +71,9 @@ console.log(chalk.magenta('                                        \|_\|        
   if (!argv.sample && (argv.inputFile === undefined)) {
     userInput = await orchestratePrompts();
   }
-
+  console.log(JSON.stringify(userInput, null, 2));
   if (userInput) {
-    const project = new Project({
+    const projectOptions: ProjectOptions = {
       manipulationSettings: {
         indentationText: IndentationText.TwoSpaces,
         newLineKind: NewLineKind.LineFeed,
@@ -83,45 +81,15 @@ console.log(chalk.magenta('                                        \|_\|        
         usePrefixAndSuffixTextForRename: false,
         useTrailingCommas: false
       }
-    });
-    const entitiesWritten: any = [];
-    const baseEntitiesDir = `${userInput.projectName}/${userInput.srcFolder}`;
-    for (const entity of userInput.entities) {
-      const controllerFile = project.createSourceFile(
-        `${baseEntitiesDir}/controllers/${entity.name}.controller.ts`,
-        generateController(entity),
-        {overwrite: true}
-      );
-
-      const modelFile = project.createSourceFile(
-        `${baseEntitiesDir}/models/${entity.name}.model.ts`,
-        generateModel(entity),
-        {overwrite: true}
-      );
-
-      const routeFile = project.createSourceFile(
-        `${baseEntitiesDir}/routes/${entity.name}.route.ts`,
-        generateRoute(entity),
-        {overwrite: true}
-      );
-
-      entitiesWritten.push(
-        {
-          name: entity.name,
-          controllerFilePath: controllerFile.getFilePath(),
-          modelFilePath: modelFile.getFilePath(),
-          routeFilePath: routeFile.getFilePath()
-        }
-      )
-    }
-
+    };
+    let project: Project;
+    let entitiesWritten: any;
+    const serverSuiteDir = userInput.projectName + '/server';
+    const clientSuiteDir = userInput.projectName + '/client';
+    ({project, entitiesWritten} = generateServerSuite(projectOptions, userInput, serverSuiteDir));
+    project = await generateClientSuite(project, userInput, clientSuiteDir);
     if (userInput.generateApp) {
       try {
-        project.createSourceFile(
-          `${baseEntitiesDir}/server.ts`,
-          generateServer(userInput),
-          {overwrite: true}
-        );
         await copyAppTemplateFiles(null, userInput.projectName);
         console.log(chalk.magenta(`✔ Project generated in ${path.join(process.cwd(), userInput.projectName)}!`));
       } catch (e) {
@@ -131,11 +99,26 @@ console.log(chalk.magenta('                                        \|_\|        
 
     try {
       await project.save();
+      await generateClientHtmlComponents(userInput, clientSuiteDir);
       for (const entityWritten of entitiesWritten) {
         console.log(chalk.magenta(`✔ Resource generated for ${entityWritten.name}! (Make sure to add a resource-permission for it)`));
       }
     } catch (e) {
       console.log(chalk.red(`❌ Error occurred while generating resource: ${e}`));
+    }
+
+    try {
+      await updateServerFile(projectOptions, userInput, serverSuiteDir);
+      console.log(chalk.magenta(`✔ Updated routes in server.ts!`));
+    } catch (e) {
+      console.log(chalk.red(`❌ Error occurred while updating ${serverSuiteDir}/src/server.ts: ${e}`));
+    }
+
+    try {
+      await updateAppRoutingModule(projectOptions, userInput, clientSuiteDir);
+      console.log(chalk.magenta(`✔ Updated routes in app-routing.module.ts!`));
+    } catch (e) {
+      console.log(chalk.red(`❌ Error occurred while updating ${clientSuiteDir}/src/app/app-routing.module.ts: ${e}`));
     }
 
     if (userInput.swaggerDocs || userInput.generateApp) {

@@ -1,11 +1,11 @@
 {
   "name": "@netherium/api-gen",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "main": "bin/main.js",
   "description": "Generator for Express Rest Api written in Typescript that provides convenient authorization, access control lists and routes following best practices.",
   "scripts": {
     "dev": "ts-node --transpile-only src/bin/main.ts",
-    "copy:app:templates:source": "ts-node --transpile-only src/lib/helpers/copySourceFiles.ts",
+    "copy:app:templates:source": "ts-node --transpile-only src/lib/helpers/copy-source-files.ts",
     "test": "mocha -r ts-node/register/transpile-only __tests__/*.test.ts --timeout 90000 --exit",
     "test:coverage": "nyc npm run test",
     "build": "tsc && echo true > .buildstatus",
@@ -17,13 +17,17 @@
     "postversion": "git push && git push --tags"
   },
   "keywords": [
-    "Generator",
+    "CMS",
+    "Headless CMS",
     "Typescript",
-    "Express",
     "NodeJS",
+    "Express",
+    "Angular",
+    "Angular Material",
     "REST",
     "Api",
     "Restful Api",
+    "Generator",
     "Mongoose",
     "Chalk",
     "Inquirer",

@@ -1,0 +1,72 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer [attr.role]="(isSmall$ | async) ? 'dialog' : 'navigation'"
+               [mode]="(isSmall$ | async) ? 'over' : 'side'"
+               [opened]="(isSmall$ | async) === false"
+               class="sidenav"
+               fixedInViewport>
+    <img alt="Neth Logo" class="sidenav-logo" src="assets/neth-logo.svg">
+    <h2 class="px-3 mt-3 mb-0">Resources</h2>
+    <mat-nav-list>
+      <a *ngFor="let link of routerLinks | filterRoutes:'resource'" [routerLink]="link.path" mat-list-item
+         routerLinkActive="mat-list-item-active">
+        <mat-icon class="mr-3">{{link.data.icon}}</mat-icon>
+        {{ link.data.slug}}
+      </a>
+    </mat-nav-list>
+    <mat-divider></mat-divider>
+    <h2 class="px-3 mt-3 mb-0">Basic Routes</h2>
+    <mat-nav-list>
+      <a *ngFor="let link of routerLinks | filterRoutes: 'base'" [routerLink]="link.path" mat-list-item
+         routerLinkActive="mat-list-item-active">
+        <mat-icon class="mr-3">{{link.data.icon}}</mat-icon>
+        {{link.data.slug}}
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button
+        (click)="drawer.toggle()"
+        *ngIf="isSmall$ | async"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        type="button">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <div>
+        <a class="mat-toolbar-link" routerLink="">
+          <img alt="Neth Toolbar Logo" class="mat-toolbar-logo" src="assets/logo_40.png">
+          <span>eth-ng</span>
+        </a>
+      </div>
+      <span class="flex-fill"></span>
+      <ng-container *ngIf="(currentUser|async) as user;">
+        <img *ngIf="user.display; else loginButtonTemplate" [alt]="user.display.name"
+             [matMenuTriggerFor]="userActionsMenu"
+             [src]="user.display.thumbnail.url"
+             class="avatar">
+        <ng-template #loginButtonTemplate>
+          <button [matMenuTriggerFor]="userActionsMenu" aria-label="Login" mat-icon-button>
+            <mat-icon>person_outline</mat-icon>
+          </button>
+        </ng-template>
+        <mat-menu #userActionsMenu="matMenu">
+          <button mat-menu-item>
+            <img *ngIf="user.display" [alt]="user?.display.name" [src]="user?.display.thumbnail.url"
+                 class="button-avatar">
+            <a [routerLink]="['/users/edit', user._id]" style="text-decoration: none;">{{user.name}}</a>
+          </button>
+          <mat-slide-toggle (ngModelChange)="selectedThemeChanged($event)" [ngModel]="darkTheme" class="mat-menu-item">
+            Dark Theme
+          </mat-slide-toggle>
+          <button (click)="logout()" mat-menu-item>
+            <mat-icon svgIcon="neth:logout"></mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      </ng-container>
+    </mat-toolbar>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

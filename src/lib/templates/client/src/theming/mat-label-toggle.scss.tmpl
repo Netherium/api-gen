@@ -1,0 +1,22 @@
+@import '~@angular/material/theming';
+
+/**
+Uniform mat label for toggle, can be found on all boolean types
+ */
+@mixin mat-label-toggle-color($config-or-theme) {
+  $config: mat-get-color-config($config-or-theme);
+  $foreground: map-get($config, foreground);
+
+  .mat-label-toggle {
+    margin-bottom: 6px !important;
+    display: flex;
+    color: mat-color($foreground, secondary-text);
+  }
+}
+
+@mixin mat-label-toggle-theme($theme) {
+  $color: mat-get-color-config($theme);
+  @if $color != null {
+    @include mat-label-toggle-color($color);
+  }
+}

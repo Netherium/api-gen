@@ -1,0 +1,9 @@
+<app-dynamic-table [columns]="columns" [dataSource]="dataSource" [displayAsDialog]="true" [displayName]="displayName"
+                   [resource]="resource" [sort]="sort"></app-dynamic-table>
+<div class="d-flex justify-content-end" mat-dialog-actions>
+  <button (click)="cancelDialog()" color="accent" mat-raised-button>Cancel</button>
+  <button (click)="saveDialog()" [disabled]="dataSource.selection.selected.length === 0" color="primary"
+          mat-raised-button>
+    Add {{dataSource.selection.selected.length}} Selected
+  </button>
+</div>

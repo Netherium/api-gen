@@ -2,13 +2,14 @@ import { should } from 'chai';
 import * as path from 'path';
 import * as YAML from 'yaml';
 import { promises as fs } from 'fs';
-import { generateSwagger } from '../src/lib/generators/generate.swagger';
+import { generateSwagger } from '../src/lib/generators/server/generate-swagger';
 import { UI } from '../src/lib/interfaces/ui.model';
-import { UIField } from '../src/lib/interfaces/ui.field.model';
+import { UIField } from '../src/lib/interfaces/ui-field.model';
 // @ts-ignore
 import { MockSwaggerAllFields } from './mocks/mock.swagger.all.fields';
-import { UIEntity } from '../src/lib/interfaces/ui.entity.model';
+import { UIEntity } from '../src/lib/interfaces/ui-entity.model';
 import pluralize from 'pluralize';
+import { pascalCase } from '../src/lib/helpers/string-functions';
 
 should();
 
@@ -56,7 +57,7 @@ describe('Generate Swagger', () => {
         const fieldKeys = uiEntity.fields.reduce((acc: any, item: UIField, index) => {
           return [...acc, item.name];
         }, []);
-        schemas.should.have.property(uiEntity.capitalizedName).property('properties').include.keys(fieldKeys);
+        schemas.should.have.property(pascalCase(uiEntity.name)).property('properties').include.keys(fieldKeys);
       }
     });
   });
