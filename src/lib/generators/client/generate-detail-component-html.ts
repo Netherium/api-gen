@@ -5,49 +5,49 @@ import { UIEntity } from '../../interfaces/ui-entity.model';
 import { UINestedField } from '../../interfaces/ui-nested-field.model';
 
 
-const inputStringFragment = (entityName: string, field: string, pascalCaseField: string) => {
+const inputStringFragment = (entityName: string, field: string, pascalCaseField: string, isRequired: boolean) => {
   return `
           <mat-form-field class="w-100">
             <mat-label>${pascalCaseField}</mat-label>
-            <input matInput [(ngModel)]="${entityName}.${field}" name="${field}" autocomplete="off">
+            <input matInput [(ngModel)]="${entityName}.${field}" name="${field}" autocomplete="off" ${isRequired ? 'required' : ''}>
             <mat-icon matSuffix>text_fields</mat-icon>
           </mat-form-field>`;
 }
 
-const inputNumberFragment = (entityName: string, field: string, pascalCaseField: string) => {
+const inputNumberFragment = (entityName: string, field: string, pascalCaseField: string, isRequired: boolean) => {
   return `
           <mat-form-field class="w-100">
             <mat-label>${pascalCaseField}</mat-label>
-            <input matInput [(ngModel)]="${entityName}.${field}" name="${field}" type="number" autocomplete="off">
+            <input matInput [(ngModel)]="${entityName}.${field}" name="${field}" type="number" autocomplete="off" ${isRequired ? 'required' : ''}>
             <mat-icon matSuffix svgIcon="neth:numeric"></mat-icon>
           </mat-form-field>`;
 }
 
-const inputDateFragment = (entityName: string, field: string, pascalCaseField: string, dateId: number) => {
+const inputDateFragment = (entityName: string, field: string, pascalCaseField: string, dateId: number, isRequired: boolean) => {
   return `
           <mat-form-field class="w-100">
             <mat-label>${pascalCaseField}</mat-label>
             <input matInput [(ngModel)]="${entityName}.${field}" [matDatepicker]="picker${dateId}"
-                   name="${field}" autocomplete="off">
+                   name="${field}" autocomplete="off" ${isRequired ? 'required' : ''}>
             <mat-datepicker-toggle [for]="picker${dateId}" matSuffix></mat-datepicker-toggle>
             <mat-datepicker #picker${dateId}></mat-datepicker>
           </mat-form-field>`;
 }
 
-const inputBooleanFragment = (entityName: string, field: string, pascalCaseField: string) => {
+const inputBooleanFragment = (entityName: string, field: string, pascalCaseField: string, isRequired: boolean) => {
   return `
           <div class="w-100 mb-3">
             <mat-label class="mat-label-toggle">${pascalCaseField}</mat-label>
-            <mat-slide-toggle [(ngModel)]="${entityName}.${field}" name="${field}"></mat-slide-toggle>
+            <mat-slide-toggle [(ngModel)]="${entityName}.${field}" name="${field}" ${isRequired ? 'required' : ''}></mat-slide-toggle>
           </div>`
 }
 
-const inputObjectFragment = (entityName: string, field: string, pascalCaseField: string, displayProperty: string) => {
+const inputObjectFragment = (entityName: string, field: string, pascalCaseField: string, displayProperty: string, isRequired: boolean) => {
   return `
           <mat-form-field class="w-100">
             <mat-label>${pascalCaseField}</mat-label>
             <input matInput [(ngModel)]="${entityName}.${field}" (ngModelChange)="${field}Changed($event)"
-                   [matAutocomplete]="${field}Auto" name="${field}" autocomplete="off">
+                   [matAutocomplete]="${field}Auto" name="${field}" autocomplete="off" isSelectedObject ${isRequired ? 'required' : ''}>
             <mat-icon matSuffix svgIcon="neth:hexagon" *ngIf="!isLoading${pascalCaseField}"></mat-icon>
             <mat-spinner *ngIf="isLoading${pascalCaseField}" diameter="20" matSuffix></mat-spinner>
             <mat-autocomplete #${field}Auto="matAutocomplete" [displayWith]="${field}DisplayFn">
@@ -66,7 +66,7 @@ const inputMediaObjectFragment = (entityName: string, field: string, pascalCaseF
 const inputArrayStringFragment = (entityName: string, field: string, pascalCaseField: string) => {
   return `
           <mat-form-field class="w-100">
-            <mat-label>${pascalCaseField}</mat-label>
+            <mat-label>${pascalCaseField}&nbsp;<mat-icon svgIcon="neth:tags-multiple-outline"></mat-icon></mat-label>
             <mat-chip-list #${field}ChipList>
               <mat-chip *ngFor="let item of ${entityName}.${field}; index as ${field}Index" [selectable]="true" [removable]="true"
                         (removed)="remove${pascalCaseField}(${field}Index, entityForm)">
@@ -82,7 +82,7 @@ const inputArrayStringFragment = (entityName: string, field: string, pascalCaseF
 const inputArrayNumberFragment = (entityName: string, field: string, pascalCaseField: string) => {
   return `
           <mat-form-field class="w-100">
-            <mat-label>${pascalCaseField}</mat-label>
+            <mat-label>${pascalCaseField}&nbsp;<mat-icon svgIcon="neth:tags-multiple-outline"></mat-icon></mat-label>
             <mat-chip-list #${field}ChipList>
               <mat-chip *ngFor="let item of ${entityName}.${field}; index as ${field}Index" [selectable]="true" [removable]="true"
                         (removed)="remove${pascalCaseField}(${field}Index, entityForm)">
@@ -98,7 +98,7 @@ const inputArrayNumberFragment = (entityName: string, field: string, pascalCaseF
 const inputArrayDateFragment = (entityName: string, field: string, pascalCaseField: string, dateId: number) => {
   return `
           <mat-form-field class="w-100">
-            <mat-label>${pascalCaseField}</mat-label>
+            <mat-label>${pascalCaseField}&nbsp;<mat-icon svgIcon="neth:tags-multiple-outline"></mat-icon></mat-label>
             <mat-chip-list #${field}ChipList>
               <mat-chip *ngFor="let item of ${entityName}.${field}; index as ${field}Index" [selectable]="true" [removable]="true"
                         (removed)="remove${pascalCaseField}(${field}Index, entityForm)">
@@ -107,7 +107,7 @@ const inputArrayDateFragment = (entityName: string, field: string, pascalCaseFie
               </mat-chip>
               <input matInput [(ngModel)]="${field}Value" [matChipInputFor]="${field}ChipList"
                      (matChipInputTokenEnd)="add${pascalCaseField}($event)" [matDatepicker]="picker${dateId}"
-                     name="${field}" autocomplete="off">
+                     name="${field}" autocomplete="off" (blur)="blur${pascalCaseField}($event)">
               <mat-datepicker-toggle [for]="picker${dateId}" matSuffix></mat-datepicker-toggle>
               <mat-datepicker #picker${dateId}></mat-datepicker>
             </mat-chip-list>
@@ -162,7 +162,7 @@ const dialogComponentHtmlDFragment = (plainTypesFragment: string, complexTypesFr
       <div class="d-flex justify-content-end">
         <a [routerLink]="['/${kebabCase(pluralize(entityName))}']"  class="mr-3" color="accent" mat-raised-button>Cancel</a>
         <ng-container>
-          <button (click)="save()" *ngIf="!isLoading; else loadingButton" [disabled]="entityForm.pristine"
+          <button (click)="save()" *ngIf="!isLoading; else loadingButton" [disabled]="entityForm.invalid || entityForm.pristine"
                   color="primary" mat-raised-button>Save
           </button>
           <ng-template #loadingButton>
@@ -184,24 +184,24 @@ export const generateDetailComponentHtml = (uiEntity: UIEntity) => {
   for (const field of uiEntity.fields) {
     switch (true) {
       case field.type === 'String':
-        plainTypesFragment += inputStringFragment(uiEntity.name, field.name, pascalCase(field.name));
+        plainTypesFragment += inputStringFragment(uiEntity.name, field.name, pascalCase(field.name), field.required);
         break;
       case field.type === 'Number':
-        plainTypesFragment += inputNumberFragment(uiEntity.name, field.name, pascalCase(field.name));
+        plainTypesFragment += inputNumberFragment(uiEntity.name, field.name, pascalCase(field.name), field.required);
         break;
       case field.type === 'Date':
-        plainTypesFragment += inputDateFragment(uiEntity.name, field.name, pascalCase(field.name), dateId);
+        plainTypesFragment += inputDateFragment(uiEntity.name, field.name, pascalCase(field.name), dateId, field.required);
         dateId++;
         break;
       case field.type === 'Boolean':
-        plainTypesFragment += inputBooleanFragment(uiEntity.name, field.name, pascalCase(field.name));
+        plainTypesFragment += inputBooleanFragment(uiEntity.name, field.name, pascalCase(field.name), field.required);
         break;
       case field.type === 'ObjectId':
         if (field.ref === 'mediaObject') {
           complexTypesFragment += inputMediaObjectFragment(uiEntity.name, field.name, pascalCase(field.name));
         } else {
           const displayProperty = getDisplayProperty(field);
-          complexTypesFragment += inputObjectFragment(uiEntity.name, field.name, pascalCase(field.name), displayProperty);
+          complexTypesFragment += inputObjectFragment(uiEntity.name, field.name, pascalCase(field.name), displayProperty, field.required);
         }
         break;
       case field.type instanceof Array && field.type.length > 0:
@@ -217,7 +217,7 @@ export const generateDetailComponentHtml = (uiEntity: UIEntity) => {
             plainTypesFragment += inputArrayDateFragment(uiEntity.name, field.name, pascalCase(field.name), dateId);
             dateId++;
             break;
-          //TODO Array Boolean missing
+          // TODO Array Boolean missing
           case nestedField.type === 'ObjectId':
             if (nestedField.ref === 'mediaObject') {
               complexTypesFragment += inputArrayMediaObjectFragment(uiEntity.name, field.name, pascalCase(field.name));

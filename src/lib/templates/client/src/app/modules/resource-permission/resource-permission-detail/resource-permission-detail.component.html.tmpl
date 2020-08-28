@@ -10,7 +10,7 @@
         <div class="col-12 col-md-7">
           <mat-form-field class="w-100">
             <mat-label>ResourceName</mat-label>
-            <input [(ngModel)]="resourcePermission.resourceName" autocomplete="off" matInput name="resourceName">
+            <input [(ngModel)]="resourcePermission.resourceName" autocomplete="off" matInput name="resourceName" required>
             <mat-icon matSuffix>text_fields</mat-icon>
           </mat-form-field>
         </div>
@@ -66,7 +66,7 @@
       <div class="d-flex justify-content-end">
         <a [routerLink]="['/resource-permissions']" class="mr-3" color="accent" mat-raised-button>Cancel</a>
         <ng-container>
-          <button (click)="save()" *ngIf="!isLoading; else loadingButton" [disabled]="entityForm.pristine"
+          <button (click)="save()" *ngIf="!isLoading; else loadingButton" [disabled]="entityForm.invalid || entityForm.pristine"
                   color="primary" mat-raised-button>Save
           </button>
           <ng-template #loadingButton>

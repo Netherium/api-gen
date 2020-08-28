@@ -10,13 +10,15 @@ import { UploadDialogComponent } from './dialogs/upload-dialog/upload-dialog.com
 import { CommonModule } from '@angular/common';
 import { DynamicTableComponent } from './components/dynamic-table/dynamic-table.component';
 import { RouterModule } from '@angular/router';
+import { IsSelectedObjectValidator } from './validators/is-selected-object.validator';
 
 
 @NgModule({
   declarations: [
     FileUploadComponent,
     UploadDialogComponent,
-    DynamicTableComponent
+    DynamicTableComponent,
+    IsSelectedObjectValidator
   ],
   imports: [
     CommonModule,
@@ -39,7 +41,8 @@ import { RouterModule } from '@angular/router';
 
     FileUploadComponent,
     UploadDialogComponent,
-    DynamicTableComponent
+    DynamicTableComponent,
+    IsSelectedObjectValidator
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true},

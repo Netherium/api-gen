@@ -13,9 +13,9 @@ import { NgForm } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 
 @Component({
-    selector: 'app-book-detail',
-    templateUrl: './book-detail.component.html'
-  })
+  selector: 'app-book-detail',
+  templateUrl: './book-detail.component.html'
+})
 export class BookDetailComponent {
   action: CRUDAction = CRUDAction.CREATE;
   book: Book = {
@@ -31,7 +31,7 @@ export class BookDetailComponent {
     tags: [],
     pagesForReview: [],
     datesForReview: [],
-    };
+  };
   isLoading = false;
   authorChangedSub: Subject<string> = new Subject<string>();
   filteredAuthor: Observable<User[]>;
@@ -76,6 +76,9 @@ export class BookDetailComponent {
   }
 
   authorChanged(text: string) {
+    if (text === '') {
+      this.book.author = null;
+    }
     this.authorChangedSub.next(text);
   }
 
@@ -151,6 +154,11 @@ export class BookDetailComponent {
   removeDatesForReview(index: number, entityForm: NgForm): void {
     this.book.datesForReview.splice(index, 1);
     entityForm.form.markAsDirty();
+  }
+
+  blurDatesForReview(event: any): void {
+    const input = event.target;
+    input.value = '';
   }
 
   save() {

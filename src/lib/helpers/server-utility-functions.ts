@@ -107,12 +107,9 @@ export const getModelPropertiesForGenerator = (userInput: any) => {
 
 export const getFuzzySearchProperties = (userInput: any) => {
   let fuzzySearchProperties = '[';
-  userInput.fields.forEach((field: UIField, index: number) => {
+  userInput.fields.forEach((field: UIField) => {
     if(field.indexed){
-      fuzzySearchProperties += `'${field.name}'`;
-    }
-    if (userInput.fields[index + 1]) {
-      fuzzySearchProperties += ',';
+      fuzzySearchProperties += `'${field.name}', `;
     }
   });
   fuzzySearchProperties += ']';

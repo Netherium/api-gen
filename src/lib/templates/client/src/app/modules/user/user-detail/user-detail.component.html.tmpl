@@ -1,7 +1,7 @@
 <mat-card class="m-2 m-md-3 mat-elevation-z4">
   <mat-card-header>
     <mat-card-title>{{action === 1 ? 'Update' : 'Create'}} User
-      <span *ngIf="action===1" class="ml-1 mat-caption">{{user._id}}</span>
+      <span class="ml-1 mat-caption" *ngIf="action===1">{{user._id}}</span>
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
@@ -10,30 +10,30 @@
         <div class="col-12 col-md-7">
           <mat-form-field class="w-100">
             <mat-label>Email</mat-label>
-            <input [(ngModel)]="user.email" autocomplete="off" matInput name="email">
+            <input matInput [(ngModel)]="user.email" name="email" autocomplete="off" required>
             <mat-icon matSuffix>text_fields</mat-icon>
           </mat-form-field>
           <mat-form-field class="w-100">
             <mat-label>Password</mat-label>
-            <input [(ngModel)]="user.password" autocomplete="off" matInput name="password">
+            <input matInput [(ngModel)]="user.password" name="password" autocomplete="off" [required]="action === 0" >
             <mat-icon matSuffix>text_fields</mat-icon>
           </mat-form-field>
           <mat-form-field class="w-100">
             <mat-label>Name</mat-label>
-            <input [(ngModel)]="user.name" autocomplete="off" matInput name="name">
+            <input matInput [(ngModel)]="user.name" name="name" autocomplete="off" required>
             <mat-icon matSuffix>text_fields</mat-icon>
           </mat-form-field>
           <div class="w-100 mb-3">
             <mat-label class="mat-label-toggle">IsVerified</mat-label>
-            <mat-slide-toggle [(ngModel)]="user.isVerified" name="isVerified"></mat-slide-toggle>
+            <mat-slide-toggle [(ngModel)]="user.isVerified" name="isVerified" ></mat-slide-toggle>
           </div>
         </div>
         <div class="col-12 col-md-5">
           <mat-form-field class="w-100">
             <mat-label>Role</mat-label>
-            <input (ngModelChange)="roleChanged($event)" [(ngModel)]="user.role" [matAutocomplete]="roleAuto"
-                   autocomplete="off" matInput name="role">
-            <mat-icon *ngIf="!isLoadingRole" matSuffix svgIcon="neth:hexagon"></mat-icon>
+            <input matInput [(ngModel)]="user.role" (ngModelChange)="roleChanged($event)"
+                   [matAutocomplete]="roleAuto" name="role" autocomplete="off" isSelectedObject required>
+            <mat-icon matSuffix svgIcon="neth:hexagon" *ngIf="!isLoadingRole"></mat-icon>
             <mat-spinner *ngIf="isLoadingRole" diameter="20" matSuffix></mat-spinner>
             <mat-autocomplete #roleAuto="matAutocomplete" [displayWith]="roleDisplayFn">
               <mat-option *ngFor="let item of filteredRole | async" [value]="item">
@@ -41,14 +41,13 @@
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
-          <app-file-upload [(ngModel)]="user.display" [multiple]="false" [title]="'Display'"
-                           name="display"></app-file-upload>
+          <app-file-upload [(ngModel)]="user.display" name="display" [title]="'Display'" [multiple]="false"></app-file-upload>
         </div>
       </div>
       <div class="d-flex justify-content-end">
-        <a [routerLink]="['/users']" class="mr-3" color="accent" mat-raised-button>Cancel</a>
+        <a [routerLink]="['/users']"  class="mr-3" color="accent" mat-raised-button>Cancel</a>
         <ng-container>
-          <button (click)="save()" *ngIf="!isLoading; else loadingButton" [disabled]="entityForm.pristine"
+          <button (click)="save()" *ngIf="!isLoading; else loadingButton" [disabled]="entityForm.invalid || entityForm.pristine"
                   color="primary" mat-raised-button>Save
           </button>
           <ng-template #loadingButton>

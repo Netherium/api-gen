@@ -10,7 +10,7 @@
         <div class="col-12 col-md-7">
           <mat-form-field class="w-100">
             <mat-label>Name</mat-label>
-            <input [(ngModel)]="role.name" autocomplete="off" matInput name="name">
+            <input [(ngModel)]="role.name" autocomplete="off" matInput name="name" required>
             <mat-icon matSuffix>text_fields</mat-icon>
           </mat-form-field>
           <div class="w-100 mb-3">
@@ -29,7 +29,7 @@
       <div class="d-flex justify-content-end">
         <a [routerLink]="['/roles']" class="mr-3" color="accent" mat-raised-button>Cancel</a>
         <ng-container>
-          <button (click)="save()" *ngIf="!isLoading; else loadingButton" [disabled]="entityForm.pristine"
+          <button (click)="save()" *ngIf="!isLoading; else loadingButton" [disabled]="entityForm.invalid || entityForm.pristine"
                   color="primary" mat-raised-button>Save
           </button>
           <ng-template #loadingButton>

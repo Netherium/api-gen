@@ -1,4 +1,4 @@
-<p class="file-upload-title">{{title}}</p>
+<p class="file-upload-title">{{title}} <mat-icon [svgIcon]="multiple ? 'neth:file-multiple-outline' : 'neth:file-outline'"></mat-icon></p>
 <div #dropZone class="d-flex flex-column file-upload-container">
   <input #inputFile (change)="onManualAdd()" [multiple]="multiple" style="display: none" type="file"/>
   <div class="file-list-container">

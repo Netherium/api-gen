@@ -50,6 +50,9 @@ export class UserDetailComponent {
   }
 
   roleChanged(text: string) {
+    if (text === '') {
+      this.user.role = null;
+    }
     this.roleChangedSub.next(text);
   }
 

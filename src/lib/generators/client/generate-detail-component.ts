@@ -388,6 +388,25 @@ const getExtraMethodDeclaration = (uiEntity: UIEntity): MethodDeclarationStructu
                 kind: StructureKind.Method,
               }
             )
+            if (nestedField.type === 'Date') {
+              methodDeclarations.push(
+                {
+                  name: `blur${pascalCase(field.name)}`,
+                  statements: [
+                    `const input = event.target;\ninput.value = '';`,
+                  ],
+                  parameters: [
+                    {
+                      name: 'event',
+                      type: 'any',
+                      kind: StructureKind.Parameter,
+                    }
+                  ],
+                  returnType: 'void',
+                  kind: StructureKind.Method,
+                }
+              )
+            }
             break;
           case nestedField.type === 'ObjectId' && nestedField.ref !== 'mediaObject':
             const displayNestedProperty = getDisplayProperty(nestedField);
@@ -457,7 +476,9 @@ const getExtraMethodDeclaration = (uiEntity: UIEntity): MethodDeclarationStructu
         methodDeclarations.push(
           {
             name: `${field.name}Changed`,
-            statements: [`this.${field.name}ChangedSub.next(text);`],
+            statements: [
+              `if (text === '') {\n  this.${uiEntity.name}.${field.name} = null;\n}\nthis.${field.name}ChangedSub.next(text);`,
+            ],
             parameters: [
               {
                 name: 'text',

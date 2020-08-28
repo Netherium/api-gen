@@ -11,7 +11,6 @@ export const queryBuilderCollection = async (req: Request, model: Model<any>, po
       hasfuzzySearch = true;
       // @ts-ignore
       query = model.fuzzySearch(req.query.q);
-      console.log(hasfuzzySearch);
       delete req.query.q;
     }
     for (const [queryParam, paramValue] of Object.entries(req.query)) {

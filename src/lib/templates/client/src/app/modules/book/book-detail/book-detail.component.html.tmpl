@@ -10,27 +10,27 @@
         <div class="col-12 col-md-7">
           <mat-form-field class="w-100">
             <mat-label>Title</mat-label>
-            <input matInput [(ngModel)]="book.title" name="title" autocomplete="off">
+            <input matInput [(ngModel)]="book.title" name="title" autocomplete="off" required>
             <mat-icon matSuffix>text_fields</mat-icon>
           </mat-form-field>
           <mat-form-field class="w-100">
             <mat-label>Isbn</mat-label>
-            <input matInput [(ngModel)]="book.isbn" name="isbn" type="number" autocomplete="off">
+            <input matInput [(ngModel)]="book.isbn" name="isbn" type="number" autocomplete="off" required>
             <mat-icon matSuffix svgIcon="neth:numeric"></mat-icon>
           </mat-form-field>
           <div class="w-100 mb-3">
             <mat-label class="mat-label-toggle">IsPublished</mat-label>
-            <mat-slide-toggle [(ngModel)]="book.isPublished" name="isPublished"></mat-slide-toggle>
+            <mat-slide-toggle [(ngModel)]="book.isPublished" name="isPublished" ></mat-slide-toggle>
           </div>
           <mat-form-field class="w-100">
             <mat-label>PublishedAt</mat-label>
             <input matInput [(ngModel)]="book.publishedAt" [matDatepicker]="picker1"
-                   name="publishedAt" autocomplete="off">
+                   name="publishedAt" autocomplete="off" required>
             <mat-datepicker-toggle [for]="picker1" matSuffix></mat-datepicker-toggle>
             <mat-datepicker #picker1></mat-datepicker>
           </mat-form-field>
           <mat-form-field class="w-100">
-            <mat-label>Tags</mat-label>
+            <mat-label>Tags&nbsp;<mat-icon svgIcon="neth:tags-multiple-outline"></mat-icon></mat-label>
             <mat-chip-list #tagsChipList>
               <mat-chip *ngFor="let item of book.tags; index as tagsIndex" [selectable]="true" [removable]="true"
                         (removed)="removeTags(tagsIndex, entityForm)">
@@ -42,7 +42,7 @@
             </mat-chip-list>
           </mat-form-field>
           <mat-form-field class="w-100">
-            <mat-label>PagesForReview</mat-label>
+            <mat-label>PagesForReview&nbsp;<mat-icon svgIcon="neth:tags-multiple-outline"></mat-icon></mat-label>
             <mat-chip-list #pagesForReviewChipList>
               <mat-chip *ngFor="let item of book.pagesForReview; index as pagesForReviewIndex" [selectable]="true" [removable]="true"
                         (removed)="removePagesForReview(pagesForReviewIndex, entityForm)">
@@ -54,7 +54,7 @@
             </mat-chip-list>
           </mat-form-field>
           <mat-form-field class="w-100">
-            <mat-label>DatesForReview</mat-label>
+            <mat-label>DatesForReview&nbsp;<mat-icon svgIcon="neth:tags-multiple-outline"></mat-icon></mat-label>
             <mat-chip-list #datesForReviewChipList>
               <mat-chip *ngFor="let item of book.datesForReview; index as datesForReviewIndex" [selectable]="true" [removable]="true"
                         (removed)="removeDatesForReview(datesForReviewIndex, entityForm)">
@@ -63,7 +63,7 @@
               </mat-chip>
               <input matInput [(ngModel)]="datesForReviewValue" [matChipInputFor]="datesForReviewChipList"
                      (matChipInputTokenEnd)="addDatesForReview($event)" [matDatepicker]="picker2"
-                     name="datesForReview" autocomplete="off">
+                     name="datesForReview" autocomplete="off" (blur)="blurDatesForReview($event)">
               <mat-datepicker-toggle [for]="picker2" matSuffix></mat-datepicker-toggle>
               <mat-datepicker #picker2></mat-datepicker>
             </mat-chip-list>
@@ -73,7 +73,7 @@
           <mat-form-field class="w-100">
             <mat-label>Author</mat-label>
             <input matInput [(ngModel)]="book.author" (ngModelChange)="authorChanged($event)"
-                   [matAutocomplete]="authorAuto" name="author" autocomplete="off">
+                   [matAutocomplete]="authorAuto" name="author" autocomplete="off" isSelectedObject required>
             <mat-icon matSuffix svgIcon="neth:hexagon" *ngIf="!isLoadingAuthor"></mat-icon>
             <mat-spinner *ngIf="isLoadingAuthor" diameter="20" matSuffix></mat-spinner>
             <mat-autocomplete #authorAuto="matAutocomplete" [displayWith]="authorDisplayFn">
@@ -110,7 +110,7 @@
       <div class="d-flex justify-content-end">
         <a [routerLink]="['/books']"  class="mr-3" color="accent" mat-raised-button>Cancel</a>
         <ng-container>
-          <button (click)="save()" *ngIf="!isLoading; else loadingButton" [disabled]="entityForm.pristine"
+          <button (click)="save()" *ngIf="!isLoading; else loadingButton" [disabled]="entityForm.invalid || entityForm.pristine"
                   color="primary" mat-raised-button>Save
           </button>
           <ng-template #loadingButton>
