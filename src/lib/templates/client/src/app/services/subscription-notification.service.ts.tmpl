@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin, Observable, Subscription } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { CRUDAction } from '../models/crud-action.model';
@@ -35,8 +35,8 @@ export class SubscriptionNotificationService {
     }
   }
 
-  singleSubscription<T extends { _id?: string | number }>
-  (obs: Observable<T | HttpErrorResponse>, action: CRUDAction, resourceType: string, cbComplete: any = null, cbSuccess: any = null, cbError: any = null) {
+  // tslint:disable-next-line:max-line-length
+  singleSubscription<T extends { _id?: string | number }>(obs: Observable<T | HttpErrorResponse>, action: CRUDAction, resourceType: string, cbComplete: any = null, cbSuccess: any = null, cbError: any = null): Subscription {
     return obs.subscribe(data => {
       if (cbComplete) {
         cbComplete(data);
@@ -47,6 +47,7 @@ export class SubscriptionNotificationService {
           cbError(data);
         }
       } else {
+        // tslint:disable-next-line:max-line-length
         this.snackBar.open(`${resourceType} ${this.getDisplayAction(action)} ${data.hasOwnProperty('_id') ? data._id : data}`, null, this.snackbarConfigSuccess);
         if (cbSuccess) {
           cbSuccess(data);
@@ -55,13 +56,16 @@ export class SubscriptionNotificationService {
     });
   }
 
-  bulkSubscription<T extends { _id?: string | number }>(sources: Observable<T | HttpErrorResponse>[], action: CRUDAction, cbComplete: any = null, cbSuccess: any = null, cbError: any = null) {
+  // tslint:disable-next-line:max-line-length
+  bulkSubscription<T extends { _id?: string | number }>(sources: Observable<T | HttpErrorResponse>[], action: CRUDAction, cbComplete: any = null, cbSuccess: any = null, cbError: any = null): Subscription {
     return forkJoin([...sources]).subscribe(data => {
       if (cbComplete) {
         cbComplete(data);
       }
+      // tslint:disable-next-line:max-line-length
       const foundErrorResponse = data.find((responseItem: HttpErrorResponse) => responseItem instanceof HttpErrorResponse) as HttpErrorResponse;
       if (foundErrorResponse) {
+        // tslint:disable-next-line:max-line-length
         this.snackBar.open(`${foundErrorResponse.error.message} ${foundErrorResponse.error.error ? foundErrorResponse.error.error : ''}`, null, this.snackbarConfigError);
         if (cbError) {
           cbError(data);

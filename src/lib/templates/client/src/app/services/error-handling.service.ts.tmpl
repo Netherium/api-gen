@@ -16,6 +16,7 @@ export class ErrorHandlingService {
    * @param operation - name of the operation that failed
    * @param result - optional code to return as the observable result
    */
+  // tslint:disable-next-line:typedef
   public handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T | HttpErrorResponse> => {
 
@@ -32,6 +33,7 @@ export class ErrorHandlingService {
    * @param operation - name of the operation that failed
    * @param result - optional code to return as the observable result
    */
+  // tslint:disable-next-line:typedef
   public handlePaginationError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 
@@ -47,6 +49,7 @@ export class ErrorHandlingService {
    * Let the app continue.
    * @param operation - name of the operation that failed
    */
+  // tslint:disable-next-line:typedef
   public handleErrorWithMessage(operation = 'operation') {
     return (error: any): Observable<HttpErrorResponse> => {
 

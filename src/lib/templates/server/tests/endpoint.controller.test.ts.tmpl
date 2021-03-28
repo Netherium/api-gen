@@ -1,43 +1,19 @@
 process.env.NODE_ENV = 'test';
-import App from '../src/server';
 import * as chai from 'chai';
-
+import chaiHttp = require('chai-http');
+import { Document } from 'mongoose';
+import App from '../src/server';
+import { Auth } from '../src/middleware/auth';
 import UserModel from '../src/models/user.model';
 import RoleModel from '../src/models/role.model';
 import ResourcePermissionModel from '../src/models/resource-permission.model';
-import { Document } from 'mongoose';
-import { Auth } from '../src/middleware/auth';
-import chaiHttp = require('chai-http');
+import { adminRoleDetails, publicRoleDetails } from './stubs/role.stub';
+import { adminUserDetails, publicUserDetails } from './stubs/user.stub';
 
 chai.use(chaiHttp);
-const should = chai.should();
+chai.should();
+
 const app = App.express;
-
-const publicRoleDetails = {
-  name: 'Public',
-  description: 'Unauthenticated user',
-  isAuthenticated: false
-};
-
-const adminRoleDetails = {
-  name: 'Admin',
-  description: 'Top level authenticated user',
-  isAuthenticated: true
-};
-
-const adminUserDetails = {
-  email: process.env.ADMIN_EMAIL,
-  name: process.env.ADMIN_NAME,
-  password: process.env.ADMIN_PASSWORD
-};
-
-const publicUserDetails = {
-  email: 'public@email.com',
-  name: 'Testlogin',
-  password: 'qwerty'
-};
-
-const falseUID = '5ca4ab6f3f86e02af8e1a5a3';
 
 describe('Endpoints', () => {
   let publicRole: Document;

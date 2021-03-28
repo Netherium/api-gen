@@ -30,7 +30,7 @@ export class DynamicTableComponent implements OnInit, OnDestroy {
    * Retrieve selected columns from localStorage else
    * Set selectedColumns to the first 3 ('select', '_id', '1st Resource Property') and last one ('edit')
    */
-  ngOnInit() {
+  ngOnInit(): void {
     const displayStorageSetting = localStorage.getItem(`display_${this.resource}`);
     if (displayStorageSetting) {
       this.selectedColumns = JSON.parse(displayStorageSetting);
@@ -44,7 +44,7 @@ export class DynamicTableComponent implements OnInit, OnDestroy {
   /**
    * Click handler for edit
    */
-  editDialog(row: any) {
+  editDialog(row: any): void {
     this.router.navigate([`${(this.resource)}/edit/`, row._id]);
   }
 
@@ -52,7 +52,7 @@ export class DynamicTableComponent implements OnInit, OnDestroy {
    * Push multiple sources into RXJS observable for multiple delete of items
    * Trigger a refresh on dataSource
    */
-  deleteSelected() {
+  deleteSelected(): void {
     const sources = [];
     this.dataSource.selection.selected.forEach(item => {
       sources.push(this.httpService.delete(this.resource, item._id));
@@ -65,7 +65,7 @@ export class DynamicTableComponent implements OnInit, OnDestroy {
   /**
    * Unsubscribe from all subscriptions
    */
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.bulkDeleteSubscription) {
       this.bulkDeleteSubscription.unsubscribe();
     }
@@ -74,7 +74,7 @@ export class DynamicTableComponent implements OnInit, OnDestroy {
   /**
    * Set selected and store to localStorage
    */
-  selectedColumnsChanged(event) {
+  selectedColumnsChanged(event): void {
     this.selectedColumns = event;
     localStorage.setItem(`display_${this.resource}`, JSON.stringify(event));
   }

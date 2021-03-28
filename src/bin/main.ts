@@ -45,7 +45,7 @@ console.log(chalk.magenta('                                        \|_\|        
     .alias('h', 'help')
     .alias('v', 'version')
     .showHelpOnFail(true, 'Specify --help for available options')
-    .epilog(chalk.magenta('copyright@2020 Netherium'));
+    .epilog(chalk.magenta('copyright@2021 Netherium'));
 
 
   if (argv.sample) {

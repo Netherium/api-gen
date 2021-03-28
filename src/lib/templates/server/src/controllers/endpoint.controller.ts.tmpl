@@ -4,6 +4,7 @@ import { EndpointService } from '../services/endpoint.service';
 
 /** EndpointController.ts */
 export class EndpointController {
+
   /** EndpointController.list() */
   public async list(req: Request, res: Response): Promise<Response> {
     try {

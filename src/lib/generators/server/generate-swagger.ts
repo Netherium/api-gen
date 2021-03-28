@@ -2,14 +2,13 @@ import * as path from 'path';
 import { promises as fs } from 'fs';
 import * as YAML from 'yaml';
 import * as pluralize from 'pluralize';
-import { pascalCase } from '../../helpers/string-functions';
+import { kebabCase, pascalCase } from '../../helpers/string-functions';
 import { UI } from '../../interfaces/ui.model';
 import { SwaggerEntity } from '../../interfaces/swagger-entity.model';
 import { SwaggerPaths } from '../../interfaces/swagger-paths.model';
 import { SwaggerComponentSchema, SwaggerPropertiesSchema } from '../../interfaces/swagger-component-schema.model';
 import { UIEntity } from '../../interfaces/ui-entity.model';
 import { UINestedField } from '../../interfaces/ui-nested-field.model';
-
 
 export const generateSwagger = async (ui: UI) => {
   const yamlPath = path.join(process.cwd(), ui.swaggerPath);
@@ -18,7 +17,7 @@ export const generateSwagger = async (ui: UI) => {
   for (const uiEntity of ui.entities) {
     const swaggerEntity: SwaggerEntity = {
       tagName: pluralize.plural(pascalCase(uiEntity.name)),
-      route: pluralize.plural(uiEntity.name),
+      route: pluralize.plural(kebabCase(uiEntity.name)),
       entity: uiEntity
     }
 
@@ -35,7 +34,7 @@ export const generateSwagger = async (ui: UI) => {
         totalItems: {
           type: 'number'
         },
-        data:{
+        data: {
           type: 'array',
           items: {
             $ref: `#/components/schemas/${pascalCase(uiEntity.name)}`
@@ -69,8 +68,16 @@ const swaggerListMethodDeclaration = (swaggerEntity: SwaggerEntity): any => {
     tags: [
       swaggerEntity.tagName
     ],
+    parameters: [
+      {$ref: '#/components/parameters/q'},
+      {$ref: '#/components/parameters/paramsFilter'},
+      {$ref: '#/components/parameters/_sort'},
+      {$ref: '#/components/parameters/_limit'},
+      {$ref: '#/components/parameters/_page'}
+    ],
     responses: {
       200: {
+        description: 'Ok',
         content: {
           'application/json': {
             schema: {
@@ -100,17 +107,11 @@ const swaggerShowMethodDeclaration = (swaggerEntity: SwaggerEntity): any => {
       swaggerEntity.tagName
     ],
     parameters: [
-      {
-        name: 'id',
-        in: 'path',
-        required: true,
-        schema: {
-          type: 'string'
-        }
-      }
+      {$ref: '#/components/parameters/id'}
     ],
     responses: {
       200: {
+        description: 'Ok',
         content: {
           'application/json': {
             schema: {
@@ -150,6 +151,7 @@ const swaggerCreateMethodDeclaration = (swaggerEntity: SwaggerEntity): any => {
     },
     responses: {
       200: {
+        description: 'Ok',
         content: {
           'application/json': {
             schema: {
@@ -179,14 +181,7 @@ const swaggerUpdateMethodDeclaration = (swaggerEntity: SwaggerEntity): any => {
       swaggerEntity.tagName
     ],
     parameters: [
-      {
-        name: 'id',
-        in: 'path',
-        required: true,
-        schema: {
-          type: 'string'
-        }
-      }
+      {$ref: '#/components/parameters/id'}
     ],
     requestBody: {
       content: {
@@ -199,6 +194,7 @@ const swaggerUpdateMethodDeclaration = (swaggerEntity: SwaggerEntity): any => {
     },
     responses: {
       200: {
+        description: 'Ok',
         content: {
           'application/json': {
             schema: {
@@ -228,14 +224,7 @@ const swaggerDeleteMethodDeclaration = (swaggerEntity: SwaggerEntity): any => {
       swaggerEntity.tagName
     ],
     parameters: [
-      {
-        name: 'id',
-        in: 'path',
-        required: true,
-        schema: {
-          type: 'string'
-        }
-      }
+      {$ref: '#/components/parameters/id'},
     ],
     responses: {
       204: {

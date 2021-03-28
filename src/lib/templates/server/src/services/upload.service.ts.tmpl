@@ -5,32 +5,7 @@ import * as filenamify from 'filenamify';
 import { promises as fs } from 'fs';
 import * as AWS from 'aws-sdk';
 import sharp = require('sharp');
-
-export interface MediaObject {
-  name: string;
-  alternativeText: string;
-  caption: string;
-  width: number;
-  height: number;
-  hash: string;
-  ext: string;
-  mime: string;
-  size: number;
-  url: string;
-  path: string;
-  provider: string;
-  providerMetadata: string;
-  thumbnail?: {
-    hash: string;
-    ext: string;
-    mime: string;
-    width: number;
-    height: number;
-    size: number;
-    url: string;
-    path: string;
-  };
-}
+import { MediaObject } from '../models/media-object.interface';
 
 export class UploadService {
   public isLocalProvider: boolean;

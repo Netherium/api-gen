@@ -11,13 +11,13 @@ export class AppComponent implements AfterViewInit {
     this.registerSVG();
   }
 
-  registerSVG() {
+  registerSVG(): void {
     this.matIconRegistry
       .addSvgIconSetInNamespace('neth',
         this.sanitizer.bypassSecurityTrustResourceUrl('/assets/icons/icon-set.svg'));
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     const loader = document.getElementById('app-loader');
     setTimeout(() => {
       loader.classList.add('animation');

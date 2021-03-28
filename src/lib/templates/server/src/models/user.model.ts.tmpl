@@ -43,7 +43,7 @@ userSchema.virtual('password')
     if (password) {
       const user: any = this;
       user.salt = crypto.randomBytes(16).toString('hex');
-      user.hash = crypto.pbkdf2Sync(password, user.salt, 1000, 256, 'sha256').toString('hex');
+      user.hash = getHashedPassword(password, user.salt);
     }
   })
   .get(function () {
@@ -62,8 +62,9 @@ userSchema.set('toJSON', {
 
 // tslint:disable:only-arrow-functions
 userSchema.methods.validPassword = function (password: any) {
-  const hash = crypto.pbkdf2Sync(password, this.salt, 1000, 256, 'sha256').toString('hex');
-  return this.hash === hash;
+  const user: any = this;
+  const hash = getHashedPassword(password, user.salt);
+  return user.hash === hash;
 };
 
 userSchema.methods.validateJWT = function (token: string) {
@@ -82,6 +83,10 @@ userSchema.methods.generateJWT = async function () {
     // tslint:disable-next-line:no-bitwise
     exp: ~~(expiry.getTime() / 1000)
   }, process.env.secret);
+};
+
+const getHashedPassword = (password: string, salt: string): string => {
+  return crypto.pbkdf2Sync(password, salt, 1000, 256, 'sha256').toString('hex');
 };
 
 userSchema.plugin(fuzzySearching, {fields: ['email', 'name']});

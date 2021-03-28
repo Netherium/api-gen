@@ -165,7 +165,7 @@ const promptEntityName = async () => {
     {
       type: 'input',
       name: 'name',
-      message: 'Entity Name:',
+      message: 'Entity Name (singular, camelCase, i.e. "flightResult"):',
       validate: (name: any) => {
         const reg = /^[a-zA-Z0-9-_]+$/;
         return (reg.test(name)) || 'Project name cannot be empty and can contain alphanumerical and dashes only!';
@@ -214,7 +214,7 @@ const promptPropertyRef = async () => {
     {
       type: 'input',
       name: 'ref',
-      message: 'Entity Reference ("mediaObject", "user", "role", ... ):'
+      message: 'Entity Reference (singular, camelCase, i.e. "mediaObject", "user", "role", ... ):'
     });
 }
 
@@ -324,7 +324,7 @@ const promptSwaggerPath = async () => {
       type: 'fuzzypath',
       name: 'swaggerPath',
       excludePath: (nodePath: string) => {
-        const excludedItems = ['node_modules', '.idea', '.nyc', 'coverage', '__tests__'];
+        const excludedItems = ['node_modules', '.idea', '.nyc', 'coverage', 'tests'];
         for (const excludedItem of excludedItems) {
           if (nodePath.startsWith(excludedItem)) {
             return true;

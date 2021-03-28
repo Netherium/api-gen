@@ -9,6 +9,6 @@ export interface ResourcePermission {
 }
 
 interface ResourcePermissionMethod {
-  name: string,
-  roles: Role[]
+  name: string;
+  roles: Role[];
 }

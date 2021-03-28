@@ -20,7 +20,7 @@ export class LoginComponent {
   constructor(private authService: AuthService, private snackBar: MatSnackBar, private router: Router) {
   }
 
-  login() {
+  login(): void {
     const snackbarConfigSuccess: MatSnackBarConfig = {
       duration: 2000,
       panelClass: ['mat-toolbar', 'mat-primary']

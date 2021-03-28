@@ -37,6 +37,8 @@ yarn-error.log
 testem.log
 .nyc_output
 .buildstatus
+playground.ts,
+sample.json
 
 # System Files
 .DS_Store

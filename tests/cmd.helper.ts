@@ -1,4 +1,4 @@
-import { ChildProcessWithoutNullStreams, spawn } from 'child_process';
+import { ChildProcess, ChildProcessWithoutNullStreams, fork } from 'child_process';
 
 // tslint:disable-next-line:max-line-length
 const setInputsTimeouts = (inputs: string[], childProcess: ChildProcessWithoutNullStreams, inputInitDelay: number, inputInterval: number) => {
@@ -18,9 +18,13 @@ const clearInputsTimeouts = (inputsTimer: NodeJS.Timeout[]) => {
 }
 
 // tslint:disable-next-line:max-line-length
-export const cliExecute = (cmd: any, inputs: any = [], showOutput = false, processTimer = 30000, inputInitDelay = 1000, inputInterval = 1000) => {
+export const cliExecute = (additionalArguments: any = [], inputs: any = [], showOutput = false, processTimer = 30000, inputInitDelay = 1000, inputInterval = 1000) => {
   return new Promise((resolve, reject) => {
-    const childProcess = spawn(cmd, {stdio: 'pipe', shell: true});
+    let childProcess: ChildProcessWithoutNullStreams | ChildProcess | null = null;
+    childProcess = fork(process.cwd(), {
+      stdio: 'pipe',
+      execArgv: ['-r', 'ts-node/register/transpile-only', ...additionalArguments],
+    });
     childProcess.stdin.setDefaultEncoding('utf-8');
     childProcess.stdout.setEncoding('utf-8');
     let result = '';

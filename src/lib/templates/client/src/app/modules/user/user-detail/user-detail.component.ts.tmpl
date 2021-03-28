@@ -29,6 +29,7 @@ export class UserDetailComponent {
   filteredRole: Observable<Role[]>;
   isLoadingRole: boolean;
 
+  // tslint:disable-next-line:max-line-length
   constructor(private httpService: HttpGenericService, private subNotSrv: SubscriptionNotificationService, private router: Router, private activatedRoute: ActivatedRoute) {
     if (this.activatedRoute.snapshot.data.action === CRUDAction.UPDATE) {
       this.user = this.activatedRoute.snapshot.data.user;
@@ -49,7 +50,7 @@ export class UserDetailComponent {
     );
   }
 
-  roleChanged(text: string) {
+  roleChanged(text: string): void {
     if (text === '') {
       this.user.role = null;
     }
@@ -60,9 +61,10 @@ export class UserDetailComponent {
     if (role) {
       return role.name;
     }
+    return null;
   }
 
-  save() {
+  save(): void {
     this.isLoading = true;
     let obs: Observable<User | HttpErrorResponse>;
     if (this.action === CRUDAction.CREATE) {

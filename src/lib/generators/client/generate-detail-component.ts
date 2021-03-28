@@ -118,7 +118,7 @@ export const generateDetailComponent = (uiEntity: UIEntity): OptionalKind<Source
               kind: StructureKind.Parameter
             }
           ],
-          kind: StructureKind.Constructor,
+          kind: StructureKind.Constructor
         }],
         methods: [
           ...getExtraMethodDeclaration(uiEntity),
@@ -138,6 +138,7 @@ this.subNotSrv.singleSubscription<${pascalCase(uiEntity.name)}>(obs, this.action
   this.router.navigate(['/${kebabCase(pluralize(uiEntity.name))}']);
 });`,
             ],
+            returnType: 'void',
             kind: StructureKind.Method,
           }
         ],
@@ -452,11 +453,12 @@ const getExtraMethodDeclaration = (uiEntity: UIEntity): MethodDeclarationStructu
                     kind: StructureKind.Parameter,
                   }
                 ],
+                returnType: 'void',
                 kind: StructureKind.Method,
               },
               {
                 name: `${field.name}DisplayFn`,
-                statements: [`if (${nestedField.ref}) {\n  return ${nestedField.ref}.${displayNestedProperty};\n}`],
+                statements: [`if (${nestedField.ref}) {\n  return ${nestedField.ref}.${displayNestedProperty};\n}\nreturn null;`],
                 parameters: [
                   {
                     name: `${nestedField.ref}`,
@@ -486,11 +488,12 @@ const getExtraMethodDeclaration = (uiEntity: UIEntity): MethodDeclarationStructu
                 kind: StructureKind.Parameter,
               }
             ],
+            returnType: 'void',
             kind: StructureKind.Method,
           },
           {
             name: `${field.name}DisplayFn`,
-            statements: [`if (${field.ref}) {\n  return ${field.ref}.${displayProperty};\n}`],
+            statements: [`if (${field.ref}) {\n  return ${field.ref}.${displayProperty};\n}\nreturn null;`],
             parameters: [
               {
                 name: `${field.ref}`,

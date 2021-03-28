@@ -28,12 +28,12 @@ export class ShellComponent {
     this.initTheme();
   }
 
-  logout() {
+  logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
 
-  initTheme() {
+  initTheme(): void {
     const theme = JSON.parse(localStorage.getItem(`DarkTheme`));
     if (theme) {
       this.selectedThemeChanged(true);
@@ -42,7 +42,7 @@ export class ShellComponent {
     }
   }
 
-  setTheme(isDarkTheme: boolean) {
+  setTheme(isDarkTheme: boolean): void {
     const bodyEl = document.getElementById('body');
     if (isDarkTheme) {
       bodyEl.classList.add('dark-theme');
@@ -51,7 +51,7 @@ export class ShellComponent {
     }
   }
 
-  selectedThemeChanged(event) {
+  selectedThemeChanged(event): void {
     this.darkTheme = event as boolean;
     localStorage.setItem(`DarkTheme`, JSON.stringify(event));
     this.setTheme(this.darkTheme);

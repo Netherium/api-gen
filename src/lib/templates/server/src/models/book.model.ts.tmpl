@@ -54,5 +54,5 @@ const bookSchema = new Schema({
     }
   ]
 }, {timestamps: true});
-bookSchema.plugin(fuzzySearching, {fields: ['title', , , , , , , , , ,]});
+bookSchema.plugin(fuzzySearching, {fields: ['title']});
 export default mongoose.model('book', bookSchema);

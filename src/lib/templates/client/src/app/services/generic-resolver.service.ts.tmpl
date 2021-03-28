@@ -21,6 +21,7 @@ export class GenericResolverService<T> implements Resolve<T> {
             this.router.navigate(['/404']);
             return EMPTY;
           }
+          return data;
         })
       );
   }

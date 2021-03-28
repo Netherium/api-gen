@@ -14,7 +14,7 @@ import { pascalCase } from '../src/lib/helpers/string-functions';
 should();
 
 describe('Generate Swagger', () => {
-  const swaggerTestPath = '__tests__/mocks/sample.yaml';
+  const swaggerTestPath = 'tests/mocks/sample.yaml';
   const sampleYamlPath = path.join(process.cwd(), swaggerTestPath);
   const ui: UI = {
     generateApp: false,

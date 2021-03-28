@@ -1,7 +1,8 @@
-import { AbstractControl, FormControl, NG_VALIDATORS, Validator, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormControl, NG_VALIDATORS, ValidationErrors, Validator, ValidatorFn } from '@angular/forms';
 import { Directive } from '@angular/core';
 
 @Directive({
+  // tslint:disable-next-line:directive-selector
   selector: '[isSelectedObject][ngModel]',
   providers: [
     { provide: NG_VALIDATORS, useExisting: IsSelectedObjectValidator, multi: true }
@@ -14,7 +15,7 @@ export class IsSelectedObjectValidator implements Validator {
     this.validator = isSelectedObjectFactory();
   }
 
-  validate(c: FormControl) {
+  validate(c: FormControl): ValidationErrors {
     return this.validator(c);
   }
 }

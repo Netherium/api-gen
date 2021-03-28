@@ -62,7 +62,7 @@ export const HTTP_INTERNAL_SERVER_ERROR = (res: Response, err: any) => {
   }
   return res.status(500).json(
     {
-      message: 'Server Error',
+      message: 'Internal Server Error',
       error: err,
     }
   );

@@ -1,10 +1,5 @@
 import * as express from 'express';
-
-interface Endpoint {
-  endpointPath: string;
-  method: string;
-  handler: string;
-}
+import { Endpoint } from '../models/endpoint.interface';
 
 export class EndpointService {
   private expressPathRegex = /^\/\^(.*)\\\/\?\(\?=\\\/\|\$\)\/i/;

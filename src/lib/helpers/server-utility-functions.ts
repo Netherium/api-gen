@@ -22,10 +22,10 @@ export const getPopulatedFieldsFragment = (input: UIEntity, existingDocument = f
     }
     if (existingDocument) {
       fragment += `.execPopulate()`;
-    } else {
-      fragment += `.exec()`;
     }
-    return fragment;
+  }
+  if (!existingDocument) {
+    fragment += `.exec()`;
   }
   return fragment;
 }
@@ -44,6 +44,9 @@ export const getPopulatedQueryBuilderFields = (input: UIEntity) => {
       } else {
         populatedOptions += `{path: '${field.name}'}, `;
       }
+    }
+    if (fieldsToPopulate.length > 0) {
+      populatedOptions = populatedOptions.slice(0, -2);
     }
   }
   populatedOptions += ']';
@@ -107,11 +110,15 @@ export const getModelPropertiesForGenerator = (userInput: any) => {
 
 export const getFuzzySearchProperties = (userInput: any) => {
   let fuzzySearchProperties = '[';
-  userInput.fields.forEach((field: UIField) => {
-    if(field.indexed){
-      fuzzySearchProperties += `'${field.name}', `;
-    }
+  const fieldsWithFuzzySearch = userInput.fields.filter((field: UIField) => {
+    return field.indexed === true;
+  })
+  fieldsWithFuzzySearch.forEach((field: UIField) => {
+    fuzzySearchProperties += `'${field.name}', `;
   });
+  if (fieldsWithFuzzySearch.length > 0) {
+    fuzzySearchProperties = fuzzySearchProperties.slice(0, -2);
+  }
   fuzzySearchProperties += ']';
   return fuzzySearchProperties;
 }

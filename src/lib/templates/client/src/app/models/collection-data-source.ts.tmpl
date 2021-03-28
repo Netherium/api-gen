@@ -14,6 +14,7 @@ export class CollectionDataSource<T> extends DataSource<T> {
   data: BehaviorSubject<T[]>;
   selection: SelectionModel<T>;
 
+  // tslint:disable-next-line:max-line-length
   constructor(private httpService: HttpGenericService, resource: string, initialSort: Sort, initialPageNumber: number, initialPageSize: number, initialQuery: string, multipleSelection = true) {
     super();
     this.sort = new BehaviorSubject<Sort>(initialSort);
@@ -27,6 +28,7 @@ export class CollectionDataSource<T> extends DataSource<T> {
       distinctUntilChanged()
     )]);
     this.page$ = param$.pipe(
+      // tslint:disable-next-line:max-line-length
       switchMap(([sort, pageSize, pageNumber, query]) => this.httpService.listPaginatedCollection<T>(resource, sort, pageNumber, pageSize, query)),
       share()
     );

@@ -6,19 +6,17 @@ import { ResourcePermissionSetting } from '../models/resource-pemission-setting.
 
 export class Auth {
   static isAuthenticated() {
-    return (req: Request, res: Response, next: NextFunction) => {
+    return async (req: Request, res: Response, next: NextFunction) => {
       if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
         const token = req.headers.authorization.split(' ')[1];
-        jwt.verify(token, process.env.secret, (err, decoded) => {
-          if (err) {
-            return res.status(403).json({message: 'Failed to authenticate token.'});
-          } else {
-            res.locals.authUser = decoded;
-            next();
-          }
-        });
+        try {
+          res.locals.authUser = await jwt.verify(token, process.env.secret);
+          next();
+        } catch (err) {
+          return HTTP_UNAUTHORIZED(res);
+        }
       } else {
-        return res.status(403).json({message: 'Failed to authenticate token.'});
+        return HTTP_UNAUTHORIZED(res);
       }
     };
   }
@@ -45,13 +43,13 @@ export class Auth {
             if (rolesPerResourceMethod.some((role: { name: string; }) => role.name === res.locals.authUser.role)) {
               next();
             } else {
-              return HTTP_UNAUTHORIZED(res);
+              return HTTP_FORBIDDEN(res);
             }
           } catch {
-            return HTTP_FORBIDDEN(res);
+            return HTTP_UNAUTHORIZED(res);
           }
         } else {
-          return HTTP_FORBIDDEN(res);
+          return HTTP_UNAUTHORIZED(res);
         }
       }
     };

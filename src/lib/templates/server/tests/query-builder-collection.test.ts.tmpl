@@ -1,30 +1,20 @@
 process.env.NODE_ENV = 'test';
-import App from '../src/server';
 import * as chai from 'chai';
-
+import { Document } from 'mongoose';
+import App from '../src/server';
+import { Auth } from '../src/middleware/auth';
 import UserModel from '../src/models/user.model';
 import RoleModel from '../src/models/role.model';
 import BookModel from '../src/models/book.model';
 import ResourcePermissionModel from '../src/models/resource-permission.model';
-import { Document } from 'mongoose';
-import { Auth } from '../src/middleware/auth';
+import { adminRoleDetails } from './stubs/role.stub';
+import { adminUserDetails } from './stubs/user.stub';
 import chaiHttp = require('chai-http');
 
 chai.use(chaiHttp);
-const should = chai.should();
+chai.should();
+
 const app = App.express;
-
-const adminRoleDetails = {
-  name: 'Admin',
-  description: 'Top level authenticated user',
-  isAuthenticated: true
-};
-
-const adminUserDetails = {
-  email: process.env.ADMIN_EMAIL,
-  name: process.env.ADMIN_NAME,
-  password: process.env.ADMIN_PASSWORD
-};
 
 describe('QueryBuilder', () => {
   let adminRole: Document;
@@ -83,6 +73,16 @@ describe('QueryBuilder', () => {
       };
       books.push((await new BookModel(newBook).save()).toObject());
     }
+  });
+  describe('/Test "q" ?q=book1', () => {
+    it('it should return collection of books with title~=Test book1*', async () => {
+      const res = await chai.request(app)
+        .get('/api/books?q=book1')
+        .set('Authorization', 'Bearer ' + tokenAdmin);
+      res.should.have.status(200);
+      res.body.should.have.property('totalItems').eq(10);
+      res.body.should.have.deep.nested.property('data[0].title', 'Test book1');
+    });
   });
   describe('/Test "_eq" ?title_eq=Test book1', () => {
     it('it should return collection of books with title=Test book1', async () => {

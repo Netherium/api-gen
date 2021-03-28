@@ -13,9 +13,10 @@ export class MediaObjectDetailComponent {
   action: CRUDAction = CRUDAction.CREATE;
   isLoading = false;
   mediaObject: MediaObject = null;
-  alternativeText: string = '';
-  caption: string = '';
+  alternativeText = '';
+  caption = '';
 
+  // tslint:disable-next-line:max-line-length
   constructor(private httpService: HttpGenericService, private subNotSrv: SubscriptionNotificationService, private router: Router, private activatedRoute: ActivatedRoute) {
     if (this.activatedRoute.snapshot.data.action === CRUDAction.UPDATE) {
       this.mediaObject = this.activatedRoute.snapshot.data.mediaObject;
@@ -25,7 +26,7 @@ export class MediaObjectDetailComponent {
     }
   }
 
-  save() {
+  save(): void {
     this.mediaObject = {
       ...this.mediaObject,
       alternativeText: this.alternativeText,

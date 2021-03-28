@@ -26,10 +26,10 @@ export class FileUploadComponent implements OnInit, OnDestroy, ControlValueAcces
   @ViewChild('inputFile', {static: true}) inputFile;
   @ViewChild('dropZone', {static: true}) dropZone: ElementRef;
   @ViewChild(MatMenuTrigger) addFileOptionsMenu: MatMenuTrigger;
-  @Input() standAlone: boolean = false;
+  @Input() standAlone = false;
   @Input() canAddFiles = true;
   @Input() title: string;
-  @Input() multiple: boolean = true;
+  @Input() multiple = true;
   files: File[] | MediaObject[] | File | MediaObject;
   filesDragged: FileList;
   dropZoneEl: HTMLElement;
@@ -37,6 +37,7 @@ export class FileUploadComponent implements OnInit, OnDestroy, ControlValueAcces
   createSubscription: Subscription;
   counter = 0;
 
+  // tslint:disable-next-line:max-line-length
   constructor(private httpService: HttpGenericService, public dialog: MatDialog, private snackBar: MatSnackBar, private subNotSrv: SubscriptionNotificationService) {
     if (this.multiple) {
       this.files = [];
@@ -56,7 +57,7 @@ export class FileUploadComponent implements OnInit, OnDestroy, ControlValueAcces
   /**
    *  Handle 'drop' event for multiple and single files
    */
-  handleFileDrop(e) {
+  handleFileDrop(e): void {
     e.stopPropagation();
     e.preventDefault();
     if (this.canAddFiles) {
@@ -81,7 +82,7 @@ export class FileUploadComponent implements OnInit, OnDestroy, ControlValueAcces
    *  Handle 'dragenter' event
    *  Counter is hack for event bubbling on underlying DOM elements when dragging
    */
-  handleDragEnter(e) {
+  handleDragEnter(e): void {
     e.stopPropagation();
     e.preventDefault();
     this.counter++;
@@ -92,7 +93,7 @@ export class FileUploadComponent implements OnInit, OnDestroy, ControlValueAcces
    *  Handle 'dragleave' event
    *  Remove counter while leave dragging on underlying DOM elements
    */
-  handleDragLeave(e) {
+  handleDragLeave(e): void {
     e.stopPropagation();
     e.preventDefault();
     this.counter--;
@@ -104,7 +105,7 @@ export class FileUploadComponent implements OnInit, OnDestroy, ControlValueAcces
   /**
    *  Handle 'dragover' event
    */
-  handleDragOver(e) {
+  handleDragOver(e): void {
     e.stopPropagation();
     e.preventDefault();
     e.dataTransfer.dropEffect = 'copy';
@@ -113,7 +114,7 @@ export class FileUploadComponent implements OnInit, OnDestroy, ControlValueAcces
   /**
    * Hack to trigger native browser file dialog
    */
-  triggerNativeFileDialog() {
+  triggerNativeFileDialog(): void {
     this.addFileOptionsMenu.closeMenu();
     this.inputFile.nativeElement.click();
   }
@@ -121,7 +122,7 @@ export class FileUploadComponent implements OnInit, OnDestroy, ControlValueAcces
   /**
    * Trigger Upload dialog which is a data table of MediaObjects
    */
-  triggerMediaObjectsDialog() {
+  triggerMediaObjectsDialog(): void {
     const dialogRef = this.dialog.open(UploadDialogComponent, {
       panelClass: 'dialog-full',
       data: this.multiple
@@ -147,7 +148,7 @@ export class FileUploadComponent implements OnInit, OnDestroy, ControlValueAcces
   /**
    * Handle input from native browser file dialog
    */
-  onManualAdd() {
+  onManualAdd(): void {
     if (this.multiple) {
       if (this.inputFile.nativeElement.files instanceof FileList && this.inputFile.nativeElement.files.length > 0) {
         for (let i = 0; i < this.inputFile.nativeElement.files.length; i++) {
@@ -166,10 +167,12 @@ export class FileUploadComponent implements OnInit, OnDestroy, ControlValueAcces
   /**
    * Checks if upload button is enabled
    */
-  canUpload() {
+  canUpload(): boolean {
     if (this.multiple) {
+      // tslint:disable-next-line:no-non-null-assertion
       return (this.files as File[] | MediaObject[]).some(file => (file ! instanceof File));
     } else {
+      // tslint:disable-next-line:no-non-null-assertion
       return (this.files !== null) && (this.files ! instanceof File);
     }
   }
@@ -177,7 +180,7 @@ export class FileUploadComponent implements OnInit, OnDestroy, ControlValueAcces
   /**
    * Handle upload, when button is pressed
    */
-  upload() {
+  upload(): void {
     if (this.multiple) {
       const sources = [];
       const fileRefs = [];
@@ -221,7 +224,7 @@ export class FileUploadComponent implements OnInit, OnDestroy, ControlValueAcces
   /**
    * Handle remove on mat-chip
    */
-  remove(file: File | MediaObject) {
+  remove(file: File | MediaObject): void {
     if (this.multiple) {
       let index;
       if (file instanceof File) {
@@ -247,13 +250,13 @@ export class FileUploadComponent implements OnInit, OnDestroy, ControlValueAcces
    * Dummy function for onChange
    */
   onChange: any = () => {
-  };
+  }
 
   /**
    * Dummy function for onTouched
    */
   onTouched: any = () => {
-  };
+  }
 
   /**
    *  Register a function onChange
@@ -287,7 +290,7 @@ export class FileUploadComponent implements OnInit, OnDestroy, ControlValueAcces
   /**
    * OnDestroy unsubscribe subscriptions and remove listeners
    */
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.createSubscription) {
       this.createSubscription.unsubscribe();
     }

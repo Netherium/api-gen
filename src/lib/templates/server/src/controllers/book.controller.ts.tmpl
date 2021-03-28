@@ -5,10 +5,11 @@ import { queryBuilderCollection } from '../helpers/query-builder-collection';
 
 /** BookController.ts */
 export class BookController {
+
   /** BookController.list() */
   public async list(req: Request, res: Response): Promise<Response> {
     try {
-      const bookCollection = await queryBuilderCollection(req, BookModel, [{path: 'author'}, {path: 'collaborators'}, {path: 'cover'}, {path: 'images'}, ]);
+      const bookCollection = await queryBuilderCollection(req, BookModel, [{path: 'author'}, {path: 'collaborators'}, {path: 'cover'}, {path: 'images'}]);
       return HTTP_OK(res, bookCollection);
     } catch (err) {
       return HTTP_INTERNAL_SERVER_ERROR(res, err);
@@ -84,7 +85,7 @@ export class BookController {
   public async delete(req: Request, res: Response): Promise<Response> {
     const id = req.params.id;
     try {
-      const bookDeleted = await BookModel.findByIdAndDelete(id);
+      const bookDeleted = await BookModel.findByIdAndDelete(id).exec();
       if (!bookDeleted) {
         return HTTP_NOT_FOUND(res);
       }
@@ -93,4 +94,5 @@ export class BookController {
       return HTTP_INTERNAL_SERVER_ERROR(res, err);
     }
   }
+
 }

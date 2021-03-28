@@ -5,7 +5,7 @@
 <h4 align="center">A powerful RESTful Headless CMS written in Typescript using <a href="https://github.com/expressjs/express" target="_blank">Express</a> and <a href="https://angular.io/" target="_blank">Angular</a></h4>
 <h5 align="center">JWT auth, Access-Control Lists (ACL), Uploads, MongoDB, Angular and Angular Material in one :package:  </h5>
 <p align="center">
-    <img src="https://img.shields.io/badge/Coverage-97.89%25-brightgreen.svg" alt="Lines Covered">
+    <img src="https://img.shields.io/badge/Coverage-99.02%25-brightgreen.svg" alt="Lines Covered">
     <img src="https://img.shields.io/badge/Build-Passing-brightgreen.svg" alt="Build Status">
     <img src="https://img.shields.io/badge/Node-%3E=12.0.0-grey?logo=node.js&color=339933" alt="Node Version Required">
     <img src="https://img.shields.io/badge/Built%20with-Typescript-blue" alt="Built with Typescript">
@@ -48,22 +48,26 @@
 3. :computer: Fill in choices
 <img src="https://raw.githubusercontent.com/Netherium/api-gen/master/img/cli.png">
 
-4. :tada: Your CMS is ready!
+4.  :pray: If you generated project, navigate and install dependencies
+
     Server
-    ```bash
+
+     ```bash
     $ cd myproject/server
     $ npm install
     $ copy `.env.sample` to `.env` and adjust credentials
     $ npm run dev 
     ```
-   Navigate to http://localhost:4000/api/auth/init to initialize app
+    Navigate to http://localhost:4000/api/auth/init to initialize app
    
-   Client
-   ```bash
-   $ cd myproject/client
-   $ npm install
-   $ npm run start (or ng serve)
-   ```
+    Client
+
+    ```bash
+    $ cd myproject/client
+    $ npm install
+    $ npm run start (or ng serve)
+    ```
+
    Navigate to http://localhost:4200 and login with your credentials
 
 <p align="center">
@@ -82,7 +86,7 @@
 - Robust routing and middleware based on same principles of Express
 - Solid modularized admin panel with [Angular](https://angular.io) and [Angular Material](https://material.angular.io)
 - MongoDB integration
-- ~~Elasticsearch integration~~ (soon™), temporarily replaced with 'mongoose-fuzzy-searching'
+- Fuzzy search with 'mongoose-fuzzy-searching'
 - Protected routes, ACL based with middleware, using [`jwt-token`](https://jwt.io)
 - File Upload routes and thumbnail generator
 - Test and Coverage
@@ -95,34 +99,34 @@
 
 1. :dash: Gimmie my API!!!
     
- - `neth-api-gen`
- - Select `app`
- - Add entities according to your needs
- - Get a production ready(:crossed_fingers:) api + admin panel including [basic routes](#basic-routes) + the entities you've added ([ACL required](#resource-permissions))
- - Impress your team!
+   - `neth-api-gen`
+   - Select `app`
+   - Add entities according to your needs
+   - Get a production ready(:crossed_fingers:) api + admin panel including [basic routes](#basic-routes) + the entities you've added ([ACL required](#resource-permissions))
+   - Impress your team!
 
 2. :bulb: I forgot to add...
 
- - `neth-api-gen`
- - Select `entities`
- - Add more entities to your existing neth-api-gen project, or a solid boilerplate for an ExpressJs/Angular project (modifications may apply)
- - Go and play!
+   - `neth-api-gen`
+   - Select `entities`
+   - Add more entities to your existing neth-api-gen project, or a solid boilerplate for an ExpressJs/Angular project (modifications may apply)
+   - Go and play!
 
 3. :joystick: I want more control and faster!!!
 
- - `neth-api-gen -i mysample.json`
- - Import all the options from a json file, instead of a UI
- - Do it once, do it many!    
+   - `neth-api-gen -i mysample.json`
+   - Import all the options from a json file, instead of a UI
+   - Do it once, do it many!    
 
 4. :confused: But where is that JSON???
 
- - `neth-api-gen -s`
- -  Oh yeah, forgot to mention it
+   - `neth-api-gen -s`
+   -  Oh yeah, forgot to mention it
 
 5. :question: Can you help???
 
- - `neth-api-gen -h`
- - I can
+   - `neth-api-gen -h`
+   - I can
 
 :warning: When `generateApp: true`, `swaggerDocs` is irrelevant, but you need to provide `swaggerPath: "myproject/swagger.yaml"`
     
@@ -162,7 +166,7 @@
        
    ```bash
    apiUrl: 'http://localhost:4000/api',         // Endpoint of the server
-   authorizedRole: 'Admin'                      // Role that has authorized access to admin panel
+   authorizedRole: ['Admin']                    // Roles that have authorized access to admin panel
    ...
    ```
 
@@ -340,7 +344,7 @@ Follow the structure below. It will keep things and your mind tidy :blossom:
 
 ## Under The Hood
 
-- When you generate an `App`, an Express server project based on [Neth-express-api-ts](https://github.com/Netherium/neth-express-api-ts) and an Angular project
+- When you generate an `App`, an Express server project based on [Neth-express-api-ts](https://github.com/Netherium/neth-express-api-ts) and an Angular project are being created
 - When you generate an `Entity`, multiple files are generated under `server` and `client` folders
     Server
     - Controller, Model, Route files are generated under their corresponding folders `./server/src/controllers/entity.controller.ts, ./server/src/models/entity.model.ts, ./server/src/routes/entity.route.ts`

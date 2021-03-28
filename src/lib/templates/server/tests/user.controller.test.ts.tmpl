@@ -1,54 +1,19 @@
 process.env.NODE_ENV = 'test';
-import App from '../src/server';
 import * as chai from 'chai';
-
+import { Document } from 'mongoose';
+import App from '../src/server';
+import { Auth } from '../src/middleware/auth';
 import UserModel from '../src/models/user.model';
 import RoleModel from '../src/models/role.model';
 import ResourcePermissionModel from '../src/models/resource-permission.model';
-import { Document } from 'mongoose';
-import { Auth } from '../src/middleware/auth';
+import { adminRoleDetails, publicRoleDetails } from './stubs/role.stub';
+import { adminUserDetails, loginUserDetails, modifiedUserDetails, registerUserDetails } from './stubs/user.stub';
 import chaiHttp = require('chai-http');
 
 chai.use(chaiHttp);
-const should = chai.should();
+chai.should();
+
 const app = App.express;
-
-const publicRoleDetails = {
-  name: 'Public',
-  description: 'Unauthenticated user',
-  isAuthenticated: false
-};
-
-const adminRoleDetails = {
-  name: 'Admin',
-  description: 'Top level authenticated user',
-  isAuthenticated: true
-};
-
-const adminUserDetails = {
-  email: process.env.ADMIN_EMAIL,
-  name: process.env.ADMIN_NAME,
-  password: process.env.ADMIN_PASSWORD
-};
-
-const deskUserDetails = {
-  email: 'testregister@email.com',
-  name: 'TestRegister',
-  password: 'qwerty'
-};
-
-const simpleUserDetails = {
-  email: 'testlogin@email.com',
-  name: 'Testlogin',
-  password: 'qwerty'
-};
-
-const modifiedSimpleUserDetails = {
-  email: 'testlogin@email.com',
-  name: 'Testloginmodified',
-  password: 'qwerty'
-};
-
 const falseUID = '5ca4ab6f3f86e02af8e1a5a3';
 
 describe('Users', () => {
@@ -85,7 +50,7 @@ describe('Users', () => {
     await RoleModel.deleteMany({});
     publicRole = await new RoleModel(publicRoleDetails).save();
     adminRole = await new RoleModel(adminRoleDetails).save();
-    const adminUser = await new UserModel({...adminUserDetails, role: adminRole}).save();
+    await new UserModel({...adminUserDetails, role: adminRole}).save();
     userResourcePermission.methods.map((method: any) => {
       return {
         roles: method.roles.push(adminRole),
@@ -94,7 +59,7 @@ describe('Users', () => {
     });
     await new ResourcePermissionModel(userResourcePermission).save();
     await Auth.updateAppPermissions(null, app);
-    await new UserModel({...simpleUserDetails, role: publicRole}).save();
+    await new UserModel({...loginUserDetails, role: publicRole}).save();
   });
   describe('/GET users', () => {
     let tokenAdmin = '';
@@ -106,7 +71,7 @@ describe('Users', () => {
       tokenAdmin = JSON.parse(res1.text).token;
       const res2 = await chai.request(app)
         .post('/api/auth/login')
-        .send(simpleUserDetails);
+        .send(loginUserDetails);
       tokenSimple = JSON.parse(res2.text).token;
     });
     it('it should return collection of user', async () => {
@@ -121,9 +86,7 @@ describe('Users', () => {
       const res = await chai.request(app)
         .get('/api/users')
         .set('Authorization', 'Bearer ' + tokenSimple);
-      res.should.have.status(401);
-      res.body.should.have.property('message').eql('Unauthorized');
-
+      res.should.have.status(403);
     });
   });
   describe('/GET users/:id', () => {
@@ -155,7 +118,7 @@ describe('Users', () => {
         .get(`/api/users/1234`)
         .set('Authorization', 'Bearer ' + tokenAdmin);
       res.should.have.status(500);
-      res.body.should.have.property('message').eqls('Server Error');
+      res.body.should.have.property('message').eqls('Internal Server Error');
     });
   });
   describe('/POST users', () => {
@@ -170,15 +133,15 @@ describe('Users', () => {
       const res = await chai.request(app)
         .post(`/api/users`)
         .set('Authorization', 'Bearer ' + tokenAdmin)
-        .send({...deskUserDetails, role: publicRole});
+        .send({...registerUserDetails, role: publicRole});
       res.should.have.status(201);
-      res.body.should.have.property('email').eqls(deskUserDetails.email);
+      res.body.should.have.property('email').eqls(registerUserDetails.email);
     });
     it('it should prevent user duplication insert', async () => {
       const res = await chai.request(app)
         .post(`/api/users`)
         .set('Authorization', 'Bearer ' + tokenAdmin)
-        .send(deskUserDetails);
+        .send(registerUserDetails);
       res.should.have.status(500);
     });
   });
@@ -190,30 +153,30 @@ describe('Users', () => {
         .post('/api/auth/login')
         .send(adminUserDetails);
       tokenAdmin = JSON.parse(res1.text).token;
-      user = await UserModel.findOne({email: simpleUserDetails.email});
+      user = await UserModel.findOne({email: loginUserDetails.email});
     });
     it('it should update simpleLoginUser', async () => {
       const res = await chai.request(app)
         .put(`/api/users/${user._id}`)
         .set('Authorization', 'Bearer ' + tokenAdmin)
-        .send(modifiedSimpleUserDetails);
+        .send(modifiedUserDetails);
       res.should.have.status(200);
-      res.body.should.have.property('name').eqls(modifiedSimpleUserDetails.name);
+      res.body.should.have.property('name').eqls(modifiedUserDetails.name);
     });
     it('it should update not update a user with false id', async () => {
       const res = await chai.request(app)
         .put(`/api/users/${falseUID}`)
         .set('Authorization', 'Bearer ' + tokenAdmin)
-        .send(modifiedSimpleUserDetails);
+        .send(modifiedUserDetails);
       res.should.have.status(404);
     });
     it('it should return 500 when id not a mongoose uid', async () => {
       const res = await chai.request(app)
         .put(`/api/users/1234`)
         .set('Authorization', 'Bearer ' + tokenAdmin)
-        .send(modifiedSimpleUserDetails);
+        .send(modifiedUserDetails);
       res.should.have.status(500);
-      res.body.should.have.property('message').eqls('Server Error');
+      res.body.should.have.property('message').eqls('Internal Server Error');
     });
   });
   describe('/DELETE users/:id', () => {
@@ -224,7 +187,7 @@ describe('Users', () => {
         .post('/api/auth/login')
         .send(adminUserDetails);
       tokenAdmin = JSON.parse(res1.text).token;
-      user = await UserModel.findOne({email: modifiedSimpleUserDetails.email});
+      user = await UserModel.findOne({email: modifiedUserDetails.email});
     });
     it('it should delete modifiedSimpleUser', async () => {
       const res = await chai.request(app)

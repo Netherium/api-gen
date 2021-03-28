@@ -7,8 +7,8 @@ export class PaginatedCollection<T> {
 
   static fromResponse<T>(response, pageNumber, pageSize, query): PaginatedCollection<T> {
     const self = new PaginatedCollection<T>();
-    self.data = response['data'];
-    self.totalItems = response['totalItems'];
+    self.data = response.data;
+    self.totalItems = response.totalItems;
     self.pageNumber = pageNumber;
     self.pageSize = pageSize;
     self.query = query;

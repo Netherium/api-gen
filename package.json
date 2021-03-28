@@ -1,12 +1,12 @@
 {
   "name": "@netherium/api-gen",
-  "version": "0.2.7",
+  "version": "0.3.0",
   "main": "bin/main.js",
   "description": "Generator for Express Rest Api written in Typescript that provides convenient authorization, access control lists and routes following best practices.",
   "scripts": {
     "dev": "ts-node --transpile-only src/bin/main.ts",
     "copy:app:templates:source": "ts-node --transpile-only src/lib/helpers/copy-source-files.ts",
-    "test": "mocha -r ts-node/register/transpile-only __tests__/*.test.ts --timeout 90000 --exit",
+    "test": "mocha -r ts-node/register tests/*.test.ts --timeout 120000 --exit",
     "test:coverage": "nyc npm run test",
     "build": "tsc && echo true > .buildstatus",
     "copy:assets": "copyfiles -u 3 -a \"src/lib/templates/**/*\" \"./lib/templates\"",
@@ -78,28 +78,28 @@
   ],
   "dependencies": {
     "chalk": "^4.1.0",
-    "inquirer": "^7.3.1",
+    "inquirer": "^8.0.0",
     "inquirer-fuzzy-path": "^2.3.0",
     "pluralize": "^8.0.0",
-    "ts-morph": "^7.1.2",
-    "yaml": "^1.10.0",
-    "yargs": "^15.4.1"
+    "ts-morph": "^10.0.2",
+    "yaml": "^1.10.2",
+    "yargs": "^16.0.0"
   },
   "devDependencies": {
-    "@olavoparno/jest-badges-readme": "^1.4.2",
-    "@types/chai": "^4.2.11",
-    "@types/faker": "^4.1.12",
-    "@types/inquirer": "^6.5.0",
-    "@types/mocha": "^8.0.3",
+    "@olavoparno/jest-badges-readme": "1.4.2",
+    "@types/chai": "^4.2.15",
+    "@types/faker": "^5.1.7",
+    "@types/inquirer": "^7.3.1",
+    "@types/mocha": "^8.2.2",
     "@types/pluralize": "0.0.29",
     "@types/yaml": "^1.9.7",
-    "@types/yargs": "^15.0.5",
-    "chai": "^4.2.0",
-    "copyfiles": "^2.3.0",
-    "mocha": "^8.1.1",
+    "@types/yargs": "^16.0.1",
+    "chai": "^4.3.4",
+    "copyfiles": "^2.4.1",
+    "mocha": "^8.3.2",
     "nyc": "^15.1.0",
-    "ts-node": "^8.10.2",
-    "tslint": "^6.1.2",
-    "typescript": "^3.9.6"
+    "ts-node": "^9.1.1",
+    "tslint": "^6.1.3",
+    "typescript": "^4.2.3"
   }
 }

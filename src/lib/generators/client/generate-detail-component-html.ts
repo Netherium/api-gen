@@ -38,7 +38,7 @@ const inputBooleanFragment = (entityName: string, field: string, pascalCaseField
   return `
           <div class="w-100 mb-3">
             <mat-label class="mat-label-toggle">${pascalCaseField}</mat-label>
-            <mat-slide-toggle [(ngModel)]="${entityName}.${field}" name="${field}" ${isRequired ? 'required' : ''}></mat-slide-toggle>
+            <mat-slide-toggle [(ngModel)]="${entityName}.${field}" name="${field}"></mat-slide-toggle>
           </div>`
 }
 

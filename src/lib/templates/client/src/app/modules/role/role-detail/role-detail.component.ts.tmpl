@@ -21,6 +21,7 @@ export class RoleDetailComponent {
   };
   isLoading = false;
 
+  // tslint:disable-next-line:max-line-length
   constructor(private httpService: HttpGenericService, private subNotSrv: SubscriptionNotificationService, private router: Router, private activatedRoute: ActivatedRoute) {
     if (this.activatedRoute.snapshot.data.action === CRUDAction.UPDATE) {
       this.role = this.activatedRoute.snapshot.data.role;
@@ -28,7 +29,7 @@ export class RoleDetailComponent {
     }
   }
 
-  save() {
+  save(): void {
     this.isLoading = true;
     let obs: Observable<Role | HttpErrorResponse>;
     if (this.action === CRUDAction.CREATE) {

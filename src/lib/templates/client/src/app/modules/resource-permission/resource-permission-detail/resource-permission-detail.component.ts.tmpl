@@ -30,6 +30,7 @@ export class ResourcePermissionDetailComponent {
   selectableChipListRoles = true;
   removableChipListRoles = true;
 
+  // tslint:disable-next-line:max-line-length
   constructor(private httpService: HttpGenericService, private subNotSrv: SubscriptionNotificationService, private router: Router, private activatedRoute: ActivatedRoute) {
     if (this.activatedRoute.snapshot.data.action === CRUDAction.UPDATE) {
       this.resourcePermission = this.activatedRoute.snapshot.data.resourcePermission;
@@ -40,7 +41,7 @@ export class ResourcePermissionDetailComponent {
     }
   }
 
-  setFilteredObservable(index: number) {
+  setFilteredObservable(index: number): void {
     this.roleInputs[index] = '';
     this.roleInputsSubject[index] = new BehaviorSubject<string>(this.roleInputs[index]);
     this.isLoadingRoles[index] = false;
@@ -58,7 +59,7 @@ export class ResourcePermissionDetailComponent {
     );
   }
 
-  roleChanged(text: string, index: number) {
+  roleChanged(text: string, index: number): void {
     this.roleInputsSubject[index].next(text);
   }
 
@@ -66,6 +67,7 @@ export class ResourcePermissionDetailComponent {
     if (role) {
       return role.name;
     }
+    return null;
   }
 
   selectedRoles(event: MatAutocompleteSelectedEvent, index: number): void {
@@ -83,7 +85,7 @@ export class ResourcePermissionDetailComponent {
     entityForm.form.markAsDirty();
   }
 
-  addMethods(entityForm: NgForm) {
+  addMethods(entityForm: NgForm): void {
     this.resourcePermission.methods.push(
       {
         name: '',
@@ -95,12 +97,12 @@ export class ResourcePermissionDetailComponent {
     entityForm.form.markAsDirty();
   }
 
-  removeMethods(entityForm: NgForm) {
+  removeMethods(entityForm: NgForm): void {
     this.resourcePermission.methods.pop();
     entityForm.form.markAsDirty();
   }
 
-  save() {
+  save(): void {
     this.isLoading = true;
     let obs: Observable<ResourcePermission | HttpErrorResponse>;
     if (this.action === CRUDAction.CREATE) {

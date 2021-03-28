@@ -43,11 +43,11 @@ export class UploadDialogComponent {
     this.dataSource = new CollectionDataSource<MediaObject>(this.httpService, this.resource, this.sort, 0, 5, '', this.data);
   }
 
-  saveDialog() {
+  saveDialog(): void {
     this.dialogRef.close(this.dataSource.selection.selected);
   }
 
-  cancelDialog() {
+  cancelDialog(): void {
     this.dialogRef.close();
   }
 }

@@ -62,7 +62,7 @@ export const updateServerFile = async (projectOptions: ProjectOptions, userInput
     });
     if ('statements' in routesMethod) {
       const routesStatements = routesMethod.statements as string[];
-      const routeStatement = `this.express.use('/api/${pluralize(kebabCase(uiEntity.name))}', new ${pascalCase(uiEntity.name)}Route().router);`
+      const routeStatement = `this.express.use(\`/\${process.env.API_NAME}/${pluralize(kebabCase(uiEntity.name))}\`, new ${pascalCase(uiEntity.name)}Route().router);`
       if (!routesStatements.includes(routeStatement)) {
         routesStatements.push(routeStatement);
         appStructure.methods.map(item => {
