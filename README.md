@@ -68,7 +68,7 @@
     $ npm run start (or ng serve)
     ```
 
-   Navigate to http://localhost:4200 and login with your credentials
+    Navigate to http://localhost:4200 and login with your credentials
 
 <p align="center">
     <img src="https://raw.githubusercontent.com/Netherium/api-gen/master/img/admin-panel-login.png" alt="Admin Panel Login">
