@@ -1,7 +1,7 @@
 import { DataSource, SelectionModel } from '@angular/cdk/collections';
 import { Sort } from '@angular/material/sort';
 import { BehaviorSubject, combineLatest, Observable, timer } from 'rxjs';
-import { debounce, distinctUntilChanged, map, share, switchMap } from 'rxjs/operators';
+import { debounce, distinctUntilChanged, map, share, switchMap, tap } from 'rxjs/operators';
 import { HttpGenericService } from '../services/http-generic.service';
 import { PaginatedCollection } from './paginated-collection.model';
 
@@ -13,6 +13,7 @@ export class CollectionDataSource<T> extends DataSource<T> {
   page$: Observable<PaginatedCollection<T>>;
   data: BehaviorSubject<T[]>;
   selection: SelectionModel<T>;
+  isLoading = false;
 
   // tslint:disable-next-line:max-line-length
   constructor(private httpService: HttpGenericService, resource: string, initialSort: Sort, initialPageNumber: number, initialPageSize: number, initialQuery: string, multipleSelection = true) {
@@ -28,8 +29,14 @@ export class CollectionDataSource<T> extends DataSource<T> {
       distinctUntilChanged()
     )]);
     this.page$ = param$.pipe(
+      tap(() => {
+        this.isLoading = true;
+      }),
       // tslint:disable-next-line:max-line-length
       switchMap(([sort, pageSize, pageNumber, query]) => this.httpService.listPaginatedCollection<T>(resource, sort, pageNumber, pageSize, query)),
+      tap(() => {
+        this.isLoading = false;
+      }),
       share()
     );
   }

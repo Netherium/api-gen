@@ -10,6 +10,7 @@ import { debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, t
 import { User } from '../../user/user.model';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { NgForm } from '@angular/forms';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatChipInputEvent } from '@angular/material/chips';
 
 @Component({
@@ -90,6 +91,11 @@ export class BookDetailComponent {
     return null;
   }
 
+  dropCollaborators(event: CdkDragDrop<Book['collaborators']>, entityForm: NgForm): void {
+    moveItemInArray(this.book.collaborators, event.previousIndex, event.currentIndex);
+    entityForm.form.markAsDirty();
+  }
+
   selectedCollaborators(event: MatAutocompleteSelectedEvent): void {
     this.book.collaborators.push(event.option.value);
     document.querySelector<HTMLInputElement>('input[ng-reflect-name="collaborators"]').value = '';
@@ -111,6 +117,11 @@ export class BookDetailComponent {
     return null;
   }
 
+  dropTags(event: CdkDragDrop<Book['tags']>, entityForm: NgForm): void {
+    moveItemInArray(this.book.tags, event.previousIndex, event.currentIndex);
+    entityForm.form.markAsDirty();
+  }
+
   addTags(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
@@ -127,6 +138,11 @@ export class BookDetailComponent {
     entityForm.form.markAsDirty();
   }
 
+  dropPagesForReview(event: CdkDragDrop<Book['pagesForReview']>, entityForm: NgForm): void {
+    moveItemInArray(this.book.pagesForReview, event.previousIndex, event.currentIndex);
+    entityForm.form.markAsDirty();
+  }
+
   addPagesForReview(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
@@ -140,6 +156,11 @@ export class BookDetailComponent {
 
   removePagesForReview(index: number, entityForm: NgForm): void {
     this.book.pagesForReview.splice(index, 1);
+    entityForm.form.markAsDirty();
+  }
+
+  dropDatesForReview(event: CdkDragDrop<Book['datesForReview']>, entityForm: NgForm): void {
+    moveItemInArray(this.book.datesForReview, event.previousIndex, event.currentIndex);
     entityForm.form.markAsDirty();
   }
 

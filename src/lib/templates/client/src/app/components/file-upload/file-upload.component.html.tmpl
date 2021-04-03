@@ -1,4 +1,6 @@
-<p class="file-upload-title">{{title}} <mat-icon [svgIcon]="multiple ? 'neth:file-multiple-outline' : 'neth:file-outline'"></mat-icon></p>
+<p class="file-upload-title">{{title}}
+  <mat-icon [svgIcon]="multiple ? 'neth:file-multiple-outline' : 'neth:file-outline'"></mat-icon>
+</p>
 <div #dropZone class="d-flex flex-column file-upload-container">
   <input #inputFile (change)="onManualAdd()" [multiple]="multiple" style="display: none" type="file"/>
   <div class="file-list-container">
@@ -12,7 +14,9 @@
                   [removable]="true" [selected]="file.url !== undefined" class="justify-content-between"
                   color="primary">
           <ng-container *ngIf="file !== null && file.url else notYetUploaded">
-            <img *ngIf="file.thumbnail" [alt]="file.name" [src]="file.thumbnail.url">
+            <a [href]="file.url" target="_blank">
+              <img *ngIf="file.thumbnail" [alt]="file.name" [src]="file.thumbnail.url">
+            </a>
             {{file.hash + file.ext}}
           </ng-container>
           <ng-template #notYetUploaded>
@@ -26,7 +30,9 @@
                   [removable]="standAlone === false || !files.url"
                   [selected]="files.url !== undefined" class="justify-content-between" color="primary">
           <ng-container *ngIf="files.url else notYetUploaded">
-            <img *ngIf="files.thumbnail" [alt]="files.name" [src]="files.thumbnail.url">
+            <a [href]="files.url" target="_blank">
+              <img *ngIf="files.thumbnail" [alt]="files.name" [src]="files.thumbnail.url">
+            </a>
             {{files.hash + files.ext}}
           </ng-container>
           <ng-template #notYetUploaded>
@@ -36,24 +42,25 @@
         </mat-chip>
       </ng-template>
     </mat-chip-list>
-    <button [disabled]="!canAddFiles" [matMenuTriggerFor]="addFileOptionsMenu" color="primary" mat-icon-button>
+    <button [disabled]="!canAddFiles" [matMenuTriggerFor]="addFileOptionsMenu" color="primary" mat-icon-button
+            type="button">
       <mat-icon>add</mat-icon>
     </button>
     <mat-menu #addFileOptionsMenu="matMenu">
-      <button (click)="triggerNativeFileDialog()" mat-menu-item>
+      <button (click)="triggerNativeFileDialog()" mat-menu-item type="button">
         <mat-icon>computer</mat-icon>
         <span>Add from Device</span>
       </button>
-      <button (click)="triggerMediaObjectsDialog()" *ngIf="!standAlone" mat-menu-item>
+      <button (click)="triggerMediaObjectsDialog()" *ngIf="!standAlone" mat-menu-item type="button">
         <mat-icon>perm_media</mat-icon>
         <span>Add from Media Objects</span>
       </button>
     </mat-menu>
     <button (click)="upload()" *ngIf="!isLoading; else loadingButton" [disabled]="!canUpload()" color="primary"
-            mat-raised-button>Upload
+            mat-raised-button type="button">Upload
     </button>
     <ng-template #loadingButton>
-      <button color="accent" disabled mat-raised-button>
+      <button color="accent" disabled mat-raised-button type="button">
         <mat-spinner diameter="20"></mat-spinner>
       </button>
     </ng-template>

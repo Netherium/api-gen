@@ -189,6 +189,14 @@ const getExtraImportDeclaration = (uiEntity: UIEntity): ImportDeclarationStructu
                 {kind: StructureKind.ImportSpecifier, name: 'NgForm'}
               ]
             };
+            assocExtraImportDeclarations['@angular/cdk/drag-drop'] = {
+              kind: StructureKind.ImportDeclaration,
+              moduleSpecifier: '@angular/cdk/drag-drop',
+              namedImports: [
+                {kind: StructureKind.ImportSpecifier, name: 'CdkDragDrop'},
+                {kind: StructureKind.ImportSpecifier, name: 'moveItemInArray'}
+              ]
+            };
             break;
           case nestedField.type === 'ObjectId' && nestedField.ref !== 'mediaObject':
             assocExtraImportDeclarations.MatAutocompleteSelectedEvent = {
@@ -216,6 +224,14 @@ const getExtraImportDeclaration = (uiEntity: UIEntity): ImportDeclarationStructu
                 {kind: StructureKind.ImportSpecifier, name: 'map'},
                 {kind: StructureKind.ImportSpecifier, name: 'switchMap'},
                 {kind: StructureKind.ImportSpecifier, name: 'tap'}
+              ]
+            };
+            assocExtraImportDeclarations['@angular/cdk/drag-drop'] = {
+              kind: StructureKind.ImportDeclaration,
+              moduleSpecifier: '@angular/cdk/drag-drop',
+              namedImports: [
+                {kind: StructureKind.ImportSpecifier, name: 'CdkDragDrop'},
+                {kind: StructureKind.ImportSpecifier, name: 'moveItemInArray'}
               ]
             };
             assocExtraImportDeclarations[pascalCase(nestedField.ref)] = {
@@ -356,6 +372,24 @@ const getExtraMethodDeclaration = (uiEntity: UIEntity): MethodDeclarationStructu
           case nestedField.type === 'String' || nestedField.type === 'Number' || nestedField.type === 'Date':
             methodDeclarations.push(
               {
+                name: `drop${pascalCase(field.name)}`,
+                statements: [`moveItemInArray(this.${uiEntity.name}.${field.name}, event.previousIndex, event.currentIndex);`, `entityForm.form.markAsDirty();`],
+                parameters: [
+                  {
+                    name: 'event',
+                    type: `CdkDragDrop<${pascalCase(uiEntity.name)}['${field.name}']>`,
+                    kind: StructureKind.Parameter,
+                  },
+                  {
+                    name: 'entityForm',
+                    type: 'NgForm',
+                    kind: StructureKind.Parameter,
+                  }
+                ],
+                returnType: 'void',
+                kind: StructureKind.Method,
+              },
+              {
                 name: `add${pascalCase(field.name)}`,
                 statements: [
                   `const input = event.input;\nconst value = event.value;\nif ((value || '').trim()) {\n  this.${uiEntity.name}.${field.name}.push((value.trim() as any));\n}\nif (input) {\n  input.value = '';\n}`,
@@ -412,6 +446,24 @@ const getExtraMethodDeclaration = (uiEntity: UIEntity): MethodDeclarationStructu
           case nestedField.type === 'ObjectId' && nestedField.ref !== 'mediaObject':
             const displayNestedProperty = getDisplayProperty(nestedField);
             methodDeclarations.push(
+              {
+                name: `drop${pascalCase(field.name)}`,
+                statements: [`moveItemInArray(this.${uiEntity.name}.${field.name}, event.previousIndex, event.currentIndex);`, `entityForm.form.markAsDirty();`],
+                parameters: [
+                  {
+                    name: 'event',
+                    type: `CdkDragDrop<${pascalCase(uiEntity.name)}['${field.name}']>`,
+                    kind: StructureKind.Parameter,
+                  },
+                  {
+                    name: 'entityForm',
+                    type: 'NgForm',
+                    kind: StructureKind.Parameter,
+                  }
+                ],
+                returnType: 'void',
+                kind: StructureKind.Method,
+              },
               {
                 name: `selected${pascalCase(field.name)}`,
                 statements: [`this.${uiEntity.name}.${field.name}.push(event.option.value);`, `document.querySelector<HTMLInputElement>('input[ng-reflect-name="${field.name}"]').value = '';`],

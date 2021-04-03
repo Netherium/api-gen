@@ -45,7 +45,9 @@ export class DynamicTableComponent implements OnInit, OnDestroy {
    * Click handler for edit
    */
   editDialog(row: any): void {
-    this.router.navigate([`${(this.resource)}/edit/`, row._id]);
+    if (this.displayAsDialog === false) {
+      this.router.navigate([`${(this.resource)}/edit/`, row._id]);
+    }
   }
 
   /**

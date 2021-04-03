@@ -20,7 +20,7 @@
           </mat-form-field>
           <div class="w-100 mb-3">
             <mat-label class="mat-label-toggle">IsPublished</mat-label>
-            <mat-slide-toggle [(ngModel)]="book.isPublished" name="isPublished" ></mat-slide-toggle>
+            <mat-slide-toggle [(ngModel)]="book.isPublished" name="isPublished"></mat-slide-toggle>
           </div>
           <mat-form-field class="w-100">
             <mat-label>PublishedAt</mat-label>
@@ -31,9 +31,9 @@
           </mat-form-field>
           <mat-form-field class="w-100">
             <mat-label>Tags&nbsp;<mat-icon svgIcon="neth:tags-multiple-outline"></mat-icon></mat-label>
-            <mat-chip-list #tagsChipList>
+            <mat-chip-list #tagsChipList cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="dropTags($event, entityForm)">
               <mat-chip *ngFor="let item of book.tags; index as tagsIndex" [selectable]="true" [removable]="true"
-                        (removed)="removeTags(tagsIndex, entityForm)">
+                        (removed)="removeTags(tagsIndex, entityForm)" cdkDrag>
                 {{item}}
                 <mat-icon matChipRemove>cancel</mat-icon>
               </mat-chip>
@@ -43,9 +43,9 @@
           </mat-form-field>
           <mat-form-field class="w-100">
             <mat-label>PagesForReview&nbsp;<mat-icon svgIcon="neth:tags-multiple-outline"></mat-icon></mat-label>
-            <mat-chip-list #pagesForReviewChipList>
+            <mat-chip-list #pagesForReviewChipList cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="dropPagesForReview($event, entityForm)">
               <mat-chip *ngFor="let item of book.pagesForReview; index as pagesForReviewIndex" [selectable]="true" [removable]="true"
-                        (removed)="removePagesForReview(pagesForReviewIndex, entityForm)">
+                        (removed)="removePagesForReview(pagesForReviewIndex, entityForm)" cdkDrag>
                 {{item}}
                 <mat-icon matChipRemove>cancel</mat-icon>
               </mat-chip>
@@ -55,9 +55,9 @@
           </mat-form-field>
           <mat-form-field class="w-100">
             <mat-label>DatesForReview&nbsp;<mat-icon svgIcon="neth:tags-multiple-outline"></mat-icon></mat-label>
-            <mat-chip-list #datesForReviewChipList>
+            <mat-chip-list #datesForReviewChipList cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="dropDatesForReview($event, entityForm)">
               <mat-chip *ngFor="let item of book.datesForReview; index as datesForReviewIndex" [selectable]="true" [removable]="true"
-                        (removed)="removeDatesForReview(datesForReviewIndex, entityForm)">
+                        (removed)="removeDatesForReview(datesForReviewIndex, entityForm)" cdkDrag>
                 {{item | date}}
                 <mat-icon matChipRemove>cancel</mat-icon>
               </mat-chip>
@@ -84,9 +84,9 @@
           </mat-form-field>
           <mat-form-field class="w-100">
             <mat-label>Collaborators</mat-label>
-            <mat-chip-list #collaboratorsChipList>
+            <mat-chip-list #collaboratorsChipList cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="dropCollaborators($event, entityForm)">
               <mat-chip *ngFor="let item of book.collaborators; index as collaboratorsIndex" [selectable]="true"
-                        [removable]="true" (removed)="removeCollaborators(collaboratorsIndex, entityForm)">
+                        [removable]="true" (removed)="removeCollaborators(collaboratorsIndex, entityForm)" cdkDrag>
                 {{item.email}}
                 <mat-icon matChipRemove>cancel</mat-icon>
               </mat-chip>

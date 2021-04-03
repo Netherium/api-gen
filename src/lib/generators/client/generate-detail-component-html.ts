@@ -67,9 +67,9 @@ const inputArrayStringFragment = (entityName: string, field: string, pascalCaseF
   return `
           <mat-form-field class="w-100">
             <mat-label>${pascalCaseField}&nbsp;<mat-icon svgIcon="neth:tags-multiple-outline"></mat-icon></mat-label>
-            <mat-chip-list #${field}ChipList>
+            <mat-chip-list #${field}ChipList cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop${pascalCaseField}($event, entityForm)">
               <mat-chip *ngFor="let item of ${entityName}.${field}; index as ${field}Index" [selectable]="true" [removable]="true"
-                        (removed)="remove${pascalCaseField}(${field}Index, entityForm)">
+                        (removed)="remove${pascalCaseField}(${field}Index, entityForm)" cdkDrag>
                 {{item}}
                 <mat-icon matChipRemove>cancel</mat-icon>
               </mat-chip>
@@ -83,9 +83,9 @@ const inputArrayNumberFragment = (entityName: string, field: string, pascalCaseF
   return `
           <mat-form-field class="w-100">
             <mat-label>${pascalCaseField}&nbsp;<mat-icon svgIcon="neth:tags-multiple-outline"></mat-icon></mat-label>
-            <mat-chip-list #${field}ChipList>
+            <mat-chip-list #${field}ChipList cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop${pascalCaseField}($event, entityForm)">
               <mat-chip *ngFor="let item of ${entityName}.${field}; index as ${field}Index" [selectable]="true" [removable]="true"
-                        (removed)="remove${pascalCaseField}(${field}Index, entityForm)">
+                        (removed)="remove${pascalCaseField}(${field}Index, entityForm)" cdkDrag>
                 {{item}}
                 <mat-icon matChipRemove>cancel</mat-icon>
               </mat-chip>
@@ -99,9 +99,9 @@ const inputArrayDateFragment = (entityName: string, field: string, pascalCaseFie
   return `
           <mat-form-field class="w-100">
             <mat-label>${pascalCaseField}&nbsp;<mat-icon svgIcon="neth:tags-multiple-outline"></mat-icon></mat-label>
-            <mat-chip-list #${field}ChipList>
+            <mat-chip-list #${field}ChipList cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop${pascalCaseField}($event, entityForm)">
               <mat-chip *ngFor="let item of ${entityName}.${field}; index as ${field}Index" [selectable]="true" [removable]="true"
-                        (removed)="remove${pascalCaseField}(${field}Index, entityForm)">
+                        (removed)="remove${pascalCaseField}(${field}Index, entityForm)" cdkDrag>
                 {{item | date}}
                 <mat-icon matChipRemove>cancel</mat-icon>
               </mat-chip>
@@ -123,9 +123,9 @@ const inputArrayObjectFragment = (entityName: string, field: string, pascalCaseF
   return `
           <mat-form-field class="w-100">
             <mat-label>${pascalCaseField}</mat-label>
-            <mat-chip-list #${field}ChipList>
+            <mat-chip-list #${field}ChipList cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop${pascalCaseField}($event, entityForm)">
               <mat-chip *ngFor="let item of ${entityName}.${field}; index as ${field}Index" [selectable]="true"
-                        [removable]="true" (removed)="remove${pascalCaseField}(${field}Index, entityForm)">
+                        [removable]="true" (removed)="remove${pascalCaseField}(${field}Index, entityForm)" cdkDrag>
                 {{item.${displayProperty}}}
                 <mat-icon matChipRemove>cancel</mat-icon>
               </mat-chip>

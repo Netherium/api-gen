@@ -2,7 +2,6 @@
 @import "theming/neth.theme";
 @import "theming/grid";
 
-
 * {
   box-sizing: border-box;
 }
@@ -52,19 +51,19 @@ a.cell-file {
   }
 }
 
-.mat-chip-list .mat-datepicker-toggle .mat-icon-button {
-  width: 1.5em;
-  height: 1.5em;
-  font: inherit;
-  vertical-align: baseline;
-  right: 4px;
-
-  .mat-datepicker-toggle-default-icon {
-    width: 1em;
-  }
-}
-
 .mat-chip-list {
+  .mat-datepicker-toggle .mat-icon-button {
+    width: 1.5em;
+    height: 1.5em;
+    font: inherit;
+    vertical-align: baseline;
+    right: 4px;
+
+    .mat-datepicker-toggle-default-icon {
+      width: 1em;
+    }
+  }
+
   .mat-icon[matSuffix] {
     width: 1em;
     font-size: 150%;
@@ -86,6 +85,10 @@ a.cell-file {
       left: 2px
     }
   }
+
+  a {
+    line-height: 1;
+  }
 }
 
 .mat-header-cell, .mat-cell {
@@ -102,4 +105,10 @@ a.cell-file {
 
 .cdk-global-overlay-wrapper {
   overflow-y: scroll !important;
+}
+
+.mat-progress-bar.mat-card-loader {
+  position: absolute;
+  top: 4px;
+  left: 0;
 }
