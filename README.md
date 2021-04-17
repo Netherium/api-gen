@@ -5,7 +5,7 @@
 <h4 align="center">A powerful RESTful Headless CMS written in Typescript using <a href="https://github.com/expressjs/express" target="_blank">Express</a> and <a href="https://angular.io/" target="_blank">Angular</a></h4>
 <h5 align="center">JWT auth, Access-Control Lists (ACL), Uploads, MongoDB, Angular and Angular Material in one :package:  </h5>
 <p align="center">
-    <img src="https://img.shields.io/badge/Coverage-99.02%25-brightgreen.svg" alt="Lines Covered">
+    <img src="https://img.shields.io/badge/Coverage-99.03%25-brightgreen.svg" alt="Lines Covered">
     <img src="https://img.shields.io/badge/Build-Passing-brightgreen.svg" alt="Build Status">
     <img src="https://img.shields.io/badge/Node-%3E=12.0.0-grey?logo=node.js&color=339933" alt="Node Version Required">
     <img src="https://img.shields.io/badge/Built%20with-Typescript-blue" alt="Built with Typescript">
@@ -157,7 +157,6 @@
     ADDRESS=localhost
     PORT=4000
     MONGODB_URL=mongodb://localhost:27017/YOUDBNAMEHERE
-    ELASTIC_URL=localhost:9200
     SECRET=YOURSECRETHERE
     ...
     ```
