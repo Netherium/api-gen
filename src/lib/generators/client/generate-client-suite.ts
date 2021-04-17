@@ -10,8 +10,6 @@ import { generateComponent } from './generate-component';
 import { generateDetailComponent } from './generate-detail-component';
 import { UI } from '../../interfaces/ui.model';
 import pluralize from 'pluralize';
-import * as path from 'path';
-
 
 export const generateClientSuite = (project: Project, userInput: UI, clientSuiteDir: string): Project => {
   for (const uiEntity of userInput.entities) {
@@ -43,16 +41,19 @@ export const generateClientSuite = (project: Project, userInput: UI, clientSuite
     );
   }
   return project;
-}
+};
 
 export const generateClientHtmlComponents = async (userInput: UI, clientSuiteDir: string) => {
   for (const uiEntity of userInput.entities) {
     const moduleDir = `${clientSuiteDir}/src/app/modules/${kebabCase(uiEntity.name)}`;
     await fs.mkdir(`${moduleDir}/${kebabCase(uiEntity.name)}-detail`, {recursive: true});
-    await fs.writeFile(`${moduleDir}/${kebabCase(uiEntity.name)}-detail/${kebabCase(uiEntity.name)}-detail.component.html`, generateDetailComponentHtml(uiEntity));
+    await fs.writeFile(
+      `${moduleDir}/${kebabCase(uiEntity.name)}-detail/${kebabCase(uiEntity.name)}-detail.component.html`,
+      generateDetailComponentHtml(uiEntity)
+    );
     await fs.writeFile(`${moduleDir}/${kebabCase(uiEntity.name)}.component.html`, generateComponentHtml());
   }
-}
+};
 
 export const updateAppRoutingModule = async (projectOptions: ProjectOptions, userInput: UI, clientSuiteDir: string) => {
   const project = new Project(projectOptions);
@@ -78,4 +79,4 @@ export const updateAppRoutingModule = async (projectOptions: ProjectOptions, use
     }
   }
   await project.save();
-}
+};

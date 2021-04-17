@@ -10,7 +10,7 @@ export const generateModel = (uiEntity: UIEntity): OptionalKind<SourceFileStruct
         moduleSpecifier: 'mongoose',
         namespaceImport: 'mongoose',
         trailingTrivia: writer => {
-          writer.blankLine()
+          writer.blankLine();
         }
       },
       {
@@ -55,4 +55,4 @@ export const generateModel = (uiEntity: UIEntity): OptionalKind<SourceFileStruct
       }
     ]
   };
-}
+};

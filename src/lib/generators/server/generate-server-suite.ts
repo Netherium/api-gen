@@ -39,7 +39,7 @@ export const generateServerSuite =
           modelFilePath: modelFile.getFilePath(),
           routeFilePath: routeFile.getFilePath()
         }
-      )
+      );
     }
     if (userInput.generateApp) {
       project.createSourceFile(
@@ -49,7 +49,7 @@ export const generateServerSuite =
       );
     }
     return {project, entitiesWritten};
-  }
+  };
 
 export const updateServerFile = async (projectOptions: ProjectOptions, userInput: UI, serverSuiteDir: string) => {
   const project = new Project(projectOptions);
@@ -62,7 +62,7 @@ export const updateServerFile = async (projectOptions: ProjectOptions, userInput
     });
     if ('statements' in routesMethod) {
       const routesStatements = routesMethod.statements as string[];
-      const routeStatement = `this.express.use(\`/\${process.env.API_NAME}/${pluralize(kebabCase(uiEntity.name))}\`, new ${pascalCase(uiEntity.name)}Route().router);`
+      const routeStatement = `this.express.use(\`/\${process.env.API_NAME}/${pluralize(kebabCase(uiEntity.name))}\`, new ${pascalCase(uiEntity.name)}Route().router);`;
       if (!routesStatements.includes(routeStatement)) {
         routesStatements.push(routeStatement);
         appStructure.methods.map(item => {
@@ -77,7 +77,7 @@ export const updateServerFile = async (projectOptions: ProjectOptions, userInput
       let importFound = false;
       const moduleSpecifier = `./routes/${kebabCase(uiEntity.name)}.route`;
       for (const importDeclaration of importsDeclarations) {
-        if (importDeclaration.getStructure().moduleSpecifier === moduleSpecifier ) {
+        if (importDeclaration.getStructure().moduleSpecifier === moduleSpecifier) {
           importFound = true;
           break;
         }
@@ -86,12 +86,12 @@ export const updateServerFile = async (projectOptions: ProjectOptions, userInput
         serverFileSource.addImportDeclaration({
             kind: StructureKind.ImportDeclaration,
             isTypeOnly: false,
-            moduleSpecifier: moduleSpecifier,
+            moduleSpecifier,
             namedImports: [{kind: StructureKind.ImportSpecifier, name: `${pascalCase(uiEntity.name)}Route`}]
           }
-        )
+        );
       }
       await project.save();
     }
   }
-}
+};

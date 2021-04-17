@@ -7,7 +7,10 @@ export const generateServer = (ui: UI): OptionalKind<SourceFileStructure> => {
   const registerRoutes: string[] = [];
   const importDeclarations: ImportDeclarationStructure[] = [];
   ui.entities.forEach(uiEntity => {
-      registerRoutes.push(`this.express.use('/api/${pluralize(kebabCase(uiEntity.name))}', new ${pascalCase(uiEntity.name)}Route().router);`);
+      registerRoutes.push(
+        `this.express.use('/api/${pluralize(kebabCase(uiEntity.name))}',
+        new ${pascalCase(uiEntity.name)}Route().router);`
+      );
       importDeclarations.push(
         {
           kind: StructureKind.ImportDeclaration,
@@ -15,9 +18,9 @@ export const generateServer = (ui: UI): OptionalKind<SourceFileStructure> => {
           moduleSpecifier: `./routes/${kebabCase(uiEntity.name)}.route`,
           namedImports: [{kind: StructureKind.ImportSpecifier, name: `${pascalCase(uiEntity.name)}Route`}]
         }
-      )
+      );
     }
-  )
+  );
 
   return {
     statements: [
@@ -527,5 +530,5 @@ export const generateServer = (ui: UI): OptionalKind<SourceFileStructure> => {
       }
     ],
     kind: StructureKind.SourceFile
-  }
-}
+  };
+};

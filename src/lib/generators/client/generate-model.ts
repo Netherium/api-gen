@@ -40,6 +40,7 @@ const getFieldType = (uiField: UIField | UINestedField): string => {
       typescriptName: 'boolean'
     }
   ];
+  // tslint:disable-next-line:prefer-for-of
   for (let i = 0; i < mongooseTSTypeMatch.length; i++) {
     if (mongooseTSTypeMatch[i].mongooseName === uiField.type) {
       return mongooseTSTypeMatch[i].typescriptName;

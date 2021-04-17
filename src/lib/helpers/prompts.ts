@@ -11,13 +11,13 @@ inquirer.registerPrompt('fuzzypath', require('inquirer-fuzzy-path'));
 export const orchestratePrompts = async (): Promise<UI> => {
   let projectName = '.';
   const generateApp = (await promptGenerateAction()).type === 'App';
-  if(generateApp){
+  if (generateApp) {
     let dirExistsNotEmpty: boolean;
     do {
       projectName = (await promptProjectName()).name;
       dirExistsNotEmpty = (fs.existsSync(projectName) && (await fs.promises.readdir(projectName)).length > 0);
     } while ((dirExistsNotEmpty === true) && (await promptProjectNameAgain()).projectNameAgain === false);
-  }else{
+  } else {
     projectName = (await promptProjectLocation()).name;
   }
   const entities: UIEntity[] = [];
@@ -57,7 +57,7 @@ export const orchestratePrompts = async (): Promise<UI> => {
             ...(nestedDisplayProperty) && {displayProperty: nestedDisplayProperty},
             ...(nestedProperties.includes('Required')) && {required: true},
             ...(nestedProperties.includes('Unique')) && {unique: true},
-          }
+          };
           type = [nestedField];
         }
         let properties = [];
@@ -75,7 +75,7 @@ export const orchestratePrompts = async (): Promise<UI> => {
         };
         fields.push(newField);
       } while ((await promptEntityPropertyAgain()).askAgain === true);
-      const canBePopulated = fields.find(o => o.type === 'ObjectId' || o.type instanceof Array)
+      const canBePopulated = fields.find(o => o.type === 'ObjectId' || o.type instanceof Array);
       const entity: UIEntity = {
         name: entityName,
         fields,
@@ -83,7 +83,7 @@ export const orchestratePrompts = async (): Promise<UI> => {
         populate: canBePopulated ? (await promptEntityPropertiesPopulate()).populate : false
       };
       entities.push(entity);
-    } while ((await promptEntityAgain()).askAgain === true)
+    } while ((await promptEntityAgain()).askAgain === true);
   }
 
   let swaggerPath = `${projectName}/server/swagger.yaml`;
@@ -100,8 +100,8 @@ export const orchestratePrompts = async (): Promise<UI> => {
     entities,
     swaggerDocs,
     swaggerPath
-  }
-}
+  };
+};
 
 const promptProjectNameAgain = async () => {
   return inquirer.prompt(
@@ -111,7 +111,7 @@ const promptProjectNameAgain = async () => {
       message: 'Directory not empty, are you sure (enter for NO)?',
       default: false
     });
-}
+};
 
 const promptGenerateAction = async () => {
   return inquirer.prompt(
@@ -122,7 +122,7 @@ const promptGenerateAction = async () => {
       choices: ['App', 'Entities'],
     }
   );
-}
+};
 
 const promptGenerateEntities = async () => {
   return inquirer.prompt(
@@ -132,7 +132,7 @@ const promptGenerateEntities = async () => {
       message: 'Add entities (enter for YES)?',
       default: true
     });
-}
+};
 
 const promptProjectName = async () => {
   return inquirer.prompt(
@@ -145,7 +145,7 @@ const promptProjectName = async () => {
         return (reg.test(name)) || 'Project name cannot be empty and can contain alphanumerical and dashes only!';
       }
     });
-}
+};
 
 const promptProjectLocation = async () => {
   return inquirer.prompt(
@@ -158,7 +158,7 @@ const promptProjectLocation = async () => {
         return (reg.test(name)) || 'Project location cannot be empty and can contain alphanumerical, dashes and slashed only!';
       }
     });
-}
+};
 
 const promptEntityName = async () => {
   return inquirer.prompt(
@@ -171,7 +171,7 @@ const promptEntityName = async () => {
         return (reg.test(name)) || 'Project name cannot be empty and can contain alphanumerical and dashes only!';
       }
     });
-}
+};
 
 const promptPropertyName = async () => {
   return inquirer.prompt(
@@ -184,8 +184,8 @@ const promptPropertyName = async () => {
         return (reg.test(name)) || 'Property name cannot be empty and can contain alphanumerical only!';
       }
     },
-  )
-}
+  );
+};
 
 const promptPropertyType = async () => {
   return inquirer.prompt(
@@ -196,7 +196,7 @@ const promptPropertyType = async () => {
       choices: ['String', 'Number', 'Date', 'Boolean', 'Array', 'ObjectId'],
     }
   );
-}
+};
 
 const promptNestedPropertyType = async () => {
   return inquirer.prompt(
@@ -207,7 +207,7 @@ const promptNestedPropertyType = async () => {
       choices: ['String', 'Number', 'Date', 'Boolean', 'ObjectId'],
     }
   );
-}
+};
 
 const promptPropertyRef = async () => {
   return inquirer.prompt(
@@ -216,7 +216,7 @@ const promptPropertyRef = async () => {
       name: 'ref',
       message: 'Entity Reference (singular, camelCase, i.e. "mediaObject", "user", "role", ... ):'
     });
-}
+};
 
 const promptPropertyDisplayProperty = async () => {
   return inquirer.prompt(
@@ -225,7 +225,7 @@ const promptPropertyDisplayProperty = async () => {
       name: 'displayProperty',
       message: 'Display property of ObjectId (used in autocomplete, i.e. if "ref: user", then "name" or "email"):',
     });
-}
+};
 
 const promptPropertyRestrictions = async () => {
   return inquirer.prompt(
@@ -243,7 +243,7 @@ const promptPropertyRestrictions = async () => {
       ],
     }
   );
-}
+};
 
 const promptPropertyIndexed = async () => {
   return inquirer.prompt(
@@ -253,7 +253,7 @@ const promptPropertyIndexed = async () => {
       message: 'Indexed (enter for YES)?',
       default: true
     });
-}
+};
 
 const promptEntityPropertyAgain = async () => {
   return inquirer.prompt(
@@ -263,7 +263,7 @@ const promptEntityPropertyAgain = async () => {
       message: 'Add Another Property (enter for YES)?',
       default: true
     });
-}
+};
 
 const promptEntityTimestamps = async () => {
   return inquirer.prompt(
@@ -273,8 +273,8 @@ const promptEntityTimestamps = async () => {
       message: 'Add Timestamps (enter for YES)?',
       default: true
     }
-  )
-}
+  );
+};
 
 const promptEntityPropertiesPopulate = async () => {
   return inquirer.prompt(
@@ -284,8 +284,8 @@ const promptEntityPropertiesPopulate = async () => {
       message: 'Populate external refs?',
       default: true
     }
-  )
-}
+  );
+};
 
 const promptEntityAgain = async () => {
   return inquirer.prompt(
@@ -295,18 +295,7 @@ const promptEntityAgain = async () => {
       message: 'Add Another Entity (enter for NO)?',
       default: false
     });
-}
-
-const promptRoutesOutputFolder = async (defaultDir: string) => {
-  return inquirer.prompt(
-    {
-      type: 'input',
-      name: 'outputFolder',
-      default: defaultDir,
-      message: `Output Folder:`,
-    },
-  )
-}
+};
 
 const promptSwaggerDocs = async () => {
   return inquirer.prompt(
@@ -316,7 +305,7 @@ const promptSwaggerDocs = async () => {
       message: 'Generate Swagger Docs (enter for YES)?',
       default: true
     });
-}
+};
 
 const promptSwaggerPath = async () => {
   return inquirer.prompt([
@@ -341,4 +330,4 @@ const promptSwaggerPath = async () => {
       depthLimit: 3,
     }
   ]);
-}
+};
