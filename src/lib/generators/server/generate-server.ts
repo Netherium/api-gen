@@ -288,6 +288,7 @@ export const generateServer = (ui: UI): OptionalKind<SourceFileStructure> => {
         ctors: [
           {
             statements: [
+              "this.api=this.api;",
               "this.express = express();",
               "this.setupEnvironment();",
               "this.middleware();",
@@ -402,13 +403,13 @@ export const generateServer = (ui: UI): OptionalKind<SourceFileStructure> => {
             statements: [
               "if (process.env.UPLOAD_PROVIDER === 'local') {\r\n  this.express.use('/uploads', express.static(process.env.UPLOAD_PROVIDER_FOLDER));\r\n}",
               "this.express.use('/', new RootRoute().router);",
-              "this.express.use(`/${process.env.API_NAME}/auth`, new AuthRoute().router);",
-              "this.express.use(`/${process.env.API_NAME}/users`, new UserRoute().router);",
-              "this.express.use(`/${process.env.API_NAME}/resource-permissions`, new ResourcePermissionRoute().router);",
-              "this.express.use(`/${process.env.API_NAME}/roles`, new RoleRoute().router);",
-              "this.express.use(`/${process.env.API_NAME}/media-objects`, new MediaObjectRoute().router);",
-              "this.express.use(`/${process.env.API_NAME}/endpoints`, new EndpointRoute().router);",
-              "this.express.use(`/${process.env.API_NAME}/books`, new BookRoute().router);",
+              "this.express.use(`/${this.api}/auth`, new AuthRoute().router);",
+              "this.express.use(`/${this.api}/users`, new UserRoute().router);",
+              "this.express.use(`/${this.api}/resource-permissions`, new ResourcePermissionRoute().router);",
+              "this.express.use(`/${this.api}/roles`, new RoleRoute().router);",
+              "this.express.use(`/${this.api}/media-objects`, new MediaObjectRoute().router);",
+              "this.express.use(`/${this.api}/endpoints`, new EndpointRoute().router);",
+              "this.express.use(`/${this.api}/books`, new BookRoute().router);",
             ],
             docs: [
               {
@@ -462,7 +463,7 @@ export const generateServer = (ui: UI): OptionalKind<SourceFileStructure> => {
               },
               "swaggerDoc.info.title = process.env.SITE_TITLE;",
               "swaggerDoc.servers = [\r\n  {\r\n    url: getApiURL()\r\n  }\r\n];",
-              "this.express.use(`/${process.env.API_NAME}/docs`, swaggerUI.serve, swaggerUI.setup(swaggerDoc, options));",
+              "this.express.use(`/${this.api}/docs`, swaggerUI.serve, swaggerUI.setup(swaggerDoc, options));",
             ],
             docs: [
               {
