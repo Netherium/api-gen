@@ -5,7 +5,7 @@
 <h5 align="center">JWT auth, Access-Control Lists (ACL), Uploads, MongoDB in one :package: </h5>
 <div align="center">
     <img src="https://img.shields.io/badge/Coverage-93.78%25-brightgreen.svg" alt="Lines Covered">
-    <img src="#buildstatus#" alt="Build Status">
+    <img src="https://img.shields.io/badge/Build-Passing-brightgreen.svg" alt="Build Status">
     <img src="https://img.shields.io/badge/Node-%3E=12.0.0-grey?logo=node.js&color=339933" alt="Node Version Required">
     <img src="https://img.shields.io/badge/Built%20with-Typescript-blue" alt="Built with Typescript">
 </div>
@@ -48,7 +48,6 @@
     ADDRESS=localhost
     PORT=4000
     MONGODB_URL=mongodb://localhost:27017/YOUDBNAMEHERE
-    ELASTIC_URL=localhost:9200
     SECRET=YOURSECRETHERE
     ....
     ```

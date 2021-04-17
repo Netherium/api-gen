@@ -48,7 +48,6 @@
     ADDRESS=localhost
     PORT=4000
     MONGODB_URL=mongodb://localhost:27017/YOUDBNAMEHERE
-    ELASTIC_URL=localhost:9200
     SECRET=YOURSECRETHERE
     ....
     ```
