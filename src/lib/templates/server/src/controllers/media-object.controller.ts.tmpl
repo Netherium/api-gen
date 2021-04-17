@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import MediaObjectModel from '../models/media-object.model';
 import {
   HTTP_CREATED,
   HTTP_INTERNAL_SERVER_ERROR,
@@ -8,9 +7,11 @@ import {
   HTTP_OK,
   HTTP_UNPROCESSABLE_ENTITY
 } from '../helpers/http.responses';
-import { MediaObject, UploadService } from '../services/upload.service';
+import { UploadService } from '../services/upload.service';
 import { UploadedFile } from 'express-fileupload';
 import { queryBuilderCollection } from '../helpers/query-builder-collection';
+import MediaObjectModel from '../models/media-object.model';
+import { MediaObject } from '../models/media-object.interface';
 
 /** UploadController.ts */
 export class MediaObjectController {
