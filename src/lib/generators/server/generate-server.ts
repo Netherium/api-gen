@@ -250,7 +250,9 @@ export const generateServer = (ui: UI): OptionalKind<SourceFileStructure> => {
         ]
       },
       {
-        isAbstract: false,
+        //export class App
+        //so external services (such as firebase-functions) can import it
+        isAbstract: true,
         name: 'App',
         isExported: false,
         isDefaultExport: false,
