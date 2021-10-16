@@ -41,7 +41,7 @@ export class LoginComponent {
           const loader = document.getElementById('login-loader');
           loader.classList.add('login-animation');
           setTimeout(() => {
-            this.router.navigate(['']);
+            this.router.navigate(['']).then();
           }, 500);
         }
       });

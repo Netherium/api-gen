@@ -3,6 +3,7 @@ import { UI } from '../../interfaces/ui.model';
 import pluralize from 'pluralize';
 import { kebabCase, pascalCase } from '../../helpers/string-functions';
 
+/* eslint-disable max-len */
 export const generateServer = (ui: UI): OptionalKind<SourceFileStructure> => {
   const registerRoutes: string[] = [];
   const importDeclarations: ImportDeclarationStructure[] = [];
@@ -307,6 +308,7 @@ export const generateServer = (ui: UI): OptionalKind<SourceFileStructure> => {
             hasQuestionToken: false,
             scope: Scope.Private,
             isAbstract: false,
+            returnType: 'void',
             kind: StructureKind.Method
           },
           {
@@ -330,6 +332,7 @@ export const generateServer = (ui: UI): OptionalKind<SourceFileStructure> => {
             hasQuestionToken: false,
             scope: Scope.Private,
             isAbstract: false,
+            returnType: 'void',
             kind: StructureKind.Method
           },
           {
@@ -366,6 +369,7 @@ export const generateServer = (ui: UI): OptionalKind<SourceFileStructure> => {
             hasQuestionToken: false,
             scope: Scope.Private,
             isAbstract: false,
+            returnType: 'void',
             kind: StructureKind.Method
           },
           {
@@ -393,6 +397,7 @@ export const generateServer = (ui: UI): OptionalKind<SourceFileStructure> => {
             hasQuestionToken: false,
             scope: Scope.Private,
             isAbstract: false,
+            returnType: 'void',
             kind: StructureKind.Method
           },
           {
@@ -445,6 +450,7 @@ export const generateServer = (ui: UI): OptionalKind<SourceFileStructure> => {
             hasQuestionToken: false,
             scope: Scope.Private,
             isAbstract: false,
+            returnType: 'void',
             kind: StructureKind.Method
           },
           {
@@ -464,6 +470,7 @@ export const generateServer = (ui: UI): OptionalKind<SourceFileStructure> => {
             hasQuestionToken: false,
             scope: Scope.Private,
             isAbstract: false,
+            returnType: 'void',
             kind: StructureKind.Method
           },
           {
@@ -484,6 +491,7 @@ export const generateServer = (ui: UI): OptionalKind<SourceFileStructure> => {
             hasQuestionToken: false,
             scope: Scope.Private,
             isAbstract: false,
+            returnType: 'void',
             kind: StructureKind.Method
           },
           {
@@ -505,7 +513,7 @@ export const generateServer = (ui: UI): OptionalKind<SourceFileStructure> => {
                   }
                 ]
               },
-              'mongoose.connect(process.env.MONGODB_URL, mongooseOptions)\r\n.then(() => {\r\n  // tslint:disable-next-line:no-console\r\n  console.info(`MongoDB connected at ${process.env.MONGODB_URL}`);\r\n  this.express.listen(this.express.get(\'port\'), this.express.get(\'address\'), async () => {\r\n    // tslint:disable-next-line\r\n    console.info(`API running at http://${this.express.get(\'address\')}:${this.express.get(\'port\')} in ${this.express.get(\'env\')} mode`);\r\n    await Auth.updateAppPermissions(null, this.express);\r\n    this.express.emit(\'Express_TS_Started\');\r\n  });\r\n})\r\n.catch((err: any) => {\r\n  console.error(`MongoDB cannot connect at ${process.env.MONGODB_URL}\\nError: ${err}`);\r\n  process.exit(1);\r\n});'
+              'mongoose.connect(process.env.MONGODB_URL, mongooseOptions)\r\n.then(() => {\r\n  console.info(`MongoDB connected at ${process.env.MONGODB_URL}`);\r\n  this.express.listen(this.express.get(\'port\'), this.express.get(\'address\'), async () => {\r\n    // eslint-disable-next-line max-len\r\n    console.info(`API running at http://${this.express.get(\'address\')}:${this.express.get(\'port\')} in ${this.express.get(\'env\')} mode`);\r\n    await Auth.updateAppPermissions(null, this.express);\r\n    this.express.emit(\'Express_TS_Started\');\r\n  });\r\n})\r\n.catch((err: any) => {\r\n  console.error(`MongoDB cannot connect at ${process.env.MONGODB_URL}\\nError: ${err}`);\r\n  process.exit(1);\r\n});'
             ],
             docs: [
               {
@@ -519,6 +527,7 @@ export const generateServer = (ui: UI): OptionalKind<SourceFileStructure> => {
             hasQuestionToken: false,
             scope: Scope.Private,
             isAbstract: false,
+            returnType: 'void',
             kind: StructureKind.Method
           }
         ]

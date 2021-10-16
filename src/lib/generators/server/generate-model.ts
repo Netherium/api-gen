@@ -9,7 +9,7 @@ export const generateModel = (uiEntity: UIEntity): OptionalKind<SourceFileStruct
         kind: StructureKind.ImportDeclaration,
         moduleSpecifier: 'mongoose',
         namespaceImport: 'mongoose',
-        trailingTrivia: writer => {
+        trailingTrivia: (writer): void => {
           writer.blankLine();
         }
       },

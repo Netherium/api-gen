@@ -14,5 +14,4 @@ export class EndpointController {
       return HTTP_INTERNAL_SERVER_ERROR(res, err);
     }
   }
-
 }

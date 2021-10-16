@@ -87,4 +87,4 @@ export const generateRoutingModule = (uiEntity: UIEntity): OptionalKind<SourceFi
         kind: StructureKind.Class,
       }], kind: StructureKind.SourceFile
   };
-}
+};

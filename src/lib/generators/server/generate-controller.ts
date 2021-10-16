@@ -8,6 +8,7 @@ import {
 import { UIEntity } from '../../interfaces/ui-entity.model';
 import { kebabCase, pascalCase } from '../../helpers/string-functions';
 
+/* eslint-disable max-len */
 export const generateController = (uiEntity: UIEntity): OptionalKind<SourceFileStructure> => {
   return {
     statements: [
@@ -97,12 +98,14 @@ export const generateController = (uiEntity: UIEntity): OptionalKind<SourceFileS
               }
             ],
             statements: [
+              // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
               writer => {
                 writer
                   .writeLine('try {')
+                  .writeLine('  // eslint-disable-next-line max-len')
                   .writeLine(`  const ${uiEntity.name}Collection = await queryBuilderCollection(req, ${pascalCase(uiEntity.name)}Model, ${getPopulatedQueryBuilderFields(uiEntity)});`)
                   .writeLine(`  return HTTP_OK(res, ${uiEntity.name}Collection);`)
-                  .writeLine(`} catch (err) {\n  return HTTP_INTERNAL_SERVER_ERROR(res, err);\n}`)
+                  .writeLine(`} catch (err) {\n  return HTTP_INTERNAL_SERVER_ERROR(res, err);\n}`);
               }
             ],
           },
@@ -127,15 +130,15 @@ export const generateController = (uiEntity: UIEntity): OptionalKind<SourceFileS
               }
             ],
             statements: [
-              writer => {
+              (writer): void => {
                 writer
                   .writeLine('const id = req.params.id;')
                   .writeLine(`try {`)
-                  // tslint:disable-next-line:max-line-length
+                  .writeLine('  // eslint-disable-next-line max-len')
                   .writeLine(`  const ${uiEntity.name}Entry = await ${pascalCase(uiEntity.name)}Model.findOne({_id: id})${getPopulatedFieldsFragment(uiEntity)};`)
                   .writeLine(`  if (!${uiEntity.name}Entry) {\n    return HTTP_NOT_FOUND(res);\n  }`)
                   .writeLine(`  return HTTP_OK(res, ${uiEntity.name}Entry);`)
-                  .writeLine(`} catch (err) {\n  return HTTP_INTERNAL_SERVER_ERROR(res, err);\n}`)
+                  .writeLine(`} catch (err) {\n  return HTTP_INTERNAL_SERVER_ERROR(res, err);\n}`);
               }
             ],
           },
@@ -160,15 +163,16 @@ export const generateController = (uiEntity: UIEntity): OptionalKind<SourceFileS
               }
             ],
             statements: [
-              writer => {
+              (writer): void => {
                 writer
                   .writeLine(`const ${uiEntity.name}Entry = new ${pascalCase(uiEntity.name)}Model({\n${getFieldsForCreated(uiEntity)}\n});`)
                   .writeLine(`try {`)
                   .writeLine(`  const ${uiEntity.name}Created = await ${uiEntity.name}Entry.save();`)
                   .conditionalWriteLine(uiEntity.populate === false, () => `  return HTTP_CREATED(res, ${uiEntity.name}Created);`)
+                  .conditionalWriteLine(uiEntity.populate === true, () => '  // eslint-disable-next-line max-len')
                   .conditionalWriteLine(uiEntity.populate === true, () => `  const ${uiEntity.name}CreatedPopulated = await ${uiEntity.name}Created${getPopulatedFieldsFragment(uiEntity, true)};`)
                   .conditionalWriteLine(uiEntity.populate === true, () => `  return HTTP_CREATED(res, ${uiEntity.name}CreatedPopulated);`)
-                  .writeLine(`} catch (err) {\n  return HTTP_INTERNAL_SERVER_ERROR(res, err);\n}`)
+                  .writeLine(`} catch (err) {\n  return HTTP_INTERNAL_SERVER_ERROR(res, err);\n}`);
               }
             ],
           },
@@ -193,14 +197,15 @@ export const generateController = (uiEntity: UIEntity): OptionalKind<SourceFileS
               }
             ],
             statements: [
-              writer => {
+              (writer): void => {
                 writer
                   .writeLine(`const id = req.params.id;\nconst ${uiEntity.name}UpdateData = {${getFieldsForUpdate(uiEntity)}\n};`)
                   .writeLine(`try {`)
+                  .writeLine('  // eslint-disable-next-line max-len')
                   .writeLine(`  const ${uiEntity.name}Updated = await ${pascalCase(uiEntity.name)}Model.findByIdAndUpdate(id, ${uiEntity.name}UpdateData, {new: true})${getPopulatedFieldsFragment(uiEntity)};`)
                   .writeLine(`  if (!${uiEntity.name}Updated) {\n    return HTTP_NOT_FOUND(res);\n  }`)
                   .writeLine(`  return HTTP_OK(res, ${uiEntity.name}Updated);`)
-                  .writeLine(`} catch (err) {\n  return HTTP_INTERNAL_SERVER_ERROR(res, err);\n}`)
+                  .writeLine(`} catch (err) {\n  return HTTP_INTERNAL_SERVER_ERROR(res, err);\n}`);
               }
             ],
           },
@@ -225,10 +230,10 @@ export const generateController = (uiEntity: UIEntity): OptionalKind<SourceFileS
               }
             ],
             statements: [
-              writer => {
+              (writer): void => {
                 writer
                   .writeLine('const id = req.params.id;')
-                  .writeLine(`try {\n  const ${uiEntity.name}Deleted = await ${pascalCase(uiEntity.name)}Model.findByIdAndDelete(id);\n  if (!${uiEntity.name}Deleted) {\n    return HTTP_NOT_FOUND(res);\n  }\n  return HTTP_NO_CONTENT(res);\n} catch (err) {\n  return HTTP_INTERNAL_SERVER_ERROR(res, err);\n}`)
+                  .writeLine(`try {\n  const ${uiEntity.name}Deleted = await ${pascalCase(uiEntity.name)}Model.findByIdAndDelete(id);\n  if (!${uiEntity.name}Deleted) {\n    return HTTP_NOT_FOUND(res);\n  }\n  return HTTP_NO_CONTENT(res);\n} catch (err) {\n  return HTTP_INTERNAL_SERVER_ERROR(res, err);\n}`);
               }
             ],
           },
@@ -236,4 +241,4 @@ export const generateController = (uiEntity: UIEntity): OptionalKind<SourceFileS
       }
     ]
   };
-}
+};

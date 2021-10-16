@@ -15,7 +15,7 @@ export class CollectionDataSource<T> extends DataSource<T> {
   selection: SelectionModel<T>;
   isLoading = false;
 
-  // tslint:disable-next-line:max-line-length
+  // eslint-disable-next-line max-len
   constructor(private httpService: HttpGenericService, resource: string, initialSort: Sort, initialPageNumber: number, initialPageSize: number, initialQuery: string, multipleSelection = true) {
     super();
     this.sort = new BehaviorSubject<Sort>(initialSort);
@@ -32,7 +32,7 @@ export class CollectionDataSource<T> extends DataSource<T> {
       tap(() => {
         this.isLoading = true;
       }),
-      // tslint:disable-next-line:max-line-length
+      // eslint-disable-next-line max-len
       switchMap(([sort, pageSize, pageNumber, query]) => this.httpService.listPaginatedCollection<T>(resource, sort, pageNumber, pageSize, query)),
       tap(() => {
         this.isLoading = false;

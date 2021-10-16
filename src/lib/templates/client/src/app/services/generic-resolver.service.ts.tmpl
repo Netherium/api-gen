@@ -18,7 +18,7 @@ export class GenericResolverService<T> implements Resolve<T> {
       .pipe(
         tap(data => {
           if (data instanceof HttpErrorResponse) {
-            this.router.navigate(['/404']);
+            this.router.navigate(['/404']).then();
             return EMPTY;
           }
           return data;

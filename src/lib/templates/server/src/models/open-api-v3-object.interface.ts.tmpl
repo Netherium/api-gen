@@ -159,9 +159,8 @@ interface LinkObject {
   server?: ServerObject;
 }
 
-// tslint:disable-next-line:no-empty-interface
-interface HeaderObject extends ParameterBaseObject {
-}
+
+type HeaderObject = ParameterBaseObject
 
 interface TagObject {
   name: string

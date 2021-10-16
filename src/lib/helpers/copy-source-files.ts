@@ -1,11 +1,11 @@
 import { promises as fs } from 'fs';
 import * as path from 'path';
 
-(async () => {
+(async (): Promise<void> => {
   /**
    *  Copies templates from src to ./lib/templates for development
    */
-  const copyTemplateFiles = async (src: string, dest: any, excludedDirectories: string[] = []) => {
+  const copyTemplateFiles = async (src: string, dest: any, excludedDirectories: string[] = []): Promise<void> => {
     const stat = await fs.lstat(src);
     const isDirectory = stat.isDirectory();
     if (isDirectory) {
@@ -28,7 +28,7 @@ import * as path from 'path';
     } else {
       await fs.copyFile(src, dest);
     }
-  }
+  };
 
   try {
     await copyTemplateFiles('../neth-express-api-ts', 'src/lib/templates/server', [
@@ -41,6 +41,6 @@ import * as path from 'path';
       'coverage'
     ]);
   } catch (e) {
-    console.log('Copy template files aborted', e);
+    console.error('Copy template files aborted', e);
   }
 })();

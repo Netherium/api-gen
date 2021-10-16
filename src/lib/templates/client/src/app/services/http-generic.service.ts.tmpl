@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -29,7 +29,7 @@ export class HttpGenericService {
     }
     return this.http.get<T[]>(`${this.url + endpoint}?q=${term}`)
       .pipe(
-        tap(t => console.log('service.suggest ' + t.length)),
+        tap(t => isDevMode() ? console.log('service.suggest ' + t.length) : null),
         catchError(this.errorHandler.handleError('service.suggest', []))
       );
   }
@@ -38,7 +38,7 @@ export class HttpGenericService {
    * GET PaginatedCollection<T>
    * Returns a PaginatedCollection, transforming data of <T> to a PaginatedCollection<T>
    */
-  // tslint:disable-next-line:max-line-length
+  // eslint-disable-next-line max-len
   listPaginatedCollection<T>(endpoint: string, sort: { active: string; direction: string } | null, pageNumber: number, pageSize: number, query: string = ''): Observable<PaginatedCollection<T>> {
     let queryParameters = `_page=${pageNumber + 1}&_limit=${pageSize}`;
     if (sort !== null) {
@@ -57,8 +57,8 @@ export class HttpGenericService {
     return this.http.get<PaginatedCollection<T>>(`${this.url + endpoint}?${queryParameters}`)
       .pipe(
         map(data => PaginatedCollection.fromResponse<T>(data, pageNumber, pageSize, query)),
-        tap(t => console.log('service.list ' + t.data.length)),
-        // tslint:disable-next-line:max-line-length
+        tap(t => isDevMode() ? console.log('service.list ' + t.data.length) : null),
+        // eslint-disable-next-line max-len
         catchError(this.errorHandler.handlePaginationError<PaginatedCollection<T>>('service.listPaginatedCollection', PaginatedCollection.emptyCollection<T>(pageNumber, pageSize, query)))
       );
   }
@@ -69,7 +69,7 @@ export class HttpGenericService {
   listCollection<T>(endpoint: string): Observable<Collection<T> | HttpErrorResponse> {
     return this.http.get<Collection<T>>(`${this.url + endpoint}`)
       .pipe(
-        tap(t => console.log('service.list ' + t.data.length)),
+        tap(t => isDevMode() ? console.log('service.list ' + t.data.length) : null),
         catchError(this.errorHandler.handleError<Collection<T>>('service.list'))
       );
   }
@@ -81,7 +81,7 @@ export class HttpGenericService {
   list<T>(endpoint: string): Observable<T[] | HttpErrorResponse> {
     return this.http.get<T[]>(`${this.url + endpoint}`)
       .pipe(
-        tap(t => console.log('service.list ' + t.length)),
+        tap(t => isDevMode() ? console.log('service.list ' + t.length) : null),
         catchError(this.errorHandler.handleError('service.list', []))
       );
   }
@@ -91,7 +91,7 @@ export class HttpGenericService {
    */
   show<T>(id: string | number, endpoint: string): Observable<T | HttpErrorResponse> {
     return this.http.get<T>(`${this.url + endpoint}/${id}`).pipe(
-      tap((t: T) => console.log(`service.show(${t})`)),
+      tap((t: T) => isDevMode() ? console.log(`service.show(${t})`) : null),
       catchError(this.errorHandler.handleError<T>(`service.show`))
     );
   }
@@ -101,7 +101,7 @@ export class HttpGenericService {
    */
   create<T>(endpoint: string, model: T): Observable<T | HttpErrorResponse> {
     return this.http.post<T>(`${this.url + endpoint}`, model, httpOptions).pipe(
-      tap((t: T) => console.log(`service.create`, t)),
+      tap((t: T) => isDevMode() ? console.log(`service.create`, t) : null),
       catchError(this.errorHandler.handleError<T>('service.create'))
     );
   }
@@ -111,7 +111,7 @@ export class HttpGenericService {
    */
   update<T extends { _id: string | number }>(endpoint: string, model: T): Observable<T | HttpErrorResponse> {
     return this.http.put(`${this.url + endpoint}/${model._id}`, model, httpOptions).pipe(
-      tap((t: T) => console.log(`service.update`, t)),
+      tap((t: T) => isDevMode() ? console.log(`service.update`, t) : null),
       catchError(this.errorHandler.handleError<T>('service.update'))
     );
   }
@@ -121,7 +121,7 @@ export class HttpGenericService {
    */
   delete<T>(endpoint: string, id: string | number): Observable<T | HttpErrorResponse> {
     return this.http.delete<T>(`${this.url + endpoint}/${id}`, httpOptions).pipe(
-      tap(_ => console.log(`service.delete`, id)),
+      tap(_ => isDevMode() ? console.log(`service.delete`, id) : null),
       catchError(this.errorHandler.handleError<T>('service.delete'))
     );
   }
@@ -135,7 +135,7 @@ export class HttpGenericService {
     }
     formData.append('file', file);
     return this.http.post<T>(`${this.url + endpoint}`, formData).pipe(
-      tap((t: T) => console.log(`service.createUpload`, t)),
+      tap((t: T) => isDevMode() ? console.log(`service.createUpload`, t) : null),
       catchError(this.errorHandler.handleError<T>('service.createUpload'))
     );
   }

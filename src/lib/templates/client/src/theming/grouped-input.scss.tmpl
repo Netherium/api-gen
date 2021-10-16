@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import '~@angular/material/theming';
 
 /**
@@ -5,22 +6,22 @@ Mixin for theming on grouped inputs, currently used in 'Resource Permissions'
 to serve nested array in nested array
  */
 @mixin grouped-input-color($config-or-theme) {
-  $config: mat-get-color-config($config-or-theme);
+  $config: mat.get-color-config($config-or-theme);
   $foreground: map-get($config, foreground);
   $background: map-get($config, background);
   $is-dark-theme: map-get($config, is-dark);
   .grouped-inputs {
     border-radius: 4px;
     position: relative;
-    border: 1px solid mat-color($foreground, divider, if($is-dark-theme, 0.7, 0.42));
-    background-color: mat-color($background, card);
+    border: 1px solid mat.get-color-from-palette($foreground, divider, if($is-dark-theme, 0.7, 0.42));
+    background-color: mat.get-color-from-palette($background, card);
     padding: 8px;
     margin-bottom: 16px;
   }
 }
 
 @mixin grouped-input-theme($theme) {
-  $color: mat-get-color-config($theme);
+  $color: mat.get-color-config($theme);
   @if $color != null {
     @include grouped-input-color($color);
   }

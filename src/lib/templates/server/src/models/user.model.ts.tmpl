@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 import * as jwt from 'jsonwebtoken';
+import { JwtPayload } from 'jsonwebtoken';
 import * as crypto from 'crypto';
 
 const fuzzySearching = require('mongoose-fuzzy-searching');
@@ -48,6 +49,7 @@ userSchema.virtual('password')
   })
   .get(function () {
     const user: any = this;
+
     return user.hash;
   });
 
@@ -56,31 +58,32 @@ userSchema.set('toJSON', {
     delete ret.__v;
     delete ret.salt;
     delete ret.hash;
+
     return ret;
   }
 });
 
-// tslint:disable:only-arrow-functions
-userSchema.methods.validPassword = function (password: any) {
+userSchema.methods.validPassword = function (password: any): boolean {
   const user: any = this;
   const hash = getHashedPassword(password, user.salt);
   return user.hash === hash;
 };
 
-userSchema.methods.validateJWT = function (token: string) {
+// eslint-disable-next-line prefer-arrow/prefer-arrow-functions
+userSchema.methods.validateJWT = function (token: string): null | JwtPayload | string {
   return jwt.decode(token);
 };
 
-userSchema.methods.generateJWT = async function () {
+userSchema.methods.generateJWT = async function (): Promise<string> {
   const expiry = new Date();
-  expiry.setDate(parseInt(expiry.getDate() + process.env.JWT_EXPIRATION, 10));
+  const jwtExpiration = parseInt(process.env.JWT_EXPIRATION, 10);
+  expiry.setDate(expiry.getDate() + jwtExpiration);
   const user: any = this;
   return jwt.sign({
     _id: user._id,
     email: user.email,
     name: user.name,
     role: user.role.name,
-    // tslint:disable-next-line:no-bitwise
     exp: ~~(expiry.getTime() / 1000)
   }, process.env.secret);
 };

@@ -15,16 +15,16 @@ import { generateSwagger } from '../lib/generators/server/generate-swagger';
 import { generateServerSuite, updateServerFile } from '../lib/generators/server/generate-server-suite';
 import { generateClientHtmlComponents, generateClientSuite, updateAppRoutingModule } from '../lib/generators/client/generate-client-suite';
 
-console.log(chalk.magenta(' _   _        _    _                            _                             '));
-console.log(chalk.magenta('\| \\ \| \|      \| \|  \| \|                          (_)                            '));
-console.log(chalk.magenta('\|  \\\| \|  ___ \| \|_ \| \|__   ______   __ _  _ __   _  ______   __ _   ___  _ __  '));
-console.log(chalk.magenta('\| . ` \| / _ \\\| __\|\| \'_ \\ \|______\| / _` \|\| \'_ \\ \| \|\|______\| / _` \| / _ \\\| \'_ \\ '));
-console.log(chalk.magenta('\| \|\\  \|\|  __/\| \|_ \| \| \| \|        \| (_\| \|\| \|_) \|\| \|        \| (_\| \|\|  __/\| \| \| \|'));
-console.log(chalk.magenta('\\_\| \\_/ \\___\| \\__\|\|_\| \|_\|         \\__,_\|\| .__/ \|_\|         \\__, \| \\___\|\|_\| \|_\|'));
-console.log(chalk.magenta('                                        \| \|                 __/ \|             '));
-console.log(chalk.magenta('                                        \|_\|                \|___/              '));
+console.info(chalk.magenta(' _   _        _    _                            _                             '));
+console.info(chalk.magenta('\| \\ \| \|      \| \|  \| \|                          (_)                            '));
+console.info(chalk.magenta('\|  \\\| \|  ___ \| \|_ \| \|__   ______   __ _  _ __   _  ______   __ _   ___  _ __  '));
+console.info(chalk.magenta('\| . ` \| / _ \\\| __\|\| \'_ \\ \|______\| / _` \|\| \'_ \\ \| \|\|______\| / _` \| / _ \\\| \'_ \\ '));
+console.info(chalk.magenta('\| \|\\  \|\|  __/\| \|_ \| \| \| \|        \| (_\| \|\| \|_) \|\| \|        \| (_\| \|\|  __/\| \| \| \|'));
+console.info(chalk.magenta('\\_\| \\_/ \\___\| \\__\|\|_\| \|_\|         \\__,_\|\| .__/ \|_\|         \\__, \| \\___\|\|_\| \|_\|'));
+console.info(chalk.magenta('                                        \| \|                 __/ \|             '));
+console.info(chalk.magenta('                                        \|_\|                \|___/              '));
 
-(async () => {
+(async (): Promise<void> => {
   const {argv}: any = yargs
     .scriptName('neth-api-gen')
     .usage('Usage: $0')
@@ -51,9 +51,9 @@ console.log(chalk.magenta('                                        \|_\|        
   if (argv.sample) {
     try {
       await generateSampleJson();
-      console.log(chalk.magenta(`✔ Exported sample file: neth-api-gen-sample.json`));
+      console.info(chalk.magenta(`✔ Exported sample file: neth-api-gen-sample.json`));
     } catch (err) {
-      console.log(chalk.red(`❌ Error occurred while exporting sample file: ${err}`));
+      console.error(chalk.red(`❌ Error occurred while exporting sample file: ${err}`));
     }
     process.exit();
   }
@@ -63,7 +63,7 @@ console.log(chalk.magenta('                                        \|_\|        
     try {
       userInput = await readFromJson(argv.inputFile);
     } catch (err) {
-      console.log(chalk.red(`❌ Error occurred while reading json file: ${err}`));
+      console.error(chalk.red(`❌ Error occurred while reading json file: ${err}`));
       process.exit();
     }
   }
@@ -71,7 +71,7 @@ console.log(chalk.magenta('                                        \|_\|        
   if (!argv.sample && (argv.inputFile === undefined)) {
     userInput = await orchestratePrompts();
   }
-  console.log(JSON.stringify(userInput, null, 2));
+  console.info(JSON.stringify(userInput, null, 2));
   if (userInput) {
     const projectOptions: ProjectOptions = {
       manipulationSettings: {
@@ -86,14 +86,15 @@ console.log(chalk.magenta('                                        \|_\|        
     let entitiesWritten: any;
     const serverSuiteDir = userInput.projectName + '/server';
     const clientSuiteDir = userInput.projectName + '/client';
+    // eslint-disable-next-line prefer-const
     ({project, entitiesWritten} = generateServerSuite(projectOptions, userInput, serverSuiteDir));
     project = await generateClientSuite(project, userInput, clientSuiteDir);
     if (userInput.generateApp) {
       try {
         await copyAppTemplateFiles(null, userInput.projectName);
-        console.log(chalk.magenta(`✔ Project generated in ${path.join(process.cwd(), userInput.projectName)}!`));
+        console.info(chalk.magenta(`✔ Project generated in ${path.join(process.cwd(), userInput.projectName)}!`));
       } catch (e) {
-        console.log(chalk.red(`❌ Error occurred while generating project: ${e}`));
+        console.error(chalk.red(`❌ Error occurred while generating project: ${e}`));
       }
     }
 
@@ -101,32 +102,32 @@ console.log(chalk.magenta('                                        \|_\|        
       await project.save();
       await generateClientHtmlComponents(userInput, clientSuiteDir);
       for (const entityWritten of entitiesWritten) {
-        console.log(chalk.magenta(`✔ Resource generated for ${entityWritten.name}! (Make sure to add a resource-permission for it)`));
+        console.info(chalk.magenta(`✔ Resource generated for ${entityWritten.name}! (Make sure to add a resource-permission for it)`));
       }
     } catch (e) {
-      console.log(chalk.red(`❌ Error occurred while generating resource: ${e}`));
+      console.error(chalk.red(`❌ Error occurred while generating resource: ${e}`));
     }
 
     try {
       await updateServerFile(projectOptions, userInput, serverSuiteDir);
-      console.log(chalk.magenta(`✔ Updated routes in server.ts!`));
+      console.info(chalk.magenta(`✔ Updated routes in server.ts!`));
     } catch (e) {
-      console.log(chalk.red(`❌ Error occurred while updating ${serverSuiteDir}/src/server.ts: ${e}`));
+      console.error(chalk.red(`❌ Error occurred while updating ${serverSuiteDir}/src/server.ts: ${e}`));
     }
 
     try {
       await updateAppRoutingModule(projectOptions, userInput, clientSuiteDir);
-      console.log(chalk.magenta(`✔ Updated routes in app-routing.module.ts!`));
+      console.info(chalk.magenta(`✔ Updated routes in app-routing.module.ts!`));
     } catch (e) {
-      console.log(chalk.red(`❌ Error occurred while updating ${clientSuiteDir}/src/app/app-routing.module.ts: ${e}`));
+      console.error(chalk.red(`❌ Error occurred while updating ${clientSuiteDir}/src/app/app-routing.module.ts: ${e}`));
     }
 
     if (userInput.swaggerDocs || userInput.generateApp) {
       try {
         await generateSwagger(userInput);
-        console.log(chalk.magenta(`✔ Swagger docs updated!`));
+        console.info(chalk.magenta(`✔ Swagger docs updated!`));
       } catch (e) {
-        console.log(chalk.red(`❌ Error occurred while updating swagger docs: ${e}`));
+        console.error(chalk.red(`❌ Error occurred while updating swagger docs: ${e}`));
       }
     }
   }

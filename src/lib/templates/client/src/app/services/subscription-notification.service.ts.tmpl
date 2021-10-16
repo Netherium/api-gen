@@ -35,7 +35,7 @@ export class SubscriptionNotificationService {
     }
   }
 
-  // tslint:disable-next-line:max-line-length
+  // eslint-disable-next-line max-len
   singleSubscription<T extends { _id?: string | number }>(obs: Observable<T | HttpErrorResponse>, action: CRUDAction, resourceType: string, cbComplete: any = null, cbSuccess: any = null, cbError: any = null): Subscription {
     return obs.subscribe(data => {
       if (cbComplete) {
@@ -47,7 +47,7 @@ export class SubscriptionNotificationService {
           cbError(data);
         }
       } else {
-        // tslint:disable-next-line:max-line-length
+        // eslint-disable-next-line max-len
         this.snackBar.open(`${resourceType} ${this.getDisplayAction(action)} ${data.hasOwnProperty('_id') ? data._id : data}`, null, this.snackbarConfigSuccess);
         if (cbSuccess) {
           cbSuccess(data);
@@ -56,16 +56,16 @@ export class SubscriptionNotificationService {
     });
   }
 
-  // tslint:disable-next-line:max-line-length
+  // eslint-disable-next-line max-len
   bulkSubscription<T extends { _id?: string | number }>(sources: Observable<T | HttpErrorResponse>[], action: CRUDAction, cbComplete: any = null, cbSuccess: any = null, cbError: any = null): Subscription {
     return forkJoin([...sources]).subscribe(data => {
       if (cbComplete) {
         cbComplete(data);
       }
-      // tslint:disable-next-line:max-line-length
+      // eslint-disable-next-line max-len
       const foundErrorResponse = data.find((responseItem: HttpErrorResponse) => responseItem instanceof HttpErrorResponse) as HttpErrorResponse;
       if (foundErrorResponse) {
-        // tslint:disable-next-line:max-line-length
+        // eslint-disable-next-line max-len
         this.snackBar.open(`${foundErrorResponse.error.message} ${foundErrorResponse.error.error ? foundErrorResponse.error.error : ''}`, null, this.snackbarConfigError);
         if (cbError) {
           cbError(data);

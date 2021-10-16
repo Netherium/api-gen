@@ -9,7 +9,14 @@ export class BookController {
   /** BookController.list() */
   public async list(req: Request, res: Response): Promise<Response> {
     try {
-      const bookCollection = await queryBuilderCollection(req, BookModel, [{path: 'author'}, {path: 'collaborators'}, {path: 'cover'}, {path: 'images'}]);
+      const bookCollection = await queryBuilderCollection(req, BookModel,
+        [
+          {path: 'author'},
+          {path: 'collaborators'},
+          {path: 'cover'},
+          {path: 'images'}
+        ]
+      );
       return HTTP_OK(res, bookCollection);
     } catch (err) {
       return HTTP_INTERNAL_SERVER_ERROR(res, err);
@@ -20,7 +27,12 @@ export class BookController {
   public async show(req: Request, res: Response): Promise<Response> {
     const id = req.params.id;
     try {
-      const bookEntry = await BookModel.findOne({_id: id}).populate('author').populate('collaborators').populate('cover').populate('images').exec();
+      const bookEntry = await BookModel.findOne({_id: id})
+        .populate('author')
+        .populate('collaborators')
+        .populate('cover')
+        .populate('images')
+        .exec();
       if (!bookEntry) {
         return HTTP_NOT_FOUND(res);
       }
@@ -47,7 +59,12 @@ export class BookController {
     });
     try {
       const bookCreated = await bookEntry.save();
-      const bookCreatedPopulated = await bookCreated.populate('author').populate('collaborators').populate('cover').populate('images').execPopulate();
+      const bookCreatedPopulated = await bookCreated
+        .populate('author')
+        .populate('collaborators')
+        .populate('cover')
+        .populate('images')
+        .execPopulate();
       return HTTP_CREATED(res, bookCreatedPopulated);
     } catch (err) {
       return HTTP_INTERNAL_SERVER_ERROR(res, err);
@@ -71,7 +88,12 @@ export class BookController {
       ...(req.body.datesForReview !== undefined) && {datesForReview: req.body.datesForReview}
     };
     try {
-      const bookUpdated = await BookModel.findByIdAndUpdate(id, bookUpdateData, {new: true}).populate('author').populate('collaborators').populate('cover').populate('images').exec();
+      const bookUpdated = await BookModel.findByIdAndUpdate(id, bookUpdateData, {new: true})
+        .populate('author')
+        .populate('collaborators')
+        .populate('cover')
+        .populate('images')
+        .exec();
       if (!bookUpdated) {
         return HTTP_NOT_FOUND(res);
       }

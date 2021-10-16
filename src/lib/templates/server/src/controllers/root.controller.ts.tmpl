@@ -7,7 +7,7 @@ export class RootController {
   /**
    * RootController.show()
    */
-  public async show(req: Request, res: Response) {
+  public async show(req: Request, res: Response): Promise<Response> {
     return HTTP_OK(res, {message: `Welcome to ${process.env.SITE_TITLE}. You can find endpoints documentation ${getApiURL()}/docs`});
   }
 

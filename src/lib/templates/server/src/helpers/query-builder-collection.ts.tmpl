@@ -1,7 +1,9 @@
 import { Request } from 'express';
-import { Model, QueryPopulateOptions } from 'mongoose';
+import { Model, PopulateOptions } from 'mongoose';
+import { Collection } from '../models/collection.model';
 
-export const queryBuilderCollection = async (req: Request, model: Model<any>, populateOptions: QueryPopulateOptions[] = []) => {
+export const queryBuilderCollection = async (req: Request, model: Model<any>, populateOptions: PopulateOptions[] = []):
+  Promise<Collection<any>> => {
   let limit = 10;
   let page = 1;
   let query = model.find();
@@ -9,8 +11,7 @@ export const queryBuilderCollection = async (req: Request, model: Model<any>, po
   if (Object.keys(req.query).length > 0) {
     if (req.query.q && typeof req.query.q !== 'undefined') {
       hasFuzzySearch = true;
-      // @ts-ignore
-      query = model.fuzzySearch(req.query.q);
+      query = (model as any).fuzzySearch(req.query.q);
       delete req.query.q;
     }
     for (const [queryParam, paramValue] of Object.entries(req.query)) {

@@ -4,8 +4,8 @@ import { kebabCase, pascalCase } from '../../helpers/string-functions';
 import { UIEntity } from '../../interfaces/ui-entity.model';
 import { UINestedField } from '../../interfaces/ui-nested-field.model';
 
-
-const inputStringFragment = (entityName: string, field: string, pascalCaseField: string, isRequired: boolean) => {
+/* eslint-disable max-len */
+const inputStringFragment = (entityName: string, field: string, pascalCaseField: string, isRequired: boolean): string => {
   return `
           <mat-form-field class="w-100">
             <mat-label>${pascalCaseField}</mat-label>
@@ -14,7 +14,7 @@ const inputStringFragment = (entityName: string, field: string, pascalCaseField:
           </mat-form-field>`;
 }
 
-const inputNumberFragment = (entityName: string, field: string, pascalCaseField: string, isRequired: boolean) => {
+const inputNumberFragment = (entityName: string, field: string, pascalCaseField: string, isRequired: boolean): string => {
   return `
           <mat-form-field class="w-100">
             <mat-label>${pascalCaseField}</mat-label>
@@ -23,7 +23,7 @@ const inputNumberFragment = (entityName: string, field: string, pascalCaseField:
           </mat-form-field>`;
 }
 
-const inputDateFragment = (entityName: string, field: string, pascalCaseField: string, dateId: number, isRequired: boolean) => {
+const inputDateFragment = (entityName: string, field: string, pascalCaseField: string, dateId: number, isRequired: boolean): string => {
   return `
           <mat-form-field class="w-100">
             <mat-label>${pascalCaseField}</mat-label>
@@ -34,7 +34,7 @@ const inputDateFragment = (entityName: string, field: string, pascalCaseField: s
           </mat-form-field>`;
 }
 
-const inputBooleanFragment = (entityName: string, field: string, pascalCaseField: string, isRequired: boolean) => {
+const inputBooleanFragment = (entityName: string, field: string, pascalCaseField: string): string => {
   return `
           <div class="w-100 mb-3">
             <mat-label class="mat-label-toggle">${pascalCaseField}</mat-label>
@@ -42,7 +42,7 @@ const inputBooleanFragment = (entityName: string, field: string, pascalCaseField
           </div>`
 }
 
-const inputObjectFragment = (entityName: string, field: string, pascalCaseField: string, displayProperty: string, isRequired: boolean) => {
+const inputObjectFragment = (entityName: string, field: string, pascalCaseField: string, displayProperty: string, isRequired: boolean): string => {
   return `
           <mat-form-field class="w-100">
             <mat-label>${pascalCaseField}</mat-label>
@@ -58,12 +58,12 @@ const inputObjectFragment = (entityName: string, field: string, pascalCaseField:
           </mat-form-field>`;
 }
 
-const inputMediaObjectFragment = (entityName: string, field: string, pascalCaseField: string) => {
+const inputMediaObjectFragment = (entityName: string, field: string, pascalCaseField: string): string => {
   return `
           <app-file-upload [(ngModel)]="${entityName}.${field}" name="${field}" [title]="'${pascalCaseField}'" [multiple]="false"></app-file-upload>`;
 }
 
-const inputArrayStringFragment = (entityName: string, field: string, pascalCaseField: string) => {
+const inputArrayStringFragment = (entityName: string, field: string, pascalCaseField: string): string => {
   return `
           <mat-form-field class="w-100">
             <mat-label>${pascalCaseField}&nbsp;<mat-icon svgIcon="neth:tags-multiple-outline"></mat-icon></mat-label>
@@ -79,7 +79,7 @@ const inputArrayStringFragment = (entityName: string, field: string, pascalCaseF
           </mat-form-field>`
 }
 
-const inputArrayNumberFragment = (entityName: string, field: string, pascalCaseField: string) => {
+const inputArrayNumberFragment = (entityName: string, field: string, pascalCaseField: string): string => {
   return `
           <mat-form-field class="w-100">
             <mat-label>${pascalCaseField}&nbsp;<mat-icon svgIcon="neth:tags-multiple-outline"></mat-icon></mat-label>
@@ -95,7 +95,7 @@ const inputArrayNumberFragment = (entityName: string, field: string, pascalCaseF
           </mat-form-field>`
 }
 
-const inputArrayDateFragment = (entityName: string, field: string, pascalCaseField: string, dateId: number) => {
+const inputArrayDateFragment = (entityName: string, field: string, pascalCaseField: string, dateId: number): string => {
   return `
           <mat-form-field class="w-100">
             <mat-label>${pascalCaseField}&nbsp;<mat-icon svgIcon="neth:tags-multiple-outline"></mat-icon></mat-label>
@@ -114,12 +114,12 @@ const inputArrayDateFragment = (entityName: string, field: string, pascalCaseFie
           </mat-form-field>`;
 }
 
-const inputArrayMediaObjectFragment = (entityName: string, field: string, pascalCaseField: string) => {
+const inputArrayMediaObjectFragment = (entityName: string, field: string, pascalCaseField: string): string => {
   return `
           <app-file-upload [(ngModel)]="${entityName}.${field}" name="${field}" [title]="'${pascalCaseField}'" [multiple]="true"></app-file-upload>`;
 }
 
-const inputArrayObjectFragment = (entityName: string, field: string, pascalCaseField: string, displayProperty: string) => {
+const inputArrayObjectFragment = (entityName: string, field: string, pascalCaseField: string, displayProperty: string): string => {
   return `
           <mat-form-field class="w-100">
             <mat-label>${pascalCaseField}</mat-label>
@@ -144,7 +144,7 @@ const inputArrayObjectFragment = (entityName: string, field: string, pascalCaseF
           </mat-form-field>`;
 }
 
-const dialogComponentHtmlDFragment = (plainTypesFragment: string, complexTypesFragment: string, entityName: string) => {
+const dialogComponentHtmlDFragment = (plainTypesFragment: string, complexTypesFragment: string, entityName: string): string => {
   return `<mat-card class="m-2 m-md-3 mat-elevation-z4">
   <mat-card-header>
     <mat-card-title>{{action === 1 ? 'Update' : 'Create'}} ${pascalCase(entityName)}
@@ -177,7 +177,7 @@ const dialogComponentHtmlDFragment = (plainTypesFragment: string, complexTypesFr
 </mat-card>`;
 }
 
-export const generateDetailComponentHtml = (uiEntity: UIEntity) => {
+export const generateDetailComponentHtml = (uiEntity: UIEntity): string => {
   let plainTypesFragment = '';
   let complexTypesFragment = '';
   let dateId = 1;
@@ -194,7 +194,7 @@ export const generateDetailComponentHtml = (uiEntity: UIEntity) => {
         dateId++;
         break;
       case field.type === 'Boolean':
-        plainTypesFragment += inputBooleanFragment(uiEntity.name, field.name, pascalCase(field.name), field.required);
+        plainTypesFragment += inputBooleanFragment(uiEntity.name, field.name, pascalCase(field.name));
         break;
       case field.type === 'ObjectId':
         if (field.ref === 'mediaObject') {

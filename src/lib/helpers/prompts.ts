@@ -103,7 +103,7 @@ export const orchestratePrompts = async (): Promise<UI> => {
   };
 };
 
-const promptProjectNameAgain = async () => {
+const promptProjectNameAgain = async (): Promise<any> => {
   return inquirer.prompt(
     {
       type: 'confirm',
@@ -113,7 +113,7 @@ const promptProjectNameAgain = async () => {
     });
 };
 
-const promptGenerateAction = async () => {
+const promptGenerateAction = async (): Promise<any> => {
   return inquirer.prompt(
     {
       type: 'list',
@@ -124,7 +124,7 @@ const promptGenerateAction = async () => {
   );
 };
 
-const promptGenerateEntities = async () => {
+const promptGenerateEntities = async (): Promise<any> => {
   return inquirer.prompt(
     {
       type: 'confirm',
@@ -134,7 +134,7 @@ const promptGenerateEntities = async () => {
     });
 };
 
-const promptProjectName = async () => {
+const promptProjectName = async (): Promise<any> => {
   return inquirer.prompt(
     {
       type: 'input',
@@ -147,7 +147,7 @@ const promptProjectName = async () => {
     });
 };
 
-const promptProjectLocation = async () => {
+const promptProjectLocation = async (): Promise<any> => {
   return inquirer.prompt(
     {
       type: 'input',
@@ -160,7 +160,7 @@ const promptProjectLocation = async () => {
     });
 };
 
-const promptEntityName = async () => {
+const promptEntityName = async (): Promise<any> => {
   return inquirer.prompt(
     {
       type: 'input',
@@ -173,13 +173,13 @@ const promptEntityName = async () => {
     });
 };
 
-const promptPropertyName = async () => {
+const promptPropertyName = async (): Promise<any> => {
   return inquirer.prompt(
     {
       type: 'input',
       name: 'name',
       message: 'Property Name:',
-      validate: function validatePropertyName(name) {
+      validate: (name) => {
         const reg = /^[a-zA-Z0-9]+$/;
         return (reg.test(name)) || 'Property name cannot be empty and can contain alphanumerical only!';
       }
@@ -187,7 +187,7 @@ const promptPropertyName = async () => {
   );
 };
 
-const promptPropertyType = async () => {
+const promptPropertyType = async (): Promise<any> => {
   return inquirer.prompt(
     {
       type: 'list',
@@ -198,7 +198,7 @@ const promptPropertyType = async () => {
   );
 };
 
-const promptNestedPropertyType = async () => {
+const promptNestedPropertyType = async (): Promise<any> => {
   return inquirer.prompt(
     {
       type: 'list',
@@ -209,7 +209,7 @@ const promptNestedPropertyType = async () => {
   );
 };
 
-const promptPropertyRef = async () => {
+const promptPropertyRef = async (): Promise<any> => {
   return inquirer.prompt(
     {
       type: 'input',
@@ -218,7 +218,7 @@ const promptPropertyRef = async () => {
     });
 };
 
-const promptPropertyDisplayProperty = async () => {
+const promptPropertyDisplayProperty = async (): Promise<any> => {
   return inquirer.prompt(
     {
       type: 'input',
@@ -227,7 +227,7 @@ const promptPropertyDisplayProperty = async () => {
     });
 };
 
-const promptPropertyRestrictions = async () => {
+const promptPropertyRestrictions = async (): Promise<any> => {
   return inquirer.prompt(
     {
       type: 'checkbox',
@@ -245,7 +245,7 @@ const promptPropertyRestrictions = async () => {
   );
 };
 
-const promptPropertyIndexed = async () => {
+const promptPropertyIndexed = async (): Promise<any> => {
   return inquirer.prompt(
     {
       type: 'confirm',
@@ -255,7 +255,7 @@ const promptPropertyIndexed = async () => {
     });
 };
 
-const promptEntityPropertyAgain = async () => {
+const promptEntityPropertyAgain = async (): Promise<any> => {
   return inquirer.prompt(
     {
       type: 'confirm',
@@ -265,7 +265,7 @@ const promptEntityPropertyAgain = async () => {
     });
 };
 
-const promptEntityTimestamps = async () => {
+const promptEntityTimestamps = async (): Promise<any> => {
   return inquirer.prompt(
     {
       type: 'confirm',
@@ -276,7 +276,7 @@ const promptEntityTimestamps = async () => {
   );
 };
 
-const promptEntityPropertiesPopulate = async () => {
+const promptEntityPropertiesPopulate = async (): Promise<any> => {
   return inquirer.prompt(
     {
       type: 'confirm',
@@ -287,7 +287,7 @@ const promptEntityPropertiesPopulate = async () => {
   );
 };
 
-const promptEntityAgain = async () => {
+const promptEntityAgain = async (): Promise<any> => {
   return inquirer.prompt(
     {
       type: 'confirm',
@@ -297,7 +297,7 @@ const promptEntityAgain = async () => {
     });
 };
 
-const promptSwaggerDocs = async () => {
+const promptSwaggerDocs = async (): Promise<any> => {
   return inquirer.prompt(
     {
       type: 'confirm',
@@ -307,12 +307,12 @@ const promptSwaggerDocs = async () => {
     });
 };
 
-const promptSwaggerPath = async () => {
+const promptSwaggerPath = async (): Promise<any> => {
   return inquirer.prompt([
     {
       type: 'fuzzypath',
       name: 'swaggerPath',
-      excludePath: (nodePath: string) => {
+      excludePath: (nodePath: string): boolean => {
         const excludedItems = ['node_modules', '.idea', '.nyc', 'coverage', 'tests'];
         for (const excludedItem of excludedItems) {
           if (nodePath.startsWith(excludedItem)) {
@@ -321,7 +321,7 @@ const promptSwaggerPath = async () => {
         }
         return false;
       },
-      excludeFilter: (nodePath: string) => nodePath.startsWith('.'),
+      excludeFilter: (nodePath: string): boolean => nodePath.startsWith('.'),
       itemType: 'file',
       rootPath: './',
       message: 'Locate swagger.yaml',

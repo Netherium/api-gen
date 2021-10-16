@@ -51,7 +51,7 @@ export const generateServerSuite =
     return {project, entitiesWritten};
   };
 
-export const updateServerFile = async (projectOptions: ProjectOptions, userInput: UI, serverSuiteDir: string) => {
+export const updateServerFile = async (projectOptions: ProjectOptions, userInput: UI, serverSuiteDir: string): Promise<void> => {
   const project = new Project(projectOptions);
   for (const uiEntity of userInput.entities) {
     const serverPath = `${serverSuiteDir}/src/server.ts`;
@@ -62,6 +62,7 @@ export const updateServerFile = async (projectOptions: ProjectOptions, userInput
     });
     if ('statements' in routesMethod) {
       const routesStatements = routesMethod.statements as string[];
+      // eslint-disable-next-line max-len
       const routeStatement = `this.express.use(\`/\${process.env.API_NAME}/${pluralize(kebabCase(uiEntity.name))}\`, new ${pascalCase(uiEntity.name)}Route().router);`;
       if (!routesStatements.includes(routeStatement)) {
         routesStatements.push(routeStatement);

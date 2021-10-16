@@ -5,6 +5,8 @@ import { promises as fs } from 'fs';
 import { generateSwagger } from '../src/lib/generators/server/generate-swagger';
 import { UI } from '../src/lib/interfaces/ui.model';
 import { UIField } from '../src/lib/interfaces/ui-field.model';
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { MockSwaggerAllFields } from './mocks/mock.swagger.all.fields';
 import { UIEntity } from '../src/lib/interfaces/ui-entity.model';
@@ -21,7 +23,7 @@ describe('Generate Swagger', () => {
     entities: MockSwaggerAllFields,
     swaggerDocs: true,
     swaggerPath: swaggerTestPath
-  }
+  };
   let tags: any;
   let paths: any;
   let schemas: any;
@@ -47,14 +49,14 @@ describe('Generate Swagger', () => {
       tags.should.be.a('array').length(ui.entities.length);
     });
     it('should have "paths" for each resource and method', async () => {
-      const pathKeys = ui.entities.reduce((acc: any, item: UIEntity, index) => {
+      const pathKeys = ui.entities.reduce((acc: any, item: UIEntity) => {
         return [...acc, `/${pluralize(item.name)}`, `/${pluralize(item.name)}/{id}`];
       }, []);
       paths.should.be.a('object').include.keys(pathKeys);
     });
     it('should have "schemas" equal to entities', async () => {
       for (const uiEntity of ui.entities) {
-        const fieldKeys = uiEntity.fields.reduce((acc: any, item: UIField, index) => {
+        const fieldKeys = uiEntity.fields.reduce((acc: any, item: UIField) => {
           return [...acc, item.name];
         }, []);
         schemas.should.have.property(pascalCase(uiEntity.name)).property('properties').include.keys(fieldKeys);

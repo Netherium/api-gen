@@ -71,7 +71,9 @@ export class ResourcePermissionController {
       ...(req.body.methods !== undefined) && {methods: req.body.methods}
     };
     try {
-      const resourcePermissionUpdated = await ResourcePermissionModel.findByIdAndUpdate(id, resourcePermissionUpdateData, {new: true}).exec();
+      const resourcePermissionUpdated = await ResourcePermissionModel
+        .findByIdAndUpdate(id, resourcePermissionUpdateData, {new: true})
+        .exec();
       if (!resourcePermissionUpdated) {
         return HTTP_NOT_FOUND(res);
       }

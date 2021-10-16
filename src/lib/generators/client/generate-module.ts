@@ -2,6 +2,7 @@ import { OptionalKind, SourceFileStructure, StructureKind } from 'ts-morph';
 import { kebabCase, pascalCase } from '../../helpers/string-functions';
 import { UIEntity } from '../../interfaces/ui-entity.model';
 
+/* eslint-disable max-len */
 export const generateModule = (uiEntity: UIEntity): OptionalKind<SourceFileStructure> => {
   return {
     statements: [{

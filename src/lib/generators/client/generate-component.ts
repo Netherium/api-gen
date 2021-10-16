@@ -100,7 +100,7 @@ export const generateComponent = (uiEntity: UIEntity): OptionalKind<SourceFileSt
 }
 
 
-const getColumns = (uiEntity: UIEntity) => {
+const getColumns = (uiEntity: UIEntity): string => {
   let displayedColumns = `[
 {header: 'Select', columnDef: 'select', type: 'select'},
 {header: 'Id', columnDef: '_id', type: 'String'}`;
@@ -108,13 +108,14 @@ const getColumns = (uiEntity: UIEntity) => {
     displayedColumns += `,\n{header: '${pascalCase(uiField.name)}', columnDef: '${uiField.name}', ${getColumnType(uiField)}}`
   }
   if (uiEntity.timestamps) {
+    // eslint-disable-next-line max-len
     displayedColumns += `,\n{header: 'CreatedAt', columnDef: 'createdAt', type: 'Date'},\n{header: 'UpdatedAt', columnDef: 'updatedAt', type: 'Date'}`;
   }
   displayedColumns += `,\n{header: 'Edit', columnDef: 'edit', type: 'edit'}\n]`;
   return displayedColumns;
 }
 
-const getColumnType = (uiField: UIField) => {
+const getColumnType = (uiField: UIField): string => {
   switch (true) {
     case uiField.type === 'String':
       return `type: 'String'`;

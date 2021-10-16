@@ -6,7 +6,7 @@
 <div align="center">
     <img src="#lines#" alt="Lines Covered">
     <img src="#buildstatus#" alt="Build Status">
-    <img src="https://img.shields.io/badge/Node-%3E=12.0.0-grey?logo=node.js&color=339933" alt="Node Version Required">
+    <img src="https://img.shields.io/badge/Node-%3E=14.0.0-grey?logo=node.js&color=339933" alt="Node Version Required">
     <img src="https://img.shields.io/badge/Built%20with-Typescript-blue" alt="Built with Typescript">
 </div>
 <div align="center">
@@ -68,7 +68,7 @@
     ```
 
 ## Features
-  
+
 - Typescript Intellisense Awesomeness
 - Robust routing and middleware based on same principles of Express
 - MongoDB integration
@@ -85,7 +85,7 @@
 
 The basic routes provided are listed below.
 Each one of them is being reflected by its own `route`, `controller`, `model`
- 
+
 #### Auth
 - :unlock: `api/auth/register` [POST]
 - :unlock: `api/auth/login` [POST]
@@ -95,13 +95,13 @@ Each one of them is being reflected by its own `route`, `controller`, `model`
 #### Roles
 - :closed_lock_with_key: `api/roles` [GET, GET `/:id`, POST, PUT `/:id`, DELETE `/:id`]
 
-#### Resource Permissions
+#### Resource-Permissions
 - :closed_lock_with_key: `api/resource-permissions` [GET, GET `/:id`, POST, PUT `/:id`, DELETE `/:id`]
 
 #### Users
 - :closed_lock_with_key: `api/users` [GET, GET `/:id`, POST, PUT `/:id`, DELETE `/:id`]
 
-#### Media Objects
+#### Media-Objects
 - :closed_lock_with_key: `api/media-objects` [GET, GET `/:id`, POST, PUT `/:id`, DELETE `/:id`]
 
 #### Docs
@@ -147,7 +147,7 @@ POST api/resource-permissions
         }
     ]
 }
-``` 
+```
 :warning: **If you add at least 1 unauthenticated role then this resource route will be open**
 
 
@@ -181,10 +181,10 @@ Follow the structure below. It will keep things and your mind tidy :blossom:
     │   ├── controllers     # Controllers that handle functionality from routes
     │   ├── models          # Mongoose models and typescript interfaces
     │   ├── middleware      # Middleware functions
-    │   ├── services        # Services in OOP style that can be called in controllers 
-    │   ├── helpers         # Exported functions that need no instantiation  
+    │   ├── services        # Services in OOP style that can be called in controllers
+    │   ├── helpers         # Exported functions that need no instantiation
     │   └── server.ts       # Server entrypoint file
-    │                       
+    │
     ├── test                # Automated tests `npm run test`
     │
     ├── swagger.yaml        # Swagger documentation (`api/docs`) defined in yaml format
@@ -207,7 +207,7 @@ The following query parameters are available for all routes
 Key | Type | Description | Example | Notes
 :---: | --- | --- | --- | :---:
 `q` | Parameter |  search like | `api/books?q=rings` | searches all fields that have fuzzy search enabled
-`_eq` | Suffix |  property equal to | `api/books?title_eq=Lord of the rings` | - 
+`_eq` | Suffix |  property equal to | `api/books?title_eq=Lord of the rings` | -
 `_ne` | Suffix |  property not equal to | `api/books?title_ne=Lord of the rings` | -
 `_lt` | Suffix |  property less than | `api/books?isbn_lt=1235466` | -
 `_lte` | Suffix |  property less or equal | `api/books?isbn_lte=1235466` | -
@@ -240,8 +240,8 @@ $ npm run test:coverage
 
 
 ## Debug
-  
-To debug TS without compiling it, you can setup your IDE of choice as in the example below  
+
+To debug TS without compiling it, you can setup your IDE of choice as in the example below
 Note: Running older versions of node  may require attaching `--inspect` before `--require`
 
 <img src="https://raw.githubusercontent.com/Netherium/neth-express-api-ts/master/img/debug_setup.png">

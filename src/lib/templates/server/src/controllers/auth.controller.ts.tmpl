@@ -14,12 +14,13 @@ import { Auth } from '../middleware/auth';
 
 /**
  * AuthController.ts
+ *
  * @description :: Server-side logic for managing Authentication.
  */
 export class AuthController {
 
   /** AuthController.login() */
-  public async getToken(req: Request, res: Response) {
+  public async getToken(req: Request, res: Response): Promise<Response> {
     try {
       const userEntry: any = await UserModel.findOne({email: req.body.email}).populate('role').exec();
       if (!userEntry || !req.body.password || !userEntry.validPassword(req.body.password)) {
@@ -32,7 +33,7 @@ export class AuthController {
   }
 
   /** AuthController.profile() */
-  public async show(req: Request, res: Response) {
+  public async show(req: Request, res: Response): Promise<Response> {
     const authUser = res.locals.authUser;
     try {
       const userEntry = await UserModel.findOne({_id: authUser._id}).populate('role').populate('display').exec();
@@ -66,7 +67,7 @@ export class AuthController {
   }
 
   /** AuthController.update() */
-  public async update(req: Request, res: Response) {
+  public async update(req: Request, res: Response): Promise<Response> {
     const authUser = res.locals.authUser;
     try {
       const userFound = await UserModel.findById(authUser._id).exec();
@@ -89,7 +90,7 @@ export class AuthController {
   }
 
   /** AuthController.delete() */
-  public async delete(req: Request, res: Response) {
+  public async delete(req: Request, res: Response): Promise<Response> {
     const id = res.locals.authUser;
     try {
       const userDeleted = await UserModel.findByIdAndDelete(id).exec();
@@ -112,7 +113,7 @@ export class AuthController {
    *  'roles', 'users', 'resource-permissions', 'endpoints', 'uploads', 'articles'
    * - Updates Permissions so that will be reflected in all routes instantly
    */
-  public async init(req: Request, res: Response) {
+  public async init(req: Request, res: Response): Promise<Response> {
     const publicRoleEntry = new RoleModel(
       {
         name: 'Public',

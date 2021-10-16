@@ -202,11 +202,12 @@
    
 6. :fireworks:Your build is ready to deploy !:fireworks:
 
-## Basic API Routes
+
+## Basic Routes
 
 The basic routes provided are listed below.
 Each one of them is being reflected by its own `route`, `controller`, `model`
- 
+
 #### Auth
 - :unlock: `api/auth/register` [POST]
 - :unlock: `api/auth/login` [POST]
@@ -216,14 +217,14 @@ Each one of them is being reflected by its own `route`, `controller`, `model`
 #### Roles
 - :closed_lock_with_key: `api/roles` [GET, GET `/:id`, POST, PUT `/:id`, DELETE `/:id`]
 
-#### Resource Permissions
+#### Resource-Permissions
 - :closed_lock_with_key: `api/resource-permissions` [GET, GET `/:id`, POST, PUT `/:id`, DELETE `/:id`]
 
 #### Users
 - :closed_lock_with_key: `api/users` [GET, GET `/:id`, POST, PUT `/:id`, DELETE `/:id`]
 
-#### Uploads
-- :closed_lock_with_key: `api/uploads` [GET, GET `/:id`, POST, PUT `/:id`, DELETE `/:id`]
+#### Media-Objects
+- :closed_lock_with_key: `api/media-objects` [GET, GET `/:id`, POST, PUT `/:id`, DELETE `/:id`]
 
 #### Docs
 - :unlock: `api/docs` [GET]
@@ -234,8 +235,9 @@ Each one of them is being reflected by its own `route`, `controller`, `model`
 #### Endpoints
 - :closed_lock_with_key: `api/endpoints` [GET]
 
-#### Articles (Example Resource Route)
-- :closed_lock_with_key: `api/articles` [GET, GET `/:id`, POST, PUT `/:id`, DELETE `/:id`]
+#### Books (Provided example Resource Route)
+- :closed_lock_with_key: `api/books` [GET, GET `/:id`, POST, PUT `/:id`, DELETE `/:id`]
+
 
 ## Resource Permissions
 
@@ -343,14 +345,16 @@ Follow the structure below. It will keep things and your mind tidy :blossom:
 
 ## Under The Hood
 
-- When you generate an `App`, an Express server project based on [Neth-express-api-ts](https://github.com/Netherium/neth-express-api-ts) and an Angular project are being created
+- When you generate an `App` 
+  - an **Express project** based on [Neth-express-api-ts](https://github.com/Netherium/neth-express-api-ts) is created
+  - an **Angular project** based on [Neth-ng](https://github.com/Netherium/neth-ng) is created
 - When you generate an `Entity`, multiple files are generated under `server` and `client` folders
     Server
     - Controller, Model, Route files are generated under their corresponding folders `./server/src/controllers/entity.controller.ts, ./server/src/models/entity.model.ts, ./server/src/routes/entity.route.ts`
     - An entry in `server.ts` is created, under method `routes`
     
     Client
-    - A module is being created under its corresponding folder  `./client/src/app/modules/entityfolder/...`
+    - A module is created under its corresponding folder  `./client/src/app/modules/entityfolder/...`
     - An entry in `app-routing.module.ts` is created, under variable `childrenRoutes`
 
 

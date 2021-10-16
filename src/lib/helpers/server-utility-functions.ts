@@ -5,12 +5,12 @@ import { UI } from '../interfaces/ui.model';
 import { UIEntity } from '../interfaces/ui-entity.model';
 import { UIField } from '../interfaces/ui-field.model';
 
-export const getPopulatedFieldsFragment = (input: UIEntity, existingDocument = false) => {
+export const getPopulatedFieldsFragment = (input: UIEntity, existingDocument = false): string => {
   let fragment = '';
   if (input.populate) {
     const fieldsToPopulate = input.fields.filter((modelField: any) => {
       return modelField.type === 'ObjectId' || modelField.type instanceof Array;
-    })
+    });
     for (const field of fieldsToPopulate) {
       if (field.type instanceof Array) {
         if (field.type.some(e => e.type === 'ObjectId')) {
@@ -28,14 +28,15 @@ export const getPopulatedFieldsFragment = (input: UIEntity, existingDocument = f
     fragment += `.exec()`;
   }
   return fragment;
-}
+};
 
-export const getPopulatedQueryBuilderFields = (input: UIEntity) => {
-  let populatedOptions = '[';
+export const getPopulatedQueryBuilderFields = (input: UIEntity): string => {
+  let populatedOptions = '';
   if (input.populate) {
+    populatedOptions += '[';
     const fieldsToPopulate = input.fields.filter((modelField: any) => {
       return modelField.type === 'ObjectId' || modelField.type instanceof Array;
-    })
+    });
     for (const field of fieldsToPopulate) {
       if (field.type instanceof Array) {
         if (field.type.some(e => e.type === 'ObjectId')) {
@@ -48,12 +49,13 @@ export const getPopulatedQueryBuilderFields = (input: UIEntity) => {
     if (fieldsToPopulate.length > 0) {
       populatedOptions = populatedOptions.slice(0, -2);
     }
+    populatedOptions += ']';
   }
-  populatedOptions += ']';
-  return populatedOptions;
-}
 
-export const getFieldsForCreated = (userInput: any) => {
+  return populatedOptions;
+};
+
+export const getFieldsForCreated = (userInput: any): string => {
   let fragment = '';
   for (let i = 0; i < userInput.fields.length; i++) {
     fragment += `  ${userInput.fields[i].name}: req.body.${userInput.fields[i].name}`;
@@ -62,37 +64,50 @@ export const getFieldsForCreated = (userInput: any) => {
     }
   }
   return fragment;
-}
+};
 
-export const getFieldsForUpdate = (userInput: any) => {
+export const getFieldsForUpdate = (userInput: any): string => {
   let fragment = '';
   for (let i = 0; i < userInput.fields.length; i++) {
+    // eslint-disable-next-line max-len
     fragment += `\r\n  ...(req.body.${userInput.fields[i].name} !== undefined) && {${userInput.fields[i].name}: req.body.${userInput.fields[i].name}}`;
     if (i !== (userInput.fields.length - 1)) {
       fragment += `,`;
     }
   }
   return fragment;
-}
+};
 
-export const getModelPropertiesForGenerator = (userInput: any) => {
+export const getModelPropertiesForGenerator = (userInput: any): string => {
   let modelFieldsString = '{';
   userInput.fields.forEach((field: any, index: number) => {
     if (field.type instanceof Array) {
       modelFieldsString += `\r\n${field.name}: [\r\n`;
       for (const nestedField of field.type) {
         modelFieldsString += `\t{\r\n\t\ttype: ${nestedField.type === 'ObjectId' ? 'Schema.Types.ObjectId' : nestedField.type}`;
-        if (nestedField.ref) modelFieldsString += `,\r\n\t\tref: '${nestedField.ref}'`;
-        if (nestedField.required) modelFieldsString += `,\r\n\t\trequired: ${nestedField.required}`;
-        if (nestedField.unique) modelFieldsString += `,\r\n\t\tunique: ${nestedField.unique}`;
+        if (nestedField.ref) {
+          modelFieldsString += `,\r\n\t\tref: '${nestedField.ref}'`;
+        }
+        if (nestedField.required) {
+          modelFieldsString += `,\r\n\t\trequired: ${nestedField.required}`;
+        }
+        if (nestedField.unique) {
+          modelFieldsString += `,\r\n\t\tunique: ${nestedField.unique}`;
+        }
         modelFieldsString += `\r\n\t}`;
       }
       modelFieldsString += `\r\n]`;
     } else if (field.type === 'ObjectId' || field.required || field.unique) {
       modelFieldsString += `\r\n${field.name}: {\r\n\ttype: ${field.type === 'ObjectId' ? 'Schema.Types.ObjectId' : field.type}`;
-      if (field.ref) modelFieldsString += `,\r\n\tref: '${field.ref}'`;
-      if (field.required) modelFieldsString += `,\r\n\trequired: ${field.required}`;
-      if (field.unique) modelFieldsString += `,\r\n\tunique: ${field.unique}`;
+      if (field.ref) {
+        modelFieldsString += `,\r\n\tref: '${field.ref}'`;
+      }
+      if (field.required) {
+        modelFieldsString += `,\r\n\trequired: ${field.required}`;
+      }
+      if (field.unique) {
+        modelFieldsString += `,\r\n\tunique: ${field.unique}`;
+      }
       modelFieldsString += `\r\n}`;
     } else {
       modelFieldsString += `\r\n${field.name}: ${field.type}`;
@@ -104,15 +119,17 @@ export const getModelPropertiesForGenerator = (userInput: any) => {
     }
   });
   modelFieldsString += '}';
-  if (userInput.timestamps) modelFieldsString += ', {timestamps: true}';
+  if (userInput.timestamps) {
+    modelFieldsString += ', {timestamps: true}';
+  }
   return modelFieldsString;
-}
+};
 
-export const getFuzzySearchProperties = (userInput: any) => {
+export const getFuzzySearchProperties = (userInput: any): string => {
   let fuzzySearchProperties = '[';
   const fieldsWithFuzzySearch = userInput.fields.filter((field: UIField) => {
     return field.indexed === true;
-  })
+  });
   fieldsWithFuzzySearch.forEach((field: UIField) => {
     fuzzySearchProperties += `'${field.name}', `;
   });
@@ -121,9 +138,9 @@ export const getFuzzySearchProperties = (userInput: any) => {
   }
   fuzzySearchProperties += ']';
   return fuzzySearchProperties;
-}
+};
 
-export const generateSampleJson = async () => {
+export const generateSampleJson = async (): Promise<void> => {
   const output: UI = {
     generateApp: true,
     projectName: 'myapi',
@@ -216,23 +233,23 @@ export const generateSampleJson = async () => {
     swaggerPath: './myapi/server/swagger.yaml'
   };
   return await fs.writeFile('neth-api-gen-sample.json', JSON.stringify(output, null, 2));
-}
+};
 
-export const readFromJson = async (jsonFilePath: string) => {
+export const readFromJson = async (jsonFilePath: string): Promise<any> => {
   const file = await fs.readFile(jsonFilePath);
   return JSON.parse(file.toString());
-}
+};
 
-export const copyAppTemplateFiles = async (src: null | string = null, dest: any) => {
+export const copyAppTemplateFiles = async (src: null | string = null, dest: any): Promise<void> => {
   if (src === null) {
-    src = path.join(__dirname + '/../templates')
+    src = path.join(__dirname + '/../templates');
   }
   const stat = await fs.lstat(src);
   if (stat.isDirectory()) {
     await fs.mkdir(dest, {recursive: true});
     const directories = (await fs.readdir(src));
-    for (const childItemName of (await fs.readdir(src))) {
-      const ext = extname(childItemName)
+    for (const childItemName of directories) {
+      const ext = extname(childItemName);
       let baseFileName: string;
       if (ext === '.tmpl') {
         baseFileName = basename(childItemName, ext);
@@ -244,4 +261,4 @@ export const copyAppTemplateFiles = async (src: null | string = null, dest: any)
   } else {
     await fs.copyFile(src, dest);
   }
-}
+};

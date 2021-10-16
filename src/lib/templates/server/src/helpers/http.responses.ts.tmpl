@@ -1,18 +1,18 @@
 import { Response } from 'express';
 
-export const HTTP_OK = (res: Response, entity: any) => {
+export const HTTP_OK = (res: Response, entity: any): Response => {
   return res.status(200).json(entity);
 };
 
-export const HTTP_CREATED = (res: Response, entity: any) => {
+export const HTTP_CREATED = (res: Response, entity: any): Response => {
   return res.status(201).json(entity);
 };
 
-export const HTTP_NO_CONTENT = (res: Response) => {
+export const HTTP_NO_CONTENT = (res: Response): Response => {
   return res.status(204).json();
 };
 
-export const HTTP_BAD_REQUEST = (res: Response, err: any) => {
+export const HTTP_BAD_REQUEST = (res: Response, err: any): Response => {
   if (err.hasOwnProperty('message')) {
     err = err.message;
   } else if (err.hasOwnProperty('type')) {
@@ -24,37 +24,37 @@ export const HTTP_BAD_REQUEST = (res: Response, err: any) => {
   });
 };
 
-export const HTTP_UNAUTHORIZED = (res: Response) => {
+export const HTTP_UNAUTHORIZED = (res: Response): Response => {
   return res.status(401).json({
     message: 'Unauthorized'
   });
 };
 
-export const HTTP_FORBIDDEN = (res: Response) => {
+export const HTTP_FORBIDDEN = (res: Response): Response => {
   return res.status(403).json({
     message: 'Forbidden'
   });
 };
 
-export const HTTP_NOT_FOUND = (res: Response) => {
+export const HTTP_NOT_FOUND = (res: Response): Response => {
   return res.status(404).json({
     message: 'Not Found'
   });
 };
 
-export const HTTP_UNSUPPORTED_MEDIA_TYPE = (res: Response) => {
+export const HTTP_UNSUPPORTED_MEDIA_TYPE = (res: Response): Response => {
   return res.status(415).json({
     message: 'Unsupported Media Type'
   });
 };
 
-export const HTTP_UNPROCESSABLE_ENTITY = (res: Response) => {
+export const HTTP_UNPROCESSABLE_ENTITY = (res: Response): Response => {
   return res.status(422).json({
     message: 'Unprocessable Entity'
   });
 };
 
-export const HTTP_INTERNAL_SERVER_ERROR = (res: Response, err: any) => {
+export const HTTP_INTERNAL_SERVER_ERROR = (res: Response, err: any): Response => {
   if (err.hasOwnProperty('message')) {
     err = err.message;
   } else if (err.hasOwnProperty('type')) {

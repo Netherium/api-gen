@@ -2,6 +2,7 @@ import { should } from 'chai';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as YAML from 'yaml';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { cliExecute, KEYSTROKE } from './cmd.helper';
 

@@ -6,11 +6,11 @@ import { ResourcePermissionSetting } from '../models/resource-pemission-setting.
 
 export class Auth {
   static isAuthenticated() {
-    return async (req: Request, res: Response, next: NextFunction) => {
+    return async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
       if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
         const token = req.headers.authorization.split(' ')[1];
         try {
-          res.locals.authUser = await jwt.verify(token, process.env.secret);
+          res.locals.authUser = jwt.verify(token, process.env.secret);
           next();
         } catch (err) {
           return HTTP_UNAUTHORIZED(res);
@@ -22,7 +22,7 @@ export class Auth {
   }
 
   static getAcl() {
-    return async (req: Request, res: Response, next: NextFunction) => {
+    return async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
       let rolesPerResourceMethod: any;
       try {
         const currentResource = req.baseUrl.replace(new RegExp('\/(.*)\/'), '');
@@ -39,7 +39,7 @@ export class Auth {
         if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
           try {
             const token = req.headers.authorization.split(' ')[1];
-            res.locals.authUser = await jwt.verify(token, process.env.secret);
+            res.locals.authUser = jwt.verify(token, process.env.secret);
             if (rolesPerResourceMethod.some((role: { name: string; }) => role.name === res.locals.authUser.role)) {
               next();
             } else {
@@ -55,7 +55,7 @@ export class Auth {
     };
   }
 
-  static async updateAppPermissions(req: Request = null, app: Application = null) {
+  static async updateAppPermissions(req: Request = null, app: Application = null): Promise<void> {
     try {
       const resourcePermissionsDoc = await resourcePermissionModel.find()
         .populate({

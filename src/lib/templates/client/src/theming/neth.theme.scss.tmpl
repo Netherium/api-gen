@@ -1,26 +1,27 @@
+@use '~@angular/material' as mat;
 @import '~@angular/material/theming';
 @import '../app/components/file-upload/file-upload.component';
 @import 'custom-scrollbar';
 @import 'grouped-input';
 @import 'mat-label-toggle';
 
-@include mat-core();
+@include mat.core();
 
-$primary: mat-palette($mat-deep-purple);
-$accent: mat-palette($mat-pink);
-$warn: mat-palette($mat-red);
+$primary: mat.define-palette(mat.$deep-purple-palette);
+$accent: mat.define-palette(mat.$pink-palette);
+$warn: mat.define-palette(mat.$red-palette);
 
 /**
 Definition of light-theme
  */
-$neth-light-theme: mat-light-theme((
+$neth-light-theme: mat.define-light-theme((
   color: (
     primary: $primary,
     accent: $accent,
     warn: $warn,
   )
 ));
-@include angular-material-theme($neth-light-theme);
+@include mat.all-component-themes($neth-light-theme);
 @include file-upload-theme($neth-light-theme);
 @include grouped-input-theme($neth-light-theme);
 @include mat-label-toggle-theme($neth-light-theme);
@@ -31,7 +32,7 @@ $neth-light-theme: mat-light-theme((
 Definition of dark-theme
 https://github.com/angular/components/blob/master/guides/duplicate-theming-styles.md
  */
-$neth-dark-theme: mat-dark-theme((
+$neth-dark-theme: mat.define-dark-theme((
   color: (
     primary: $primary,
     accent: $accent,
@@ -39,7 +40,7 @@ $neth-dark-theme: mat-dark-theme((
   )
 ));
 .dark-theme {
-  @include angular-material-color($neth-dark-theme);
+  @include mat.all-component-colors($neth-dark-theme);
   @include file-upload-color($neth-dark-theme);
   @include grouped-input-color($neth-dark-theme);
   @include mat-label-toggle-color($neth-dark-theme);

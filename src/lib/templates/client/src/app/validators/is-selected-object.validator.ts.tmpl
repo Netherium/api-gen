@@ -2,7 +2,7 @@ import { AbstractControl, FormControl, NG_VALIDATORS, ValidationErrors, Validato
 import { Directive } from '@angular/core';
 
 @Directive({
-  // tslint:disable-next-line:directive-selector
+  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[isSelectedObject][ngModel]',
   providers: [
     { provide: NG_VALIDATORS, useExisting: IsSelectedObjectValidator, multi: true }

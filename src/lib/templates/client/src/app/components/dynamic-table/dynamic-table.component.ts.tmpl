@@ -46,7 +46,7 @@ export class DynamicTableComponent implements OnInit, OnDestroy {
    */
   editDialog(row: any): void {
     if (this.displayAsDialog === false) {
-      this.router.navigate([`${(this.resource)}/edit/`, row._id]);
+      this.router.navigate([`${(this.resource)}/edit/`, row._id]).then();
     }
   }
 

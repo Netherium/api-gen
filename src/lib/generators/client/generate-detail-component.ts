@@ -13,6 +13,7 @@ import { kebabCase, pascalCase } from '../../helpers/string-functions';
 import { UIEntity } from '../../interfaces/ui-entity.model';
 import { UINestedField } from '../../interfaces/ui-nested-field.model';
 
+/* eslint-disable max-len */
 export const generateDetailComponent = (uiEntity: UIEntity): OptionalKind<SourceFileStructure> => {
   return {
     statements: [
@@ -135,7 +136,7 @@ if (this.action === CRUDAction.CREATE) {
 this.subNotSrv.singleSubscription<${pascalCase(uiEntity.name)}>(obs, this.action, '${pascalCase(uiEntity.name)}', () => {
   this.isLoading = false;
 }, () => {
-  this.router.navigate(['/${kebabCase(pluralize(uiEntity.name))}']);
+  this.router.navigate(['/${kebabCase(pluralize(uiEntity.name))}']).then();
 });`,
             ],
             returnType: 'void',
@@ -563,7 +564,7 @@ const getExtraMethodDeclaration = (uiEntity: UIEntity): MethodDeclarationStructu
   return methodDeclarations;
 }
 
-const getInitialCreateDialogObj = (uiEntity: UIEntity) => {
+const getInitialCreateDialogObj = (uiEntity: UIEntity): string => {
   const fieldSeparator = '\n';
   let initialObj = `{${fieldSeparator}_id: '',`;
   for (const field of uiEntity.fields) {

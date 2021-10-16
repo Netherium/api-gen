@@ -37,7 +37,7 @@ export class FileUploadComponent implements OnInit, OnDestroy, ControlValueAcces
   createSubscription: Subscription;
   counter = 0;
 
-  // tslint:disable-next-line:max-line-length
+  // eslint-disable-next-line max-len
   constructor(private httpService: HttpGenericService, public dialog: MatDialog, private snackBar: MatSnackBar, private subNotSrv: SubscriptionNotificationService) {
     if (this.multiple) {
       this.files = [];
@@ -169,10 +169,10 @@ export class FileUploadComponent implements OnInit, OnDestroy, ControlValueAcces
    */
   canUpload(): boolean {
     if (this.multiple) {
-      // tslint:disable-next-line:no-non-null-assertion
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       return (this.files as File[] | MediaObject[]).some(file => (file ! instanceof File));
     } else {
-      // tslint:disable-next-line:no-non-null-assertion
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       return (this.files !== null) && (this.files ! instanceof File);
     }
   }

@@ -1,14 +1,15 @@
+@use '~@angular/material' as mat;
 @import '../../../../node_modules/@angular/material/theming';
 
 @mixin file-upload-color($config-or-theme) {
-  $config: mat-get-color-config($config-or-theme);
+  $config: mat.get-color-config($config-or-theme);
   $foreground: map-get($config, foreground);
   $background: map-get($config, background);
   $is-dark-theme: map-get($config, is-dark);
 
   .file-upload-title {
     margin-bottom: 6px !important;
-    color: mat-color($foreground, secondary-text);
+    color: mat.get-color-from-palette($foreground, secondary-text);
 
     mat-icon {
       font-size: 12px;
@@ -19,8 +20,8 @@
   .file-upload-container {
     border-radius: 4px;
     position: relative;
-    border: 1px solid mat-color($foreground, divider, if($is-dark-theme, 0.7, 0.42));
-    background-color: mat-color($background, card);
+    border: 1px solid mat.get-color-from-palette($foreground, divider, if($is-dark-theme, 0.7, 0.42));
+    background-color: mat.get-color-from-palette($background, card);
     margin-bottom: 16px;
 
     .file-list-container {
@@ -37,7 +38,7 @@
       left: 50%;
       transform: translate(-50%, -50%);
       width: 100%;
-      color: mat-color($foreground, secondary-text);
+      color: mat.get-color-from-palette($foreground, secondary-text);
       user-select: none;
       text-align: center;
 
@@ -85,8 +86,8 @@
 }
 
 @mixin file-upload-theme($theme) {
-  $color: mat-get-color-config($theme);
-  $typography: mat-get-typography-config($theme);
+  $color: mat.get-color-config($theme);
+  $typography: mat.get-typography-config($theme);
   @if $color != null {
     @include file-upload-color($color);
   }

@@ -10,7 +10,7 @@ import { SwaggerComponentSchema, SwaggerPropertiesSchema } from '../../interface
 import { UIEntity } from '../../interfaces/ui-entity.model';
 import { UINestedField } from '../../interfaces/ui-nested-field.model';
 
-export const generateSwagger = async (ui: UI) => {
+export const generateSwagger = async (ui: UI): Promise<void> => {
   const yamlPath = path.join(process.cwd(), ui.swaggerPath);
   const yamlFile = (await fs.readFile(yamlPath)).toString();
   const yamlContents = YAML.parse(yamlFile);
@@ -19,7 +19,7 @@ export const generateSwagger = async (ui: UI) => {
       tagName: pluralize.plural(pascalCase(uiEntity.name)),
       route: pluralize.plural(kebabCase(uiEntity.name)),
       entity: uiEntity
-    }
+    };
 
     const swaggerComponentSchema: SwaggerComponentSchema = {};
     const requiredProperties = getRequiredSwaggerProperties(uiEntity);
@@ -27,7 +27,7 @@ export const generateSwagger = async (ui: UI) => {
       type: 'object',
       properties: uiFieldsToSwaggerProperties(uiEntity),
       ...(requiredProperties.length > 0) && {required: requiredProperties}
-    }
+    };
     swaggerComponentSchema[`${pascalCase(uiEntity.name)}Collection`] = {
       type: 'object',
       properties: {
@@ -41,7 +41,7 @@ export const generateSwagger = async (ui: UI) => {
           }
         }
       }
-    }
+    };
     const paths: SwaggerPaths = {};
     paths[`/${swaggerEntity.route}`] = {
       get: swaggerListMethodDeclaration(swaggerEntity),
@@ -51,16 +51,16 @@ export const generateSwagger = async (ui: UI) => {
       get: swaggerShowMethodDeclaration(swaggerEntity),
       put: swaggerUpdateMethodDeclaration(swaggerEntity),
       delete: swaggerDeleteMethodDeclaration(swaggerEntity)
-    }
+    };
     const tagFound = yamlContents.tags.find((tag: any) => tag.name === swaggerEntity.tagName);
     if (!tagFound) {
       yamlContents.tags.push({name: swaggerEntity.tagName});
     }
     yamlContents.paths = {...yamlContents.paths, ...paths};
-    yamlContents.components.schemas = {...yamlContents.components.schemas, ...swaggerComponentSchema}
+    yamlContents.components.schemas = {...yamlContents.components.schemas, ...swaggerComponentSchema};
   }
   await fs.writeFile(yamlPath, YAML.stringify(yamlContents));
-}
+};
 
 
 const swaggerListMethodDeclaration = (swaggerEntity: SwaggerEntity): any => {
@@ -99,7 +99,7 @@ const swaggerListMethodDeclaration = (swaggerEntity: SwaggerEntity): any => {
       }
     ]
   };
-}
+};
 
 const swaggerShowMethodDeclaration = (swaggerEntity: SwaggerEntity): any => {
   return {
@@ -132,8 +132,8 @@ const swaggerShowMethodDeclaration = (swaggerEntity: SwaggerEntity): any => {
         Bearer: []
       }
     ]
-  }
-}
+  };
+};
 
 const swaggerCreateMethodDeclaration = (swaggerEntity: SwaggerEntity): any => {
   return {
@@ -173,7 +173,7 @@ const swaggerCreateMethodDeclaration = (swaggerEntity: SwaggerEntity): any => {
       }
     ]
   };
-}
+};
 
 const swaggerUpdateMethodDeclaration = (swaggerEntity: SwaggerEntity): any => {
   return {
@@ -216,7 +216,7 @@ const swaggerUpdateMethodDeclaration = (swaggerEntity: SwaggerEntity): any => {
       }
     ]
   };
-}
+};
 
 const swaggerDeleteMethodDeclaration = (swaggerEntity: SwaggerEntity): any => {
   return {
@@ -243,37 +243,37 @@ const swaggerDeleteMethodDeclaration = (swaggerEntity: SwaggerEntity): any => {
       }
     ]
   };
-}
+};
 
 const uiFieldsToSwaggerProperties = (uiEntity: UIEntity): SwaggerPropertiesSchema => {
   const swaggerProperties: SwaggerPropertiesSchema = {};
   swaggerProperties._id = {
     type: 'string',
     readOnly: true
-  }
+  };
   for (const field of uiEntity.fields) {
     swaggerProperties[field.name] = {};
     switch (true) {
       case field.type === 'String':
         swaggerProperties[field.name] = {
           type: 'string',
-        }
+        };
         break;
       case field.type === 'Number':
         swaggerProperties[field.name] = {
           type: 'number',
-        }
+        };
         break;
       case field.type === 'Date':
         swaggerProperties[field.name] = {
           type: 'string',
           format: 'date-time'
-        }
+        };
         break;
       case field.type === 'Boolean':
         swaggerProperties[field.name] = {
           type: 'boolean'
-        }
+        };
         break;
       case field.type instanceof Array:
         let items: any = {};
@@ -283,12 +283,12 @@ const uiFieldsToSwaggerProperties = (uiEntity: UIEntity): SwaggerPropertiesSchem
         swaggerProperties[field.name] = {
           type: 'array',
           ...items
-        }
+        };
         break;
       case field.type === 'ObjectId':
         swaggerProperties[field.name] = {
           $ref: `#/components/schemas/${pascalCase(field.ref)}`
-        }
+        };
     }
   }
   if (uiEntity.timestamps) {
@@ -296,15 +296,15 @@ const uiFieldsToSwaggerProperties = (uiEntity: UIEntity): SwaggerPropertiesSchem
       type: 'string',
       format: 'date-time',
       readOnly: true
-    }
+    };
     swaggerProperties.updatedAt = {
       type: 'string',
       format: 'date-time',
       readOnly: true
-    }
+    };
   }
   return swaggerProperties;
-}
+};
 
 const getRequiredSwaggerProperties = (uiEntity: UIEntity): string[] => {
   const requiredProperties = [];
@@ -314,7 +314,7 @@ const getRequiredSwaggerProperties = (uiEntity: UIEntity): string[] => {
     }
   }
   return requiredProperties;
-}
+};
 
 const getNestedUiFieldsToSwaggerProperties = (uiNested: UINestedField): any => {
   const swaggerNestedProperties: SwaggerPropertiesSchema = {};
@@ -337,4 +337,4 @@ const getNestedUiFieldsToSwaggerProperties = (uiNested: UINestedField): any => {
       swaggerNestedProperties.items.$ref = `#/components/schemas/${pascalCase(uiNested.ref)}`;
   }
   return swaggerNestedProperties;
-}
+};

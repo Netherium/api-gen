@@ -43,7 +43,7 @@ export const generateClientSuite = (project: Project, userInput: UI, clientSuite
   return project;
 };
 
-export const generateClientHtmlComponents = async (userInput: UI, clientSuiteDir: string) => {
+export const generateClientHtmlComponents = async (userInput: UI, clientSuiteDir: string): Promise<void> => {
   for (const uiEntity of userInput.entities) {
     const moduleDir = `${clientSuiteDir}/src/app/modules/${kebabCase(uiEntity.name)}`;
     await fs.mkdir(`${moduleDir}/${kebabCase(uiEntity.name)}-detail`, {recursive: true});
@@ -55,7 +55,7 @@ export const generateClientHtmlComponents = async (userInput: UI, clientSuiteDir
   }
 };
 
-export const updateAppRoutingModule = async (projectOptions: ProjectOptions, userInput: UI, clientSuiteDir: string) => {
+export const updateAppRoutingModule = async (projectOptions: ProjectOptions, userInput: UI, clientSuiteDir: string): Promise<void> => {
   const project = new Project(projectOptions);
   for (const uiEntity of userInput.entities) {
     const appRoutingPath = `${clientSuiteDir}/src/app/app-routing.module.ts`;
@@ -63,9 +63,11 @@ export const updateAppRoutingModule = async (projectOptions: ProjectOptions, use
     const childrenRoutes = appRoutingModuleSource.getVariableDeclaration('childrenRoutes').getInitializerOrThrow();
     const initialized = childrenRoutes.getText();
 
+    /* eslint-disable max-len */
     if (!initialized.includes(`loadChildren: () => import('./modules/${kebabCase(uiEntity.name)}/${kebabCase(uiEntity.name)}.module').then(m => m.${pascalCase(uiEntity.name)}Module),`)) {
       const moduleRouteToInsert = `,\n  {
     path: '${kebabCase(pluralize(uiEntity.name))}',
+    // eslint-disable-next-line max-len
     loadChildren: () => import('./modules/${kebabCase(uiEntity.name)}/${kebabCase(uiEntity.name)}.module').then(m => m.${pascalCase(uiEntity.name)}Module),
     data: {
       state: '${pluralize(uiEntity.name)}',
@@ -75,6 +77,7 @@ export const updateAppRoutingModule = async (projectOptions: ProjectOptions, use
     }
   }
 ]`;
+      /* eslint-enable max-len */
       childrenRoutes.replaceWithText(initialized.replace(/\n]$/, moduleRouteToInsert));
     }
   }

@@ -25,7 +25,7 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/deleteMeAngular'),
+      dir: require('path').join(__dirname, './coverage/neth-ng'),
       subdir: '.',
       reporters: [
         { type: 'html' },

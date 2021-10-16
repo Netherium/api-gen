@@ -1,7 +1,8 @@
 import { ChildProcess, ChildProcessWithoutNullStreams, fork } from 'child_process';
 
-// tslint:disable-next-line:max-line-length
-const setInputsTimeouts = (inputs: string[], childProcess: ChildProcessWithoutNullStreams, inputInitDelay: number, inputInterval: number) => {
+
+// eslint-disable-next-line max-len
+const setInputsTimeouts = (inputs: string[], childProcess: ChildProcessWithoutNullStreams, inputInitDelay: number, inputInterval: number): NodeJS.Timeout[] => {
   const inputsTimeouts: NodeJS.Timeout[] = [];
   let inputTimeout = inputInitDelay;
   for (const input of inputs) {
@@ -9,16 +10,17 @@ const setInputsTimeouts = (inputs: string[], childProcess: ChildProcessWithoutNu
     inputTimeout = inputTimeout + inputInterval;
   }
   return inputsTimeouts;
-}
+};
 
-const clearInputsTimeouts = (inputsTimer: NodeJS.Timeout[]) => {
+const clearInputsTimeouts = (inputsTimer: NodeJS.Timeout[]): void => {
   for (const inputTimer of inputsTimer) {
     clearTimeout(inputTimer);
   }
-}
+};
 
-// tslint:disable-next-line:max-line-length
-export const cliExecute = (additionalArguments: any = [], inputs: any = [], showOutput = false, processTimer = 30000, inputInitDelay = 1000, inputInterval = 1000) => {
+
+// eslint-disable-next-line max-len
+export const cliExecute = (additionalArguments: any = [], inputs: any = [], showOutput = false, processTimer = 30000, inputInitDelay = 1000, inputInterval = 1000): Promise<any> => {
   return new Promise((resolve, reject) => {
     let childProcess: ChildProcessWithoutNullStreams | ChildProcess | null = null;
     childProcess = fork(process.cwd(), {
@@ -34,7 +36,7 @@ export const cliExecute = (additionalArguments: any = [], inputs: any = [], show
     childProcess.stdout.on('data', (data: any) => {
       result += data.toString();
       if (showOutput) {
-        console.log(data);
+        console.info(data);
       }
     });
     childProcess.on('close', (code: any) => {
@@ -47,8 +49,8 @@ export const cliExecute = (additionalArguments: any = [], inputs: any = [], show
       clearTimeout(childProcessTimer);
       resolve({error: err, code: childProcess.exitCode});
     });
-  })
-}
+  });
+};
 
 export const KEYSTROKE = {
   DOWN: '\x1B\x5B\x42',

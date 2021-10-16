@@ -46,7 +46,6 @@ export class MediaObjectController {
       return HTTP_UNPROCESSABLE_ENTITY(res);
     }
     // TODO Check for all allowed media types
-    // @ts-ignore
     // if (!isMimeTypePhoto(req.files.file.mimetype)) {
     //   return HTTP_UNSUPPORTED_MEDIA_TYPE(res);
     // }
