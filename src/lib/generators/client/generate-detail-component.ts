@@ -467,13 +467,18 @@ const getExtraMethodDeclaration = (uiEntity: UIEntity): MethodDeclarationStructu
               },
               {
                 name: `selected${pascalCase(field.name)}`,
-                statements: [`this.${uiEntity.name}.${field.name}.push(event.option.value);`, `document.querySelector<HTMLInputElement>('input[ng-reflect-name="${field.name}"]').value = '';`],
+                statements: [`this.${uiEntity.name}.${field.name}.push(event.option.value);`, `inputField.value = '';`],
                 parameters: [
                   {
                     name: 'event',
                     type: 'MatAutocompleteSelectedEvent',
                     kind: StructureKind.Parameter,
-                  }
+                  },
+                  {
+                    name: 'inputField',
+                    type: 'HTMLInputElement',
+                    kind: StructureKind.Parameter,
+                  },
                 ],
                 returnType: 'void',
                 kind: StructureKind.Method,

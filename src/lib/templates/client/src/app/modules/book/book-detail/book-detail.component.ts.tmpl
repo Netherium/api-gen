@@ -96,9 +96,9 @@ export class BookDetailComponent {
     entityForm.form.markAsDirty();
   }
 
-  selectedCollaborators(event: MatAutocompleteSelectedEvent): void {
+  selectedCollaborators(event: MatAutocompleteSelectedEvent, inputField: HTMLInputElement): void {
     this.book.collaborators.push(event.option.value);
-    document.querySelector<HTMLInputElement>('input[ng-reflect-name="collaborators"]').value = '';
+    inputField.value = '';
   }
 
   removeCollaborators(index: number, entityForm: NgForm): void {

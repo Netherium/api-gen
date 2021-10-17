@@ -129,13 +129,13 @@ const inputArrayObjectFragment = (entityName: string, field: string, pascalCaseF
                 {{item.${displayProperty}}}
                 <mat-icon matChipRemove>cancel</mat-icon>
               </mat-chip>
-              <input matInput [ngModel]="${entityName}.${field}" (ngModelChange)="${field}Changed($event)"
+              <input matInput #${field} [ngModel]="${entityName}.${field}" (ngModelChange)="${field}Changed($event)"
                      [matChipInputFor]="${field}ChipList" [matAutocomplete]="${field}Auto"
                      name="${field}" autocomplete="off">
               <mat-icon matSuffix svgIcon="neth:hexagon-multiple" *ngIf="!isLoading${pascalCaseField}"></mat-icon>
               <mat-spinner *ngIf="isLoading${pascalCaseField}" diameter="20" matSuffix></mat-spinner>
               <mat-autocomplete #${field}Auto="matAutocomplete" [displayWith]="${field}DisplayFn"
-                                (optionSelected)="selected${pascalCaseField}($event)">
+                                (optionSelected)="selected${pascalCaseField}($event, ${field})">
                 <mat-option *ngFor="let item of filtered${pascalCaseField} | async" [value]="item">
                   {{item.${displayProperty}}}
                 </mat-option>

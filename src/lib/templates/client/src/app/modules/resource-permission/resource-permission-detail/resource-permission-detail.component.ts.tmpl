@@ -70,11 +70,11 @@ export class ResourcePermissionDetailComponent {
     return null;
   }
 
-  selectedRoles(event: MatAutocompleteSelectedEvent, index: number): void {
+  selectedRoles(event: MatAutocompleteSelectedEvent, index: number, inputField: HTMLInputElement): void {
     this.resourcePermission.methods[index].roles.push(event.option.value);
     this.roleInputs[index] = '';
     this.roleInputsSubject[index].next(this.roleInputs[index]);
-    document.querySelector<HTMLInputElement>(`input[ng-reflect-name="roleInputs[${index}]"]`).value = this.roleInputs[index];
+    inputField.value = '';
   }
 
   removeRoles(role: Role, methodIndex: number, entityForm: NgForm): void {

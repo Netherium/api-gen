@@ -46,12 +46,12 @@
                     {{role.name}}
                     <mat-icon *ngIf="removableChipListRoles" matChipRemove>cancel</mat-icon>
                   </mat-chip>
-                  <input (ngModelChange)="roleChanged($event, methodIndex)" [matAutocomplete]="rolesAuto" [matChipInputFor]="rolesChipList"
+                  <input #roleInput (ngModelChange)="roleChanged($event, methodIndex)" [matAutocomplete]="rolesAuto" [matChipInputFor]="rolesChipList"
                          [ngModel]="roleInputs[methodIndex]" autocomplete="off"
                          matInput name="roleInputs[{{methodIndex}}]">
                   <mat-icon *ngIf="!isLoadingRoles[methodIndex]" matSuffix svgIcon="neth:hexagon-multiple"></mat-icon>
                   <mat-spinner *ngIf="isLoadingRoles[methodIndex]" diameter="20" matSuffix></mat-spinner>
-                  <mat-autocomplete #rolesAuto="matAutocomplete" (optionSelected)="selectedRoles($event, methodIndex)"
+                  <mat-autocomplete #rolesAuto="matAutocomplete" (optionSelected)="selectedRoles($event, methodIndex, roleInput)"
                                     [displayWith]="roleDisplayFn">
                     <mat-option *ngFor="let item of filteredRoles[methodIndex] | async" [value]="item">
                       {{item.name}}

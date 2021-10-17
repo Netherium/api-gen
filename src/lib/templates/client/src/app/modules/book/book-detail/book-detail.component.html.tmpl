@@ -90,13 +90,13 @@
                 {{item.email}}
                 <mat-icon matChipRemove>cancel</mat-icon>
               </mat-chip>
-              <input matInput [ngModel]="book.collaborators" (ngModelChange)="collaboratorsChanged($event)"
+              <input matInput #collaborators [ngModel]="book.collaborators" (ngModelChange)="collaboratorsChanged($event)"
                      [matChipInputFor]="collaboratorsChipList" [matAutocomplete]="collaboratorsAuto"
                      name="collaborators" autocomplete="off">
               <mat-icon matSuffix svgIcon="neth:hexagon-multiple" *ngIf="!isLoadingCollaborators"></mat-icon>
               <mat-spinner *ngIf="isLoadingCollaborators" diameter="20" matSuffix></mat-spinner>
               <mat-autocomplete #collaboratorsAuto="matAutocomplete" [displayWith]="collaboratorsDisplayFn"
-                                (optionSelected)="selectedCollaborators($event)">
+                                (optionSelected)="selectedCollaborators($event, collaborators)">
                 <mat-option *ngFor="let item of filteredCollaborators | async" [value]="item">
                   {{item.email}}
                 </mat-option>
