@@ -1,6 +1,6 @@
 {
   "name": "@netherium/api-gen",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "main": "bin/main.js",
   "description": "Generator for Express Rest Api written in Typescript that provides convenient authorization, access control lists and routes following best practices.",
   "scripts": {
