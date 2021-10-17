@@ -53,6 +53,7 @@
       "warn",
       {
         "allow": [
+          "log",
           "info",
           "warn",
           "error"
